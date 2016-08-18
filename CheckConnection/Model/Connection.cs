@@ -31,37 +31,5 @@ namespace ReestrUser
         //[NotNull]
         public string DefaultIPGateways { get; set; }
 
-
-        //[Ignore]
-        //public string FullName
-        //{
-        //    get
-        //    {
-        //        return string.Format(
-        //            "{0} {1}",
-        //            LastName,
-        //            FirstName
-        //        );
-        //    }
-        //}
-
-        //public override string ToString()
-        //{
-        //    return string.Format(
-        //        "{0}: {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}",
-        //        Id,
-        //        Name,
-        //        Date.ToString("dd-MM-yyyy"),
-        //        MAC,
-        //        Ip_Address_v4,
-        //        Ip_Address_v6,
-        //        DHCP_Enabled,
-        //        DHCPServer,
-        //        DNSDomain,
-        //        IPSubnetMask,
-        //        DefaultIPGateways
-        //    );
-        //}
-
     }
 }
