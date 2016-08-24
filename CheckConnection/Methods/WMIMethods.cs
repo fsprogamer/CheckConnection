@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Management;
+using CheckConnection.Model;
 
-namespace ReestrUser
+namespace CheckConnection.Methods
 {
     class WMIMethods
     {
-        public void GetNetworkDevices(ref List<Connection> Connection_list)
+
+        private ManagementObjectCollection moCollection;
+
+        public WMIMethods()
         {
-            int Conn_id = 0;
             string query = "SELECT * FROM Win32_NetworkAdapterConfiguration"
-                   + " WHERE IPEnabled = 'TRUE'";
+             + " WHERE IPEnabled = 'TRUE'";
 
             ManagementObjectSearcher moSearch = new ManagementObjectSearcher(query);
-            ManagementObjectCollection moCollection = moSearch.Get();
+            moCollection = moSearch.Get();
+        }
+
+        public List<Connection> GetNetworkDevices( )
+        {
+            int Conn_id = 0;
+            List<Connection> Connection_list = new List<Connection>();
+
 
             foreach (ManagementObject mo in moCollection)
             {
@@ -44,25 +54,31 @@ namespace ReestrUser
                     if (mo["DNSDomain"]!=null )
                      item.DNSDomain =  mo["DNSDomain"].ToString();
 
-                    string[] subnets = (string[])mo["IPSubnet"];
-                    foreach (string ipsubnet in subnets)
-                    {
-                        item.IPSubnetMask = ipsubnet;
-                        break;
+                    if (mo["IPSubnet"] != null) {
+                        string[] subnets = (string[])mo["IPSubnet"];
+                        foreach (string ipsubnet in subnets)
+                        {
+                            item.IPSubnetMask = ipsubnet;
+                            break;
+                        }
                     }
 
-                    string[] defaultgateways = (string[])mo["DefaultIPGateway"];
-                    foreach (string defaultipgateway in defaultgateways)
+                    if (mo["DefaultIPGateway"] != null)
                     {
-                        item.DefaultIPGateways = defaultipgateway;
-                        break;
+                        Gateway gtw = new Gateway();
+                        string[] defaultgateways = (string[])mo["DefaultIPGateway"];
+                        foreach (string defaultipgateway in defaultgateways)
+                        {
+                            item.DefaultIPGateways = defaultipgateway;
+                            break;
+                        }
                     }
 
                     if (mo["DHCPServer"] != null)
-                        item.DHCPServer = mo["DHCPServer"].ToString(); 
+                        item.DHCPServer = mo["DHCPServer"].ToString();
 
                     Connection_list.Add(item);
-                    Conn_id++;
+                    Conn_id++;                    
                 }
                 catch (Exception)
                 {
@@ -71,8 +87,60 @@ namespace ReestrUser
                     item.Id = Conn_id;
                     Connection_list.Add(item);
                 }
-
+                //Только одно подключение
+                break;
             }
+
+            return Connection_list;
+        }
+
+        public List<DNS> GetDNSArray(int Connection_Id )
+        {
+            List<DNS> DNS_list = new List<DNS>();
+            int Order_Id = 0;
+
+            foreach (ManagementObject mo in moCollection)
+            {
+                if (mo["DNSServerSearchOrder"] != null)
+                {                    
+                    string[] str_array = (string[])mo["DNSServerSearchOrder"];
+                    foreach (string str in str_array)
+                    {
+                        DNS dns = new DNS();
+                        dns.IP_Address = str;                        
+                        dns.Connection_Id = Connection_Id;
+                        dns.Order_Id = Order_Id;
+                        DNS_list.Add(dns);
+                        Order_Id++;
+                    }
+                }
+                //Только одно подключение
+                break;
+            }
+            return DNS_list;
+        }
+
+        public List<Gateway> GetGatewayArray(int Connection_Id )
+        {
+            List<Gateway> Gateway_list = new List<Gateway>();
+            foreach (ManagementObject mo in moCollection)
+            {
+                if (mo["DefaultIPGateway"] != null)
+                {
+                    
+                    string[] defaultgateways = (string[])mo["DefaultIPGateway"];
+                    foreach (string defaultipgateway in defaultgateways)
+                    {
+                        Gateway gtw = new Gateway();
+                        gtw.IP_Address = defaultipgateway;
+                        gtw.Connection_Id = Connection_Id;
+                        Gateway_list.Add(gtw);
+                    }
+                }
+                //Только одно подключение
+                break;
+            }
+            return Gateway_list;
         }
 
         public void GetPingResult(string PingAddress, ref List<Ping> Ping_list)

@@ -1,7 +1,7 @@
 ﻿using System;
 using SQLite;
 
-namespace ReestrUser
+namespace CheckConnection.Model
 {
     class Ping
     {

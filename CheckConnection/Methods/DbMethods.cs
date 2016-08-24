@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using SQLite;
+using CheckConnection.Model;
 
-namespace ReestrUser
+namespace CheckConnection.Methods
 {
     class DbMethods
     {
-        public void SaveConnectionTable(ref List<Connection> Connection_list)
+
+        public void SaveConnectionTable( List<Connection> Connection_list, 
+                                         List<DNS> DNS_list,
+                                         List<Gateway> Gateway_list
+                                            )
         {
             string table_name = "Connection";
             using (var db = new SQLiteConnection("Connections.db", /*SQLiteOpenFlags.Create,*/ true))
@@ -15,12 +20,50 @@ namespace ReestrUser
                 {
                     db.CreateTable<Connection>();
                 }
-                foreach( Connection conn in Connection_list )
+
+                foreach ( Connection conn in Connection_list )
                 {
-                    db.Insert(conn);
+
+                    db.RunInTransaction(() =>
+                    {
+                        db.Insert(conn);
+                        conn.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
+                        SaveDNSTable(DNS_list, db, conn.Id);
+                        SaveGatewayTable(Gateway_list, db, conn.Id);
+                    });
+
                 }
             }
         }
+
+        public void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId)
+        {
+            string table_name = "DNS";
+            if (!isTableExists(table_name, db))
+            {
+                db.CreateTable<DNS>();
+            }
+            foreach (DNS dns in DNS_list)
+            {
+              dns.Connection_Id = connId; 
+              db.Insert(dns);
+            }            
+        }
+
+        public void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId)
+        {
+            string table_name = "Gateway";
+            if (!isTableExists(table_name, db))
+            {
+                db.CreateTable<Gateway>();
+            }
+            foreach (Gateway gtw in Gateway_list)
+            {
+               gtw.Connection_Id = connId;
+               db.Insert(gtw);
+            }
+        }
+
 
         public int ReadConnectionHistory(ref List<Connection> Connection_list)
         {

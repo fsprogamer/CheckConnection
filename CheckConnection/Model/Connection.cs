@@ -1,7 +1,7 @@
 ﻿using System;
 using SQLite;
 
-namespace ReestrUser
+namespace CheckConnection.Model
 {
     class Connection
     {
@@ -29,7 +29,6 @@ namespace ReestrUser
         //[NotNull]
         public string IPSubnetMask { get; set; }
         //[NotNull]
-        public string DefaultIPGateways { get; set; }
-
+        public string DefaultIPGateways { get; set; }        
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ReestrUser
+namespace CheckConnection.Methods
 {
     public static class WinObjMethods
     {

@@ -1,4 +1,4 @@
-﻿namespace ReestrUser
+﻿namespace CheckConnection
 {
     partial class DisplayConnections
     {
@@ -32,10 +32,10 @@
             this.ConnectionsdataGridView = new System.Windows.Forms.DataGridView();
             this.HistorydataGridView = new System.Windows.Forms.DataGridView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.PingtoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TracerttoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -56,7 +56,6 @@
             this.ConnectionsdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 30);
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
-            this.ConnectionsdataGridView.ReadOnly = true;
             this.ConnectionsdataGridView.Size = new System.Drawing.Size(786, 128);
             this.ConnectionsdataGridView.TabIndex = 0;
             // 
@@ -93,15 +92,6 @@
             this.splitContainer1.SplitterDistance = 161;
             this.splitContainer1.TabIndex = 2;
             // 
-            // ConnectionHistorylabel
-            // 
-            this.ConnectionHistorylabel.AutoSize = true;
-            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
-            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
-            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
-            this.ConnectionHistorylabel.TabIndex = 2;
-            this.ConnectionHistorylabel.Text = "История подключений";
-            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -132,6 +122,15 @@
             this.TracerttoolStripButton.Size = new System.Drawing.Size(23, 22);
             this.TracerttoolStripButton.Text = "Tracert";
             this.TracerttoolStripButton.Click += new System.EventHandler(this.TracerttoolStripButton_Click);
+            // 
+            // ConnectionHistorylabel
+            // 
+            this.ConnectionHistorylabel.AutoSize = true;
+            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
+            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
+            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
+            this.ConnectionHistorylabel.TabIndex = 2;
+            this.ConnectionHistorylabel.Text = "История подключений";
             // 
             // DisplayConnections
             // 

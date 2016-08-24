@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 
 using TracertForm;
+using CheckConnection.Methods;
+using CheckConnection.Model;
 
-namespace ReestrUser
+namespace CheckConnection
 {
     public partial class DisplayConnections : Form
     {
@@ -14,6 +16,9 @@ namespace ReestrUser
             InitializeComponent();
             BindConnectionGrid(ref ConnectionsdataGridView);
             BindHistoryGrid(ref HistorydataGridView);
+
+            //row.Cells[col.Name].Value = (row.Cells[col.Name] as DataGridViewComboBoxCell).Items[0];
+
             WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
             CorrectWindowSize();
         }
@@ -24,7 +29,7 @@ namespace ReestrUser
 
             //create the column programatically
             DataGridViewCell cell = new DataGridViewTextBoxCell();
-            DataGridViewTextBoxColumn colFileName = new DataGridViewTextBoxColumn()
+            DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "Date",
@@ -32,9 +37,9 @@ namespace ReestrUser
                 DataPropertyName = "Date", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "Name",
@@ -42,9 +47,9 @@ namespace ReestrUser
                 DataPropertyName = "Name", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "MAC",
@@ -52,9 +57,9 @@ namespace ReestrUser
                 DataPropertyName = "MAC", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "Ip_Address_v4",
@@ -62,9 +67,9 @@ namespace ReestrUser
                 DataPropertyName = "Ip_Address_v4", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "Ip_Address_v6",
@@ -72,9 +77,9 @@ namespace ReestrUser
                 DataPropertyName = "Ip_Address_v6", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "DHCP_Enabled",
@@ -82,9 +87,9 @@ namespace ReestrUser
                 DataPropertyName = "DHCP_Enabled", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "DHCPServer",
@@ -92,9 +97,9 @@ namespace ReestrUser
                 DataPropertyName = "DHCPServer", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "DNSDomain",
@@ -102,9 +107,9 @@ namespace ReestrUser
                 DataPropertyName = "DNSDomain", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "IPSubnetMask",
@@ -112,9 +117,9 @@ namespace ReestrUser
                 DataPropertyName = "IPSubnetMask", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
 
-            colFileName = new DataGridViewTextBoxColumn()
+            colName = new DataGridViewTextBoxColumn()
             {
                 CellTemplate = cell,
                 Name = "DefaultIPGateways",
@@ -122,29 +127,100 @@ namespace ReestrUser
                 DataPropertyName = "DefaultIPGateways", // Tell the column which property it should use
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
             };
-            dgv.Columns.Add(colFileName);
+            dgv.Columns.Add(colName);
+
+            //DataGridViewComboBoxColumn cmb = new DataGridViewComboBoxColumn()
+            //{
+            //    //CellTemplate = cell,
+            //    Name = "DNSArray",
+            //    HeaderText = "DNS-серверы",
+            //    DataPropertyName = "IP_Address", // Tell the column which property it should use
+            //    AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+            //};                   
+
+            //dgv.Columns.Add(cmb);
 
         }
 
         private void BindConnectionGrid(ref DataGridView dgv)
-        {
-            List<Connection> connlist = new List<Connection>();
+        {            
             WMIMethods methods = new WMIMethods();
-
-            methods.GetNetworkDevices(ref connlist);
+            List<Connection> connlist = methods.GetNetworkDevices();
+            List<DNS> dnslist = methods.GetDNSArray(connlist[0].Id);
+            List<Gateway> gtwlist = methods.GetGatewayArray(connlist[0].Id);
 
             AddColumn(ref dgv);
 
             if (connlist.Count > 0)
             {
-                var connnamesList = new BindingList<Connection>(connlist); // <-- BindingList
+                var bindsList = new BindingList<Connection>(connlist); // <-- BindingList
                 //Bind BindingList directly to the DataGrid
-                dgv.DataSource = connnamesList;
+                dgv.DataSource = bindsList;
+            }
+
+            if (dnslist.Count > 0)
+            {
+                var bindsList = new BindingList<DNS>(dnslist); // <-- BindingList
+
+                /*
+                    int index = this.editingDataGridView.Columns.IndexOf(comboBoxColumn);
+                    for (int i = 0; i < columns.Count; i++)
+                    {
+                       this.editingDataGridView.Rows[i].Cells[index].Value = columns[i].Table_ID;
+                    } 
+                 */
+
+                DataGridViewComboBoxColumn cmb = new DataGridViewComboBoxColumn()
+                {
+                    //CellTemplate = cell,
+                    Name = "DNSArray",
+                    HeaderText = "DNS-серверы",
+                    DataPropertyName = "Ip_Address", // Tell the column which property it should use
+                    DisplayMember = "Ip_Address",
+                    ValueMember = "Id",                    
+                    AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill,
+                    
+                };
+                cmb.DataSource = bindsList;
+
+                dgv.Columns.Add(cmb);
+
+                dgv.Rows[0].Cells[10/*"DNSArray"*/].Value = "0";                
+            }
+
+            if (gtwlist.Count > 0)
+            {
+                var bindsList = new BindingList<Gateway>(gtwlist); // <-- BindingList
+                //Bind BindingList directly to the ComboBox
+                //dgv.DataSource = bindsList;
+                //DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)dgv.Rows[0].Cells["DNSArray"];
+                //cell.Items.AddRange(dnslist);
             }
 
             WinObjMethods.ResizeGrid(ref dgv);
             CorrectWindowSize();
         }
+        private void BindComboBox(ref DataGridView dgv)
+        {
+            WMIMethods methods = new WMIMethods();
+            List<Connection> connlist = methods.GetNetworkDevices();
+            List<DNS> dnslist = methods.GetDNSArray(connlist[0].Id);
+            List<Gateway> gtwlist = methods.GetGatewayArray(connlist[0].Id);
+
+            if (dnslist.Count > 0)
+            {
+                var bindsList = new BindingList<DNS>(dnslist); // <-- BindingList
+                //Bind BindingList directly to the ComboBox
+                //(DataGridViewComboBoxColumn)dgv.Columns["DNSArray"]. .DataSource = bindsList;
+                //System.Object[] ItemObject = new System.Object[10];
+                //for (int i = 0; i <= 9; i++)
+                //{
+                //    ItemObject[i] = "Item" + i;
+                //}
+                //listBox1.Items.AddRange(ItemObject);
+            }
+        }
+
         private void BindHistoryGrid(ref DataGridView dgv)
         {
             List<Connection> connlist = new List<Connection>();
@@ -169,12 +245,13 @@ namespace ReestrUser
             base.OnFormClosing(e);
 
             DbMethods DB = new DbMethods();
-            List<Connection> Connection_list = new List<Connection>();
             WMIMethods methods = new WMIMethods();
+            List<Connection> Connection_list = methods.GetNetworkDevices();
+            List<DNS> DNS_list = methods.GetDNSArray(Connection_list[0].Id);
+            List<Gateway> Gateway_list = methods.GetGatewayArray(Connection_list[0].Id);
 
-            methods.GetNetworkDevices(ref Connection_list);
             if (Connection_list.Count > 0)            
-                DB.SaveConnectionTable(ref Connection_list);
+                DB.SaveConnectionTable(Connection_list, DNS_list, Gateway_list);
 
             //DB.ReadConnectionHistory(ref Connection_list);
 
@@ -189,7 +266,7 @@ namespace ReestrUser
 
         private void PingtoolStripButton_Click(object sender, System.EventArgs e)
         {
-            WMIMethods methods = new WMIMethods();
+            //WMIMethods methods = new WMIMethods();
             List<Ping> Ping_list = new List<Ping>();
             //methods.GetPingResult("ya.ru",ref Ping_list);
 
@@ -201,7 +278,7 @@ namespace ReestrUser
 
         private void TracerttoolStripButton_Click(object sender, System.EventArgs e)
         {
-            WMIMethods methods = new WMIMethods();
+            //WMIMethods methods = new WMIMethods();
             List<Tracert> Tracert_list = new List<Tracert>();
             //methods.GetTracertResult("ya.ru", ref Tracert_list);
 

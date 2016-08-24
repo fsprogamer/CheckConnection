@@ -80,6 +80,8 @@
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Methods\WMIMethods.cs" />
     <Compile Include="Model\Connection.cs" />
+    <Compile Include="Model\DNS.cs" />
+    <Compile Include="Model\Gateway.cs" />
     <Compile Include="Model\Ping.cs" />
     <Compile Include="Model\Tracert.cs" />
     <Compile Include="Program.cs" />
