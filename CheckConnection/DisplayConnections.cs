@@ -11,16 +11,61 @@ namespace CheckConnection
 {
     public partial class DisplayConnections : Form
     {
+        delegate void SetComboBoxCellType(int iRowIndex);
+        bool bIsComboBox = false;
+
         public DisplayConnections()
         {
             InitializeComponent();
-            BindConnectionGrid(ref ConnectionsdataGridView);
-            BindHistoryGrid(ref HistorydataGridView);
+        }
 
-            //row.Cells[col.Name].Value = (row.Cells[col.Name] as DataGridViewComboBoxCell).Items[0];
+        private void DisplayConnections_Load(object sender, System.EventArgs e)
+        {
+            //BindConnectionGrid(ref ConnectionsdataGridView);
+            //BindHistoryGrid(ref HistorydataGridView);
+            //WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
+            //CorrectWindowSize();
 
-            WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
-            CorrectWindowSize();
+            #region Test_grid
+            List<TObj> dt = new List<TObj>();
+            for (int i = 0; i < 5; i++)
+            {
+                TObj dr = new TObj();
+                dr.Ip_Address = i.ToString();
+                dr.DNS = "Company - " + i.ToString();
+                dt.Add(dr);
+            }
+            ConnectionsdataGridView.AutoGenerateColumns = false;
+
+            DataGridViewCell cell = new DataGridViewTextBoxCell();
+            DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn()
+            {
+                CellTemplate = cell,
+                Name = "Id",
+                HeaderText = "Id",
+                DataPropertyName = "Id", // Tell the column which property it should use
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+            };
+            ConnectionsdataGridView.Columns.Add(colName);
+
+            colName = new DataGridViewTextBoxColumn()
+            {
+                CellTemplate = cell,
+                Name = "DNS",
+                HeaderText = "DNS",
+                DataPropertyName = "DNS", // Tell the column which property it should use
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+            };
+            ConnectionsdataGridView.Columns.Add(colName);
+
+            if (dt.Count > 0)
+            {
+                var bindsList = new BindingList<TObj>(dt); // <-- BindingList
+                //Bind BindingList directly to the DataGrid
+                var source = new BindingSource(bindsList, null);
+                ConnectionsdataGridView.DataSource = source;
+            }
+            #endregion
         }
 
         private void AddColumn(ref DataGridView dgv)
@@ -85,7 +130,7 @@ namespace CheckConnection
                 Name = "DHCP_Enabled",
                 HeaderText = "DHCP включен",
                 DataPropertyName = "DHCP_Enabled", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
             dgv.Columns.Add(colName);
 
@@ -95,7 +140,7 @@ namespace CheckConnection
                 Name = "DHCPServer",
                 HeaderText = "DHCP сервер",
                 DataPropertyName = "DHCPServer", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
             dgv.Columns.Add(colName);
 
@@ -105,7 +150,7 @@ namespace CheckConnection
                 Name = "DNSDomain",
                 HeaderText = "Основной DNS-суффикс",
                 DataPropertyName = "DNSDomain", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
             dgv.Columns.Add(colName);
 
@@ -115,30 +160,30 @@ namespace CheckConnection
                 Name = "IPSubnetMask",
                 HeaderText = "Маска подсети",
                 DataPropertyName = "IPSubnetMask", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
             };
             dgv.Columns.Add(colName);
 
-            //colName = new DataGridViewTextBoxColumn()
-            //{
-            //    CellTemplate = cell,
-            //    Name = "GatewayArray",
-            //    HeaderText = "Шлюзы",
-            //    ///DataPropertyName = "DefaultIPGateways", // Tell the column which property it should use
-            //    AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
-            //};
-            //dgv.Columns.Add(colName);
+            colName = new DataGridViewTextBoxColumn()
+            {
+                CellTemplate = cell,
+                Name = "DefaultIPGateways",
+                HeaderText = "Шлюзы ...",
+                DataPropertyName = "DefaultIPGateways", // Tell the column which property it should use
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
+            };
+            dgv.Columns.Add(colName);
 
-            //colName = new DataGridViewTextBoxColumn()
-            //{
-            //    CellTemplate = cell,
-            //    Name = "DNSArray",
-            //    HeaderText = "DNS-серверы",
-            //    //DataPropertyName = "IP_Address", // Tell the column which property it should use
-            //    AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
-            //};
+            colName = new DataGridViewTextBoxColumn()
+            {
+                CellTemplate = cell,
+                Name = "DNS",
+                HeaderText = "DNS-серверы...",
+                DataPropertyName = "DNS", // Tell the column which property it should use
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+            };
 
-            //dgv.Columns.Add(colName);
+            dgv.Columns.Add(colName);
 
         }
 
@@ -146,8 +191,8 @@ namespace CheckConnection
         {            
             WMIMethods methods = new WMIMethods();
             List<Connection> connlist = methods.GetNetworkDevices();
-            List<DNS> dnslist = methods.GetDNSArray(connlist[0].Id);
-            List<Gateway> gtwlist = methods.GetGatewayArray(connlist[0].Id);
+            //List<DNS> dnslist = methods.GetDNSArray(connlist[0].Id);
+            //List<Gateway> gtwlist = methods.GetGatewayArray(connlist[0].Id);
 
             AddColumn(ref dgv);
 
@@ -155,17 +200,16 @@ namespace CheckConnection
             {
                 var bindsList = new BindingList<Connection>(connlist); // <-- BindingList
                 //Bind BindingList directly to the DataGrid
-                dgv.DataSource = bindsList;
+                var source = new BindingSource(bindsList, null);
+                dgv.DataSource = source;                                
             }
 
-            dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
-            dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
+            //dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
+            //dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
 
-            dgv.Rows[0].Cells["DNSArray"].Value = "0";
-            dgv.Rows[0].Cells["GatewayArray"].Value = "0";
+            //dgv.Rows[0].Cells["DNSArray"].Value = "0";
+            //dgv.Rows[0].Cells["GatewayArray"].Value = "0";
 
-            WinObjMethods.ResizeGrid(ref dgv);
-            CorrectWindowSize();
         }
         private DataGridViewComboBoxColumn GetDNSComboBox(int conn_id)
         {
@@ -262,50 +306,96 @@ namespace CheckConnection
 
         private void PingtoolStripButton_Click(object sender, System.EventArgs e)
         {
-            //WMIMethods methods = new WMIMethods();
             List<Ping> Ping_list = new List<Ping>();
-            //methods.GetPingResult("ya.ru",ref Ping_list);
-
-            //DbMethods DB = new DbMethods();
-            //DB.SavePingTable(ref Ping_list);
+  
             var PingForm = new TracertForm.PingForm();
             PingForm.Show();
         }
 
         private void TracerttoolStripButton_Click(object sender, System.EventArgs e)
-        {
-            //WMIMethods methods = new WMIMethods();
-            List<Tracert> Tracert_list = new List<Tracert>();
-            //methods.GetTracertResult("ya.ru", ref Tracert_list);
-
-            //DbMethods DB = new DbMethods();
-            //DB.SaveTracertTable(ref Tracert_list);
+        {            
+            List<Tracert> Tracert_list = new List<Tracert>();            
 
             var TracertForm = new TracertForm.MainForm();
             TracertForm.Show();
-
         }
 
-        //private void toolStripButton1_Click(object sender, System.EventArgs e)
+        private void ConnectionsdataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            SetComboBoxCellType objChangeCellType = new SetComboBoxCellType(ChangeCellToComboBox);
+
+            if (e.ColumnIndex == this.ConnectionsdataGridView.Columns["DNS"].Index)
+            {
+                this.ConnectionsdataGridView.BeginInvoke(objChangeCellType, e.RowIndex);
+                bIsComboBox = false;
+            }
+        }
+
+        #region Test grid
+        private void ChangeCellToComboBox(int iRowIndex)
+        {
+            if (bIsComboBox == false)
+            {
+                DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
+                dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+
+                List<TObj> dt = new List<TObj>();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    TObj dr = new TObj();
+                    dr.Ip_Address = i.ToString();
+                    dr.DNS = "Company - " + i.ToString();
+                    dt.Add(dr);
+                }
+                if (dt.Count > 0)
+                {
+                    var bindsList = new BindingList<TObj>(dt);
+                    var source = new BindingSource(bindsList, null);
+                    dgComboCell.DataSource = source;
+                }
+
+                //dgComboCell.DataSource = dt;
+                dgComboCell.ValueMember = "DNS";
+                dgComboCell.DisplayMember = "Ip_Address";
+
+                ConnectionsdataGridView.Rows[iRowIndex].Cells[ConnectionsdataGridView.CurrentCell.ColumnIndex] = dgComboCell;
+                bIsComboBox = true;
+            }
+        }
+        #endregion
+
+        //private void ChangeCellToComboBox(int iRowIndex)
         //{
-        //    DataGridViewComboBoxCell cell = new DataGridViewComboBoxCell();
-        //    List<DNS> dnslist = new List<DNS>();
+        //    if (bIsComboBox == false)
+        //    {
+        //        DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
+        //        dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
 
-        //    DNS dns = new DNS();
-        //    dns.IP_Address = "10.10.10.10";
-        //    dns.Connection_Id = 1;
-        //    dns.Order_Id = 0;
-        //    dnslist.Add(dns);
+        //        List<DNS> dt = new List<DNS>();
 
-        //    dns = new DNS();
-        //    dns.IP_Address = "10.10.10.11";
-        //    dns.Connection_Id = 1;
-        //    dns.Order_Id = 1;
-        //    dnslist.Add(dns);
+        //        for (int i = 0; i < 5; i++)
+        //        {
+        //            DNS dr = new DNS();
+        //            dr.IP_Address = "Name - " + i.ToString();
+        //            dr.Id = i;
+        //            dt.Add(dr);
+        //        }
+        //        if (dt.Count > 0)
+        //        {
+        //            var bindsList = new BindingList<DNS>(dt);
+        //            var source = new BindingSource(bindsList, null);
+        //            dgComboCell.DataSource = source;
+        //        }
 
-        //    cell.DataSource = dnslist;
-        //    cell.Value = dnslist[0].IP_Address;
-        //    ConnectionsdataGridView.Rows[0].Cells["DNSArray"] = cell;
+        //        //dgComboCell.DataSource = dt;
+        //        dgComboCell.ValueMember = "DNS";
+        //        dgComboCell.DisplayMember = "DNS";
+
+        //        ConnectionsdataGridView.Rows[iRowIndex].Cells[ConnectionsdataGridView.CurrentCell.ColumnIndex] = dgComboCell;
+        //        bIsComboBox = true;
+        //    }
         //}
+
     }
 }

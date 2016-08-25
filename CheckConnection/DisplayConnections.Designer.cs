@@ -58,6 +58,7 @@
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
             this.ConnectionsdataGridView.Size = new System.Drawing.Size(786, 128);
             this.ConnectionsdataGridView.TabIndex = 0;
+            this.ConnectionsdataGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_CellEnter);
             // 
             // HistorydataGridView
             // 
@@ -140,6 +141,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "DisplayConnections";
             this.Text = "Сетевые подключения";
+            this.Load += new System.EventHandler(this.DisplayConnections_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);

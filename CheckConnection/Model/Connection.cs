@@ -28,7 +28,23 @@ namespace CheckConnection.Model
         public string DNSDomain { get; set; }
         //[NotNull]
         public string IPSubnetMask { get; set; }
-        //[NotNull]
-        public string DefaultIPGateways { get; set; }        
+        [Ignore]
+        public string DefaultIPGateways { get; set; }
+        [Ignore]
+        public string DNS { get; set; }
+    }
+
+    class TObj
+    {
+        [Ignore]
+        public string Ip_Address { get; set; }
+        [Ignore]
+        public string DNS { get; set; }
+    }
+
+    class Person
+    {
+        public string Name { get; set; }
+        public string Surname { get; set; }
     }
 }

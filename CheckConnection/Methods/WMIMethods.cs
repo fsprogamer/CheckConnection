@@ -65,7 +65,6 @@ namespace CheckConnection.Methods
 
                     if (mo["DefaultIPGateway"] != null)
                     {
-                        Gateway gtw = new Gateway();
                         string[] defaultgateways = (string[])mo["DefaultIPGateway"];
                         foreach (string defaultipgateway in defaultgateways)
                         {
@@ -73,6 +72,17 @@ namespace CheckConnection.Methods
                             break;
                         }
                     }
+
+                    if (mo["DNSServerSearchOrder"] != null)
+                    {
+                        string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
+                        foreach (string dns in DNSarray)
+                        {
+                            item.DNS = dns;
+                            break;
+                        }
+                    }
+                    
 
                     if (mo["DHCPServer"] != null)
                         item.DHCPServer = mo["DHCPServer"].ToString();
