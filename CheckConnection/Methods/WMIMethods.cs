@@ -78,7 +78,7 @@ namespace CheckConnection.Methods
                         string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
                         foreach (string dns in DNSarray)
                         {
-                            item.DNS = dns;
+                            item.DNSServer = dns;
                             break;
                         }
                     }
@@ -117,7 +117,7 @@ namespace CheckConnection.Methods
                     foreach (string str in str_array)
                     {
                         DNS dns = new DNS();
-                        dns.IP_Address = str;                        
+                        dns.DNSServer = str;                        
                         dns.Connection_Id = Connection_Id;
                         dns.Order_Id = Order_Id;
                         DNS_list.Add(dns);

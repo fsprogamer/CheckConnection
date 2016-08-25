@@ -12,7 +12,7 @@ namespace CheckConnection.Model
         [NotNull]
         public int Connection_Id { get; set; }
         [NotNull]
-        public string IP_Address { get; set; }
+        public string DNSServer { get; set; }
         [NotNull]
         public int Order_Id { get; set; }
        

@@ -31,15 +31,25 @@ namespace CheckConnection.Model
         [Ignore]
         public string DefaultIPGateways { get; set; }
         [Ignore]
-        public string DNS { get; set; }
+        public string DNSServer { get; set; }
     }
 
     class TObj
     {
         [Ignore]
-        public string Ip_Address { get; set; }
+        public string Date { get; set; }
         [Ignore]
-        public string DNS { get; set; }
+        public string DNSServer { get; set; }
+    }
+
+    class TBoxObj
+    {
+        [Ignore]
+        public int Id { get; set; }
+        [Ignore]
+        public string Date { get; set; }
+        [Ignore]
+        public string DNSServer { get; set; }
     }
 
     class Person
