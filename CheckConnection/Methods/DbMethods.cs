@@ -7,14 +7,19 @@ namespace CheckConnection.Methods
 {
     class DbMethods
     {
+        private string conn_string;
 
+        public DbMethods()
+        {
+            conn_string = Properties.Settings.Default.DBConnectionString;
+        }
         public void SaveConnectionTable( List<Connection> Connection_list, 
                                          List<DNS> DNS_list,
                                          List<Gateway> Gateway_list
                                             )
         {
             string table_name = "Connection";
-            using (var db = new SQLiteConnection("Connections.db", /*SQLiteOpenFlags.Create,*/ true))
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
                 if (!isTableExists(table_name, db))
                 {
@@ -64,12 +69,12 @@ namespace CheckConnection.Methods
             }
         }
 
-
-        public int ReadConnectionHistory(ref List<Connection> Connection_list)
+        public List<Connection> ReadConnectionHistory()
         {
             string table_name = "Connection";
+            List<Connection> Connection_list = new List<Connection>();
 
-            using (var db = new SQLiteConnection("Connections.db", /*SQLiteOpenFlags.ReadOnly,*/ true))
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
             {
                 if (isTableExists(table_name, db))
                 {
@@ -80,13 +85,51 @@ namespace CheckConnection.Methods
                     }
                 }
             }
-            return Connection_list.Count;
+            return Connection_list;
+        }
+
+        public List<DNS> ReadDNSHistory(int Connection_Id)
+        {
+            string table_name = "DNS";
+            List<DNS> DNS_list = new List<DNS>();
+
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+            {
+                if (isTableExists(table_name, db))
+                {
+                    var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name));
+                    foreach (var dns in dns_array)
+                    {
+                        DNS_list.Add(dns);
+                    }
+                }
+            }
+            return DNS_list;
+        }
+
+        public List<Gateway> ReadGatewayHistory(int Connection_Id)
+        {
+            string table_name = "Gateway";
+            List<Gateway> Gateway_list = new List<Gateway>();
+
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+            {
+                if (isTableExists(table_name, db))
+                {
+                    var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name));
+                    foreach (var gtw in gateway_array)
+                    {
+                        Gateway_list.Add(gtw);
+                    }
+                }
+            }
+            return Gateway_list;
         }
 
         public void SavePingTable(ref List<Ping> Ping_list)
         {
 
-            using (var db = new SQLiteConnection("Connections.db", /*SQLiteOpenFlags.Create,*/ true))
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
                 db.CreateTable<Ping>();
 
@@ -101,7 +144,7 @@ namespace CheckConnection.Methods
         public void SaveTracertTable(ref List<Tracert> Tracert_list)
         {
 
-            using (var db = new SQLiteConnection("Connections.db", /*SQLiteOpenFlags.Create,*/ true))
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
                 db.CreateTable<Tracert>();
 
@@ -116,7 +159,7 @@ namespace CheckConnection.Methods
         public void SaveHopTable(ref List<Hop> Hop_list)
         {
 
-            using (var db = new SQLiteConnection("Connections.db", /*SQLiteOpenFlags.Create,*/ true))
+            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
                 db.CreateTable<Hop>();
 

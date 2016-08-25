@@ -15,5 +15,6 @@ namespace CheckConnection.Model
         public string IP_Address { get; set; }
         [NotNull]
         public int Order_Id { get; set; }
+       
     }
 }
