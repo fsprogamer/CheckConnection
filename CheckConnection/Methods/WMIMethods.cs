@@ -68,7 +68,7 @@ namespace CheckConnection.Methods
                         string[] defaultgateways = (string[])mo["DefaultIPGateway"];
                         foreach (string defaultipgateway in defaultgateways)
                         {
-                            item.DefaultIPGateways = defaultipgateway;
+                            item.IPGateway = defaultipgateway;
                             break;
                         }
                     }
@@ -142,7 +142,7 @@ namespace CheckConnection.Methods
                     foreach (string defaultipgateway in defaultgateways)
                     {
                         Gateway gtw = new Gateway();
-                        gtw.IP_Address = defaultipgateway;
+                        gtw.IPGateway = defaultipgateway;
                         gtw.Connection_Id = Connection_Id;
                         Gateway_list.Add(gtw);
                     }

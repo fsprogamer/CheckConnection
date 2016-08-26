@@ -9,6 +9,6 @@ namespace CheckConnection.Model
         [NotNull]
         public int Connection_Id { get; set; }
         [NotNull]
-        public string IP_Address { get; set; }
+        public string IPGateway { get; set; }
     }
 }

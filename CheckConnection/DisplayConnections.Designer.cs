@@ -59,7 +59,6 @@
             this.ConnectionsdataGridView.Size = new System.Drawing.Size(786, 128);
             this.ConnectionsdataGridView.TabIndex = 0;
             this.ConnectionsdataGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_CellEnter);
-            this.ConnectionsdataGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.ConnectionsdataGridView_DataBindingComplete);
             // 
             // HistorydataGridView
             // 

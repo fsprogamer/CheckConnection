@@ -29,32 +29,9 @@ namespace CheckConnection.Model
         //[NotNull]
         public string IPSubnetMask { get; set; }
         [Ignore]
-        public string DefaultIPGateways { get; set; }
+        public string IPGateway { get; set; }
         [Ignore]
         public string DNSServer { get; set; }
     }
 
-    class TObj
-    {
-        [Ignore]
-        public string Date { get; set; }
-        [Ignore]
-        public string DNSServer { get; set; }
-    }
-
-    class TBoxObj
-    {
-        [Ignore]
-        public int Id { get; set; }
-        [Ignore]
-        public string Date { get; set; }
-        [Ignore]
-        public string DNSServer { get; set; }
-    }
-
-    class Person
-    {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-    }
 }
