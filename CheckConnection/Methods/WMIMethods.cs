@@ -68,8 +68,7 @@ namespace CheckConnection.Methods
                         string[] defaultgateways = (string[])mo["DefaultIPGateway"];
                         foreach (string defaultipgateway in defaultgateways)
                         {
-                            item.IPGateway = defaultipgateway;
-                            break;
+                            item.IPGateway = item.IPGateway + defaultipgateway + "; ";                            
                         }
                     }
 
@@ -78,8 +77,7 @@ namespace CheckConnection.Methods
                         string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
                         foreach (string dns in DNSarray)
                         {
-                            item.DNSServer = dns;
-                            break;
+                            item.DNSServer = item.DNSServer + dns + "; ";                            
                         }
                     }
                     

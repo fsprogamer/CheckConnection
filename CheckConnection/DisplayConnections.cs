@@ -54,6 +54,8 @@ namespace CheckConnection
         {
             dgv.AutoGenerateColumns = false;
 
+            //dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
             //create the column programatically
             DataGridViewCell cell = new DataGridViewTextBoxCell();
             DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn()
@@ -147,49 +149,96 @@ namespace CheckConnection
             };
             dgv.Columns.Add(colName);
 
-            //colName = new DataGridViewTextBoxColumn()
-            //{
-            //    CellTemplate = cell,
-            //    Name = "DefaultIPGateways",
-            //    HeaderText = "Шлюзы ...",
-            //    DataPropertyName = "DefaultIPGateways", // Tell the column which property it should use
-            //    AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            //};
-            //dgv.Columns.Add(colName);
+            colName = new DataGridViewTextBoxColumn()
+            {
+                CellTemplate = cell,
+                Name = "IPGateway",
+                HeaderText = "Шлюзы ...",
+                DataPropertyName = "IPGateway", // Tell the column which property it should use
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
+            };
+            dgv.Columns.Add(colName);
 
-            //colName = new DataGridViewTextBoxColumn()
-            //{
-            //    CellTemplate = cell,
-            //    Name = "DNSServer",
-            //    HeaderText = "DNS-серверы...",
-            //    DataPropertyName = "DNSServer", // Tell the column which property it should use
-            //    AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
-            //};
+            colName = new DataGridViewTextBoxColumn()
+            {
+                CellTemplate = cell,
+                Name = "DNSServer",
+                HeaderText = "DNS-серверы...",
+                DataPropertyName = "DNSServer", // Tell the column which property it should use
+                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
+            };
 
-            //dgv.Columns.Add(colName);
-
+            dgv.Columns.Add(colName);
+            //dgv.Columns["DNSServer"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            //dgv.Columns["DNSServer"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
 
         private void BindConnectionGrid(ref DataGridView dgv)
         {            
             WMIMethods methods = new WMIMethods();
             List<Connection> connlist = methods.GetNetworkDevices();
-            //List<DNS> dnslist = methods.GetDNSArray(connlist[0].Id);
-            //List<Gateway> gtwlist = methods.GetGatewayArray(connlist[0].Id);
 
             AddColumn(ref dgv);
-            dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
-            dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
+            //dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
+            //dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
+
+            //SetDNSComboBox(ref ConnectionsdataGridView);
 
             if (connlist.Count > 0)
             {
-                var bindsList = new BindingList<Connection>(connlist); 
+                var bindsList = new BindingList<Connection>(connlist);
                 //Bind BindingList directly to the DataGrid
                 var source = new BindingSource(bindsList, null);
-                dgv.DataSource = source;                                
+                dgv.DataSource = source;
             }
 
         }
+        private void SetTextBox(ref DataGridView dgv)
+        {
+            WMIMethods methods = new WMIMethods();
+            List<Connection> connlist = methods.GetNetworkDevices();
+
+            //Добавление данных
+            DataGridViewRow row = new DataGridViewRow();
+            DataGridViewTextBoxCell cell_txt = new DataGridViewTextBoxCell();
+            //Вписываем текст в заголовок строки
+            row.HeaderCell.Value = "1";
+            row.CreateCells(dgv);
+            //Создаем массив который будет помещен в ячейку
+            cell_txt.Value =
+            row.Cells[1] = cell_txt;
+
+            //выбираем строчку по умолчанию - здесь выбрана под номером 2.
+            row.Cells[1].Value = (row.Cells[1] as DataGridViewComboBoxCell).Items[2];
+            //Вносим в dataGridView
+            dgv.Rows.Add(row);
+        }
+        private void SetDNSComboBox(ref DataGridView dgv)
+        {
+            //Добавление столбца -тип ComboBox
+           //DataGridViewColumn column1 = new DataGridViewColumn();
+           // DataGridViewCell cell1 = new DataGridViewComboBoxCell();
+           // column1.HeaderText = "secondcolumn";
+           // column1.Name = "secondcolumn";
+           // column1.CellTemplate = cell1;
+           // dgv.Columns.Add(column1);
+
+            //Добавление данных
+            DataGridViewRow row = new DataGridViewRow();
+            DataGridViewComboBoxCell cell_CB = new DataGridViewComboBoxCell();
+            //Вписываем текст в заголовок строки
+            row.HeaderCell.Value = "1";
+            row.CreateCells(dgv);
+            //Создаем массив который будет помещен в ячейку
+            cell_CB.Items.AddRange(new string[] { "Первый", "Второй", "Третий", "Четвертый" });
+            row.Cells[1] = cell_CB;
+
+            //выбираем строчку по умолчанию - здесь выбрана под номером 2.
+            row.Cells[1].Value = (row.Cells[1] as DataGridViewComboBoxCell).Items[2];
+            //Вносим в dataGridView
+            dgv.Rows.Add(row);
+        }
+
         private DataGridViewComboBoxColumn GetDNSComboBox(int conn_id)
         {            
             DataGridViewComboBoxColumn cmb = new DataGridViewComboBoxColumn()
@@ -251,43 +300,31 @@ namespace CheckConnection
             List<Connection> connlist = DB.ReadConnectionHistory();
 
             AddColumn(ref dgv);
-          
-            //foreach (Connection conn in connlist)
-            //{
-                //dgv.Columns.Add(GetDNSComboBox(conn.Id));
-                //dgv.Columns.Add(GetGatewayComboBox(conn.Id));
 
-                //Добавление столбца - тип ComboBox
-                DataGridViewColumn column1 = new DataGridViewColumn();
-                DataGridViewCell cell1 = new DataGridViewComboBoxCell();
-                column1.HeaderText = "secondcolumn";
-                column1.Name = "secondcolumn";
-                column1.CellTemplate = cell1;
-                dgv.Columns.Add(column1);
+            foreach (Connection conn in connlist)
+            {
+                List<DNS> dnslist = DB.ReadDNSHistory(conn.Id);
+                List<Gateway> gtwlist = DB.ReadGatewayHistory(conn.Id);
 
-                //Добавление данных
-                DataGridViewRow row = new DataGridViewRow();
-                DataGridViewComboBoxCell cell_CB = new DataGridViewComboBoxCell();
-                //Вписываем текст в заголовок строки
-                row.HeaderCell.Value = "1";
-                row.CreateCells(dgv);
-                //Создаем массив который будет помещен в ячейку
-                cell_CB.Items.AddRange(new string[] { "Первый", "Второй", "Третий", "Четвертый" });
-                row.Cells[0] = cell_CB;
+                foreach (DNS dns in dnslist) { 
+                    conn.DNSServer = conn.DNSServer + dns.DNSServer + "; ";
+                }
+                conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
 
-                //выбираем строчку по умолчанию - здесь выбрана под номером 2.
-                row.Cells[0].Value = (row.Cells[0] as DataGridViewComboBoxCell).Items[2];
-                //Вносим в dataGridView
-                dgv.Rows.Add(row);
-            //}
+                foreach (Gateway gtw in gtwlist)
+                {
+                    conn.IPGateway = conn.IPGateway + gtw.IPGateway + "; ";
+                }
+                conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
+            }
 
-            //if (connlist.Count > 0)
-            //{
-            //    var bindsList = new BindingList<Connection>(connlist);
-            //    //Bind BindingList directly to the DataGrid
-            //    var source = new BindingSource(bindsList, null);
-            //    dgv.DataSource = source;
-            //}
+            if (connlist.Count > 0)
+            {
+                var bindsList = new BindingList<Connection>(connlist);
+                //Bind BindingList directly to the DataGrid
+                var source = new BindingSource(bindsList, null);
+                dgv.DataSource = source;
+            }
 
             WinObjMethods.ResizeGrid(ref dgv);
             CorrectWindowSize();            

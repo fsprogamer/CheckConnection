@@ -87,7 +87,24 @@ namespace CheckConnection.Methods
             }
             return Connection_list;
         }
+        //public List<Connection> ReadFullConnectionHistory()
+        //{
+        //    string[] table_name = new string[] { "Connection", "DNS", "Gateway" };
+        //    List<Connection> Connection_list = new List<Connection>();
 
+        //    using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+        //    {
+        //        if (isTableExists(table_name, db))
+        //        {
+        //            var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} order by Date desc", table_name));
+        //            foreach (var conn in connections)
+        //            {
+        //                Connection_list.Add(conn);
+        //            }
+        //        }
+        //    }
+        //    return Connection_list;
+        //}
         public List<DNS> ReadDNSHistory(int Connection_Id)
         {
             string table_name = "DNS";
@@ -97,7 +114,7 @@ namespace CheckConnection.Methods
             {
                 if (isTableExists(table_name, db))
                 {
-                    var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name));
+                    var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name, Connection_Id));
                     foreach (var dns in dns_array)
                     {
                         DNS_list.Add(dns);
@@ -116,7 +133,7 @@ namespace CheckConnection.Methods
             {
                 if (isTableExists(table_name, db))
                 {
-                    var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name));
+                    var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Id asc", table_name, Connection_Id));
                     foreach (var gtw in gateway_array)
                     {
                         Gateway_list.Add(gtw);
