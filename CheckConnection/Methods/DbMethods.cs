@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using SQLite;
 using CheckConnection.Model;
+using Common;
 
 namespace CheckConnection.Methods
 {
-    class DbMethods
+    class DbMethods : DBConnection
     {
-        private string conn_string;
 
         public DbMethods()
         {
@@ -190,14 +190,15 @@ namespace CheckConnection.Methods
 
         public bool isTableExists(String tableName, SQLiteConnection db)
         {
-            if ( db !=null && !String.IsNullOrWhiteSpace(tableName) )
+            if (db != null && !String.IsNullOrWhiteSpace(tableName))
             {
                 int count = db.ExecuteScalar<int>("SELECT count(tbl_name) from sqlite_master where tbl_name = '" + tableName + "'");
-                if (count > 0) {
+                if (count > 0)
+                {
                     return true;
                 }
             }
-           
+
             return false;
         }
     }
