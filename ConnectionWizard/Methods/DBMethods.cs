@@ -12,63 +12,40 @@ namespace ConnectionWizard.Methods
         {
             conn_string = Properties.Settings.Default.DBConnectionString;
         }
-
-        public List<Step> ReadWizardSteps()
+       
+        public Forms GetFormsById(int idform)
         {
-            string table_name = "Step";
-            List<Step> Step_list = new List<Step>();
-
-            using (var db = new SQLite.SQLiteConnection(conn_string, SQLiteOpenFlags.ReadOnly, true))
-            {
-                if (isTableExists(table_name, db))
-                {
-                    var connections = db.Query<Step>(String.Format("SELECT * FROM {0} order by OrderId asc", table_name));
-                    foreach (var conn in connections)
-                    {
-                        Step_list.Add(conn);
-                    }
-                }
-            }
-            return Step_list;
-        }
-
-        public Forms GetFormsById(int form_id)
-        {
-            string table_name = "Forms";
-            List<Forms> forms_list = new List<Forms>();
-
+            Forms form; ;
             using (var db = new SQLiteConnection(conn_string, true))
             {
-                if (isTableExists(table_name, db))
-                {
-                    var forms_array = db.Query<Forms>(String.Format("SELECT * FROM {0} where id_form = '{1}'", table_name, form_id));
-                    foreach (var forms in forms_array)
-                     {
-                        forms_list.Add(forms);
-                     }
-                }
+                var form_query = db.Get<Forms>(idform);
+                form = (Forms)form_query;
             }
-            return forms_list[0];
+            return form;
         }
 
         public Form_Query GetQuery(int idquery)
         {
+            Form_Query form; ;
+            using (var db = new SQLiteConnection(conn_string, true))
+            {
+                var form_query = db.Get<Form_Query>(idquery);
+                form = (Form_Query)form_query;
+            }
+            return form;
+        }
+
+        public List<Form_Query> GetQueryTable()
+        {
             string table_name = "Form_Query";
-            List<Form_Query> form_list = new List<Form_Query>();
+            List<Form_Query> form_query_list = new List<Form_Query>();
 
             using (var db = new SQLiteConnection(conn_string, true))
             {
-                if (isTableExists(table_name, db))
-                {
-                    var form_query_array= db.Query<Form_Query>(String.Format("SELECT * FROM {0} where Id_Query = {1}", table_name, idquery));
-
-                    foreach (var forms in form_query_array)
-                    {
-                        form_list.Add(forms);
-                    }
-                }
+                var form_query_array = db.Query<Form_Query>(String.Format("SELECT * FROM {0} order by Id_Query asc", table_name));
+                form_query_list.AddRange(form_query_array);
             }
-            return form_list[0];
+            return form_query_list;
         }
 
         public List<Form_Ans> GetQueryAnswer( int idquery)
@@ -78,21 +55,43 @@ namespace ConnectionWizard.Methods
 
             using (var db = new SQLiteConnection(conn_string, true))
             {
-                if (isTableExists(table_name, db))
-                {
-
-                        var form_ans_array = db.Query<Form_Ans>(String.Format("SELECT * FROM {0} where Id_Query = {1}", table_name, idquery));
-                        foreach (var fa in form_ans_array)
-                        {
-                            form_ans_list.Add(fa);
-                        }
-
-                }
+               var form_ans_array = db.Query<Form_Ans>(String.Format("SELECT * FROM {0} where Id_Query = {1}", table_name, idquery));
+               form_ans_list.AddRange(form_ans_array);
             }
             return form_ans_list;
         }
 
-        public int GetNextQuery(int idvisit, int idquery)
+        public int GetQueryByAnswerId(int answerId)
+        {
+            string table_name = "Form_Ans";
+            int queryId = 0;
+
+            using (var db = new SQLiteConnection(conn_string, true))
+            {
+                if (isTableExists(table_name, db))
+                {
+                    queryId = db.ExecuteScalar<int>(String.Format("SELECT Id_Query FROM {0} where Id_Ans = {1}", table_name, answerId));
+                }
+            }
+            return queryId;
+        }
+
+        public Form_Ans GetQueryAnswerByText(string answer)
+        {
+            string table_name = "Form_Ans";
+            Form_Ans form_answer = new Form_Ans();
+
+            using (var db = new SQLiteConnection(conn_string, true))
+            {
+               var result = from s in db.Table<Form_Ans>()
+                            where s.Answer.Equals(answer)
+                            select s;
+               form_answer = result.FirstOrDefault();
+            }
+            return form_answer;
+        }
+
+        public int GetNextQueryId(int idvisit, int idquery)
         {
             int v_next=0;             
 
@@ -150,6 +149,17 @@ namespace ConnectionWizard.Methods
             }
             return v_next;
         }
+
+        public Form_Query GetNextQuery(int idvisit, int idquery)
+        {
+            Form_Query formquery = new Form_Query();
+            int nextquery = GetNextQueryId(idvisit, idquery);
+            if (nextquery > 0) { 
+             formquery = GetQuery(nextquery);
+            }
+            return formquery;
+        }
+
         public List<Form_Ans_Abo> GetNextFormAnsAbo(int idvisit,int idquery)
         {
             string[] table_name = new string[]{ "Form_Ans", "Form_Ans_Abo" };
@@ -245,37 +255,6 @@ namespace ConnectionWizard.Methods
             }
 
             return form_visit.Id_Visit;
-        }
-
-        public void InitSteps()
-        {
-            string table_name = "Step";
-            List<Step> Step_list = new List<Step>  {
-               new Step(){ OrderId = 1, Name = "Шаг 1", Text = "Делай раз", Type = 1},
-               new Step(){ OrderId = 2, Name = "Шаг 2", Text = "Делай два", Type = 1},
-               new Step(){ OrderId = 3, Name = "Шаг 3", Text = "Делай три", Type = 1},
-               new Step(){ OrderId = 4, Name = "Шаг 4", Text = "Делай четыре", Type = 1},
-               new Step(){ OrderId = 5, Name = "Шаг 5", Text = "Делай пять", Type = 1}
-            };
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Step>();
-                }
-
-                foreach (Step step in Step_list)
-                {
-
-                    db.RunInTransaction(() =>
-                    {
-                        db.Insert(step);
-                        step.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
-                    });
-
-                }
-            }
         }
 
         public void InitWizardDB()
