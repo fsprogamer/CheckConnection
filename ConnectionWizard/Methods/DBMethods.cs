@@ -6,7 +6,7 @@ using Common;
 
 namespace ConnectionWizard.Methods
 {
-    class DBMethods : DBConnection
+    partial class DBMethods : DBConnection
     {
         public DBMethods()
         {
@@ -37,7 +37,7 @@ namespace ConnectionWizard.Methods
 
         public List<Form_Query> GetQueryTable()
         {
-            string table_name = "Form_Query";
+            const string table_name = "Form_Query";
             List<Form_Query> form_query_list = new List<Form_Query>();
 
             using (var db = new SQLiteConnection(conn_string, true))
@@ -50,7 +50,7 @@ namespace ConnectionWizard.Methods
 
         public List<Form_Ans> GetQueryAnswer( int idquery)
         {
-            string table_name = "Form_Ans";
+            const string table_name = "Form_Ans";
             List<Form_Ans> form_ans_list = new List<Form_Ans>();
 
             using (var db = new SQLiteConnection(conn_string, true))
@@ -63,7 +63,7 @@ namespace ConnectionWizard.Methods
 
         public int GetQueryByAnswerId(int answerId)
         {
-            string table_name = "Form_Ans";
+            const string table_name = "Form_Ans";
             int queryId = 0;
 
             using (var db = new SQLiteConnection(conn_string, true))
@@ -78,7 +78,7 @@ namespace ConnectionWizard.Methods
 
         public Form_Ans GetQueryAnswerByText(string answer)
         {
-            string table_name = "Form_Ans";
+            //string table_name = "Form_Ans";
             Form_Ans form_answer = new Form_Ans();
 
             using (var db = new SQLiteConnection(conn_string, true))
@@ -199,7 +199,7 @@ namespace ConnectionWizard.Methods
 
         public int SetFormAnsAbo(Form_Ans_Abo form_ans_abo)
         {
-            string table_name = "Form_Ans_Abo";
+            const string table_name = "Form_Ans_Abo";
 
             using (var db = new SQLiteConnection(conn_string, true))
             {
@@ -220,7 +220,7 @@ namespace ConnectionWizard.Methods
 
         public int Form_Next_Query(int idvisit,int idquery)
         {
-            string table_name = "Form_Ans_Abo";
+            const string table_name = "Form_Ans_Abo";
 
             using (var db = new SQLiteConnection(conn_string, true))
             {
@@ -234,7 +234,7 @@ namespace ConnectionWizard.Methods
 
         public int SetFormVisit(int pId_Form)
         {
-            string table_name = "Form_Visit";
+            const string table_name = "Form_Visit";
             Form_Visit form_visit = new Form_Visit {
                  Id_Form = pId_Form, Date_Beg = DateTime.Today
             };
@@ -255,135 +255,6 @@ namespace ConnectionWizard.Methods
             }
 
             return form_visit.Id_Visit;
-        }
-
-        public void InitWizardDB()
-        {
-            InitForms();
-            InitFormQuery();
-            InitFormAns();
-            InitFormAnsAbo();
-            InitFormCursTemp();
-            InitFormQueryCurs();
-        }
-
-        public void InitForms()
-        {
-            string table_name = "Forms";
-            //List<Forms> form_list = new List<Forms>  {
-            //new Forms(){ Id_Form = 271, Name = "Диагностика", Id_Query_First = 2360, Status = 1}
-            //};
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Forms>();
-                }
-
-                //foreach (Form form in form_list)
-                //{
-
-                //    db.RunInTransaction(() =>
-                //    {
-                //        db.Insert(form);
-                //        form.Id_Form = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
-                //    });
-
-                //}
-            }
-        }
-
-        public void InitFormQuery()
-        {
-            string table_name = "Form_Query";
-            //List<Form_Query> fquery_list = new List<Form_Query>  {
-            //    new Form_Query(){ Id_Form = 271, Id_Query = 2360, Query = "Выберите конфигурацию", Num_Query = 2361},
-            //    new Form_Query(){ Id_Form = 271, Id_Query = 2361, Query = "Проверить состояние сетевого подключения ?", Num_Query = 2362},
-            //    new Form_Query(){ Id_Form = 271, Id_Query = 2362, Query = "Есть IP-адрес ?", Num_Query = 2363},
-            //    new Form_Query(){ Id_Form = 271, Id_Query = 2363, Query = "Ip-адресов больше одного ?", Num_Query = 0},
-            //    new Form_Query(){ Id_Form = 271, Id_Query = 2364, Query = "Есть включенные адаптеры ?", Num_Query = 0}
-            //};
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Form_Query>();
-                }
-
-                //foreach (Form_Query fquery in fquery_list)
-                //{
-
-                //    db.RunInTransaction(() =>
-                //    {
-                //        db.Insert(fquery);                        
-                //    });
-
-                //}
-            }
-        }
-
-        public void InitFormAns()
-        {
-            string table_name = "Form_Ans";
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Form_Ans>();
-                }
-
-                //foreach (Form_Query fquery in fquery_list)
-                //{
-
-                //    db.RunInTransaction(() =>
-                //    {
-                //        db.Insert(fquery);
-                //    });
-
-                //}
-            }
-        }
-
-        public void InitFormAnsAbo()
-        {
-            string table_name = "Form_Ans_Abo";
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Form_Ans_Abo>();
-                }
-            }
-        }
-
-        public void InitFormCursTemp()
-        {
-            string table_name = "Form_Curs_Temp";
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Form_Curs_Temp>();
-                }
-            }
-        }
-
-        public void InitFormQueryCurs()
-        {
-            string table_name = "Form_Query_Curs";
-
-            using (var db = new SQLiteConnection(conn_string, true))
-            {
-                if (!isTableExists(table_name, db))
-                {
-                    db.CreateTable<Form_Query_Curs>();
-                }
-            }
         }
 
         public bool isTableExists(String tableName, SQLiteConnection db)

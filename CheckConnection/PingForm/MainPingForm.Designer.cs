@@ -1,6 +1,6 @@
-﻿namespace TracertForm
+﻿namespace PingForm
 {
-    partial class PingForm
+    partial class MainPingForm
     {
         /// <summary>
         /// Required designer variable.
@@ -48,7 +48,7 @@
             label2.Location = new System.Drawing.Point(12, 35);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(62, 13);
-            label2.TabIndex = 10;
+            label2.TabIndex = 16;
             label2.Text = "&Результат:";
             // 
             // label1
@@ -57,7 +57,7 @@
             label1.Location = new System.Drawing.Point(12, 12);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(111, 13);
-            label1.TabIndex = 6;
+            label1.TabIndex = 12;
             label1.Text = "&Адрес или имя узла:";
             // 
             // close
@@ -66,7 +66,7 @@
             this.close.Location = new System.Drawing.Point(316, 277);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(75, 23);
-            this.close.TabIndex = 11;
+            this.close.TabIndex = 17;
             this.close.Text = "&Закрыть";
             this.close.UseVisualStyleBackColor = true;
             this.close.Click += new System.EventHandler(this.close_Click);
@@ -86,7 +86,7 @@
             this.pingList.Location = new System.Drawing.Point(12, 54);
             this.pingList.Name = "pingList";
             this.pingList.Size = new System.Drawing.Size(379, 217);
-            this.pingList.TabIndex = 9;
+            this.pingList.TabIndex = 15;
             this.pingList.UseCompatibleStateImageBehavior = false;
             this.pingList.View = System.Windows.Forms.View.Details;
             // 
@@ -120,10 +120,10 @@
             this.startTrace.Location = new System.Drawing.Point(316, 8);
             this.startTrace.Name = "startTrace";
             this.startTrace.Size = new System.Drawing.Size(75, 23);
-            this.startTrace.TabIndex = 8;
+            this.startTrace.TabIndex = 14;
             this.startTrace.Text = "&Начать трассировку";
             this.startTrace.UseVisualStyleBackColor = true;
-            this.startTrace.Click += new System.EventHandler(this.startPing_Click);
+            this.startTrace.Click += new System.EventHandler(this.startTrace_Click);
             // 
             // destination
             // 
@@ -132,9 +132,9 @@
             this.destination.Location = new System.Drawing.Point(129, 9);
             this.destination.Name = "destination";
             this.destination.Size = new System.Drawing.Size(170, 20);
-            this.destination.TabIndex = 7;
+            this.destination.TabIndex = 13;
             // 
-            // PingForm
+            // MainPingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -145,7 +145,7 @@
             this.Controls.Add(this.startTrace);
             this.Controls.Add(this.destination);
             this.Controls.Add(label1);
-            this.Name = "PingForm";
+            this.Name = "MainPingForm";
             this.Text = "Ping узла";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -164,3 +164,4 @@
         private System.Windows.Forms.TextBox destination;
     }
 }
+

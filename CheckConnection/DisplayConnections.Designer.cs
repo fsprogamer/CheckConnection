@@ -35,7 +35,9 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.PingtoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TracerttoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.ComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
+            this.ViewComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -97,7 +99,9 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PingtoolStripButton,
-            this.TracerttoolStripButton});
+            this.TracerttoolStripButton,
+            this.ComparetoolStripButton,
+            this.ViewComparetoolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(786, 25);
@@ -124,6 +128,16 @@
             this.TracerttoolStripButton.Text = "Tracert";
             this.TracerttoolStripButton.Click += new System.EventHandler(this.TracerttoolStripButton_Click);
             // 
+            // ComparetoolStripButton
+            // 
+            this.ComparetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ComparetoolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("ComparetoolStripButton.Image")));
+            this.ComparetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ComparetoolStripButton.Name = "ComparetoolStripButton";
+            this.ComparetoolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.ComparetoolStripButton.Text = "Compare";
+            this.ComparetoolStripButton.Click += new System.EventHandler(this.ComparetoolStripButton_Click);
+            // 
             // ConnectionHistorylabel
             // 
             this.ConnectionHistorylabel.AutoSize = true;
@@ -132,6 +146,16 @@
             this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
             this.ConnectionHistorylabel.TabIndex = 2;
             this.ConnectionHistorylabel.Text = "История подключений";
+            // 
+            // ViewComparetoolStripButton
+            // 
+            this.ViewComparetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ViewComparetoolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("ViewComparetoolStripButton.Image")));
+            this.ViewComparetoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ViewComparetoolStripButton.Name = "ViewComparetoolStripButton";
+            this.ViewComparetoolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.ViewComparetoolStripButton.Text = "View Compare";
+            this.ViewComparetoolStripButton.Click += new System.EventHandler(this.ViewComparetoolStripButton_Click);
             // 
             // DisplayConnections
             // 
@@ -165,5 +189,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton PingtoolStripButton;
         private System.Windows.Forms.ToolStripButton TracerttoolStripButton;
+        private System.Windows.Forms.ToolStripButton ComparetoolStripButton;
+        private System.Windows.Forms.ToolStripButton ViewComparetoolStripButton;
     }
 }

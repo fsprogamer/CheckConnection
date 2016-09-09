@@ -1,28 +1,24 @@
 ﻿using System;
-
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
 
-using System.Net.NetworkInformation;
-
-using System.Threading;
-
-namespace TracertForm
+namespace PingForm
 {
-    public partial class PingForm : Form
+    public partial class MainPingForm : Form
     {
-        public PingForm()
+        public MainPingForm()
         {
             InitializeComponent();
         }
+
         private void close_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void startPing_Click(object sender, EventArgs e)
+        private void startTrace_Click(object sender, EventArgs e)
         {
-
             Ping pingSender = new Ping();
             PingOptions options = new PingOptions();
             string strHostName = destination.Text;
@@ -55,9 +51,5 @@ namespace TracertForm
 
             }
         }
-
-     
     }
 }
-    
-

@@ -6,7 +6,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    class DbMethods : DBConnection
+    partial class DbMethods : DBConnection
     {
 
         public DbMethods()
@@ -18,7 +18,7 @@ namespace CheckConnection.Methods
                                          List<Gateway> Gateway_list
                                             )
         {
-            string table_name = "Connection";
+            const string table_name = "Connection";
             using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
                 if (!isTableExists(table_name, db))
@@ -63,7 +63,7 @@ namespace CheckConnection.Methods
 
         public List<Connection> ReadConnectionHistory()
         {
-            string table_name = "Connection";
+            const string table_name = "Connection";
             List<Connection> Connection_list = new List<Connection>();
 
             using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
@@ -97,7 +97,7 @@ namespace CheckConnection.Methods
         //}
         public List<DNS> ReadDNSHistory(int Connection_Id)
         {
-            string table_name = "DNS";
+            const string table_name = "DNS";
             List<DNS> DNS_list = new List<DNS>();
 
             using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
@@ -114,7 +114,7 @@ namespace CheckConnection.Methods
 
         public List<Gateway> ReadGatewayHistory(int Connection_Id)
         {
-            string table_name = "Gateway";
+            const string table_name = "Gateway";
             List<Gateway> Gateway_list = new List<Gateway>();
 
             using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
@@ -127,51 +127,6 @@ namespace CheckConnection.Methods
                 }
             }
             return Gateway_list;
-        }
-
-        public void SavePingTable(ref List<Ping> Ping_list)
-        {
-
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
-            {
-                db.CreateTable<Ping>();
-
-                foreach (Ping png in Ping_list)
-                {
-                    db.Insert(png);
-                }
-
-            }
-        }
-
-        public void SaveTracertTable(ref List<Tracert> Tracert_list)
-        {
-
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
-            {
-                db.CreateTable<Tracert>();
-
-                foreach (Tracert trc in Tracert_list)
-                {
-                    db.Insert(trc);
-                }
-
-            }
-        }
-
-        public void SaveHopTable(ref List<Hop> Hop_list)
-        {
-
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
-            {
-                db.CreateTable<Hop>();
-
-                foreach (Hop hop in Hop_list)
-                {
-                    db.Insert(hop);
-                }
-
-            }
         }
 
         public bool isTableExists(String tableName, SQLiteConnection db)

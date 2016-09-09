@@ -55,10 +55,6 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -85,6 +81,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompareConnections.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CompareConnections.designer.cs">
+      <DependentUpon>CompareConnections.cs</DependentUpon>
+    </Compile>
     <Compile Include="DisplayConnections.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +94,7 @@
       <DependentUpon>DisplayConnections.cs</DependentUpon>
     </Compile>
     <Compile Include="Methods\DbMethods.cs" />
+    <Compile Include="Methods\DbMethodsNotUsed.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Methods\WMIMethods.cs" />
     <Compile Include="Model\Connection.cs" />
@@ -103,6 +106,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
+    <EmbeddedResource Include="CompareConnections.resx">
+      <DependentUpon>CompareConnections.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DisplayConnections.resx">
       <DependentUpon>DisplayConnections.cs</DependentUpon>
     </EmbeddedResource>
@@ -142,6 +148,10 @@
     <ProjectReference Include="..\tracert\tracert.csproj">
       <Project>{18ca356f-fb1f-45eb-8d0a-4ce593692bd8}</Project>
       <Name>tracert</Name>
+    </ProjectReference>
+    <ProjectReference Include="PingForm\PingForm.csproj">
+      <Project>{2c80c7c4-be99-4616-9273-965e191b5d7b}</Project>
+      <Name>PingForm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

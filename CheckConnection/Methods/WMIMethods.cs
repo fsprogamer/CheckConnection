@@ -70,6 +70,7 @@ namespace CheckConnection.Methods
                         {
                             item.IPGateway = item.IPGateway + defaultipgateway + "; ";                            
                         }
+                        item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
                     }
 
                     if (mo["DNSServerSearchOrder"] != null)
@@ -79,6 +80,7 @@ namespace CheckConnection.Methods
                         {
                             item.DNSServer = item.DNSServer + dns + "; ";                            
                         }
+                        item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
                     }
                     
 
