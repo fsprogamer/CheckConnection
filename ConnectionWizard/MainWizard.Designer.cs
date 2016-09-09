@@ -42,7 +42,6 @@
             this.wizardControl.Size = new System.Drawing.Size(574, 415);
             this.wizardControl.TabIndex = 0;
             this.wizardControl.Title = "Навигация";
-            this.wizardControl.SelectedPageChanged += new System.EventHandler(this.wizardControl_SelectedPageChanged);
             // 
             // MainWizard
             // 

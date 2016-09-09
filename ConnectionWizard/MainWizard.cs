@@ -23,11 +23,6 @@ namespace ConnectionWizard
             Wizard_Init( db.GetFormsById(271) );                  
         }
 
-        private void wizardControl_SelectedPageChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         void wizardPage_Commit(object sender, AeroWizard.WizardPageConfirmEventArgs e)
         {
             // If the user hasn't provided a sufficiently long zip code, don't allow the commit
@@ -63,19 +58,6 @@ namespace ConnectionWizard
                 e.Page.NextPage = wizardControl.Pages[wizardControl.Pages.Count - 1];
             }
             #endregion
-        }
-
-        // Find page by tag value.
-        //WizardPageCollection result = WizardPageCollection.Find(
-        //delegate (WizardPage page)
-        //{
-        //    return ((Form_Query)page.Tag).Id_Query == IDtoFind;
-        //}
-        //);
-
-        private void wizardPage_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
-        {
-
         }
 
         void Wizard_Init(Forms form)

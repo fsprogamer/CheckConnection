@@ -22,13 +22,10 @@ namespace CheckConnection.Methods
             using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
                 if (!isTableExists(table_name, db))
-                {
                     db.CreateTable<Connection>();
-                }
 
                 foreach ( Connection conn in Connection_list )
                 {
-
                     db.RunInTransaction(() =>
                     {
                         db.Insert(conn);
@@ -36,7 +33,6 @@ namespace CheckConnection.Methods
                         SaveDNSTable(DNS_list, db, conn.Id);
                         SaveGatewayTable(Gateway_list, db, conn.Id);
                     });
-
                 }
             }
         }
@@ -44,29 +40,25 @@ namespace CheckConnection.Methods
         public void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId)
         {
             string table_name = "DNS";
-            if (!isTableExists(table_name, db))
-            {
-                db.CreateTable<DNS>();
-            }
+            if (!isTableExists(table_name, db))            
+                db.CreateTable<DNS>();            
+
             foreach (DNS dns in DNS_list)
-            {
-              dns.Connection_Id = connId; 
-              db.Insert(dns);
-            }            
+              dns.Connection_Id = connId;
+            
+            db.InsertAll(DNS_list);
         }
 
         public void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId)
         {
             string table_name = "Gateway";
-            if (!isTableExists(table_name, db))
-            {
-                db.CreateTable<Gateway>();
-            }
+            if (!isTableExists(table_name, db))            
+             db.CreateTable<Gateway>();            
+
             foreach (Gateway gtw in Gateway_list)
-            {
-               gtw.Connection_Id = connId;
-               db.Insert(gtw);
-            }
+              gtw.Connection_Id = connId;
+            
+            db.InsertAll(Gateway_list);
         }
 
         public List<Connection> ReadConnectionHistory()
@@ -79,10 +71,8 @@ namespace CheckConnection.Methods
                 if (isTableExists(table_name, db))
                 {
                     var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} order by Date desc", table_name));
-                    foreach (var conn in connections)
-                    {
-                        Connection_list.Add(conn);
-                    }
+                    Connection_list.Capacity = connections.Count;
+                    Connection_list.AddRange(connections);
                 }
             }
             return Connection_list;
@@ -115,10 +105,8 @@ namespace CheckConnection.Methods
                 if (isTableExists(table_name, db))
                 {
                     var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name, Connection_Id));
-                    foreach (var dns in dns_array)
-                    {
-                        DNS_list.Add(dns);
-                    }
+                    DNS_list.Capacity = dns_array.Count;
+                    DNS_list.AddRange(dns_array);
                 }
             }
             return DNS_list;
@@ -134,10 +122,8 @@ namespace CheckConnection.Methods
                 if (isTableExists(table_name, db))
                 {
                     var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Id asc", table_name, Connection_Id));
-                    foreach (var gtw in gateway_array)
-                    {
-                        Gateway_list.Add(gtw);
-                    }
+                    Gateway_list.Capacity = gateway_array.Count;
+                    Gateway_list.AddRange(gateway_array);
                 }
             }
             return Gateway_list;
