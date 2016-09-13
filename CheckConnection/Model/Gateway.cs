@@ -2,7 +2,7 @@
 
 namespace CheckConnection.Model
 {
-    class Gateway
+    public class Gateway
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }

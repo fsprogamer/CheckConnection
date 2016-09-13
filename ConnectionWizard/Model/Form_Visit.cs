@@ -3,7 +3,7 @@ using SQLite;
 
 namespace ConnectionWizard.Model
 {
-    class Form_Visit
+    public class Form_Visit
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id_Visit { get; set; }

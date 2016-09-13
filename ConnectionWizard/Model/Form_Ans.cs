@@ -2,7 +2,7 @@
 
 namespace ConnectionWizard.Model
 {
-    class Form_Ans
+    public class Form_Ans
     {
         [NotNull]
         public int Id_Query { get; set; }

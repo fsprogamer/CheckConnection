@@ -2,7 +2,7 @@
 
 namespace ConnectionWizard.Model
 {
-    class Form_Query_Curs
+    public class Form_Query_Curs
     {
         [NotNull]
         public int Id_Curs { get; set; }

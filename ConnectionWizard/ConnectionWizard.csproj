@@ -51,7 +51,6 @@
     </Compile>
     <Compile Include="Methods\DBInitialize.cs" />
     <Compile Include="Methods\DBMethods.cs" />
-    <Compile Include="Model\Condition.cs" />
     <Compile Include="Model\Forms.cs" />
     <Compile Include="Model\Form_Ans.cs" />
     <Compile Include="Model\Form_Ans_Abo.cs" />
@@ -59,8 +58,6 @@
     <Compile Include="Model\Form_Query.cs" />
     <Compile Include="Model\Form_Query_Curs.cs" />
     <Compile Include="Model\Form_Visit.cs" />
-    <Compile Include="Model\Link.cs" />
-    <Compile Include="Model\Step.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLite.cs" />

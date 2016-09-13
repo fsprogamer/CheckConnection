@@ -3,7 +3,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-    class Connection
+    public class Connection
     {
 
         [PrimaryKey, AutoIncrement, Unique]

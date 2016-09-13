@@ -2,7 +2,7 @@
 
 namespace ConnectionWizard.Model
 {
-    class Form_Ans_Abo
+    public class Form_Ans_Abo
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id_Ans_Abo { get; set; }

@@ -6,7 +6,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    partial class DbMethods : DBConnection
+    public partial class DbMethods : DBConnection
     {
 
         public DbMethods()
@@ -19,61 +19,88 @@ namespace CheckConnection.Methods
                                             )
         {
             const string table_name = "Connection";
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
-            {
-                if (!isTableExists(table_name, db))
-                    db.CreateTable<Connection>();
 
-                foreach ( Connection conn in Connection_list )
+            try
+            {
+                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
                 {
-                    db.RunInTransaction(() =>
+                    if (!isTableExists(table_name, db))
+                        db.CreateTable<Connection>();
+
+                    foreach (Connection conn in Connection_list)
                     {
-                        db.Insert(conn);
-                        conn.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
-                        SaveDNSTable(DNS_list, db, conn.Id);
-                        SaveGatewayTable(Gateway_list, db, conn.Id);
-                    });
+                        db.RunInTransaction(() =>
+                        {
+                            db.Insert(conn);
+                            conn.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
+                            SaveDNSTable(DNS_list, db, conn.Id);
+                            SaveGatewayTable(Gateway_list, db, conn.Id);
+                        });
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: '{0}'", e);
             }
         }
 
         public void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId)
         {
             string table_name = "DNS";
-            if (!isTableExists(table_name, db))            
-                db.CreateTable<DNS>();            
+            try
+            {
+                if (!isTableExists(table_name, db))
+                    db.CreateTable<DNS>();
 
-            foreach (DNS dns in DNS_list)
-              dns.Connection_Id = connId;
-            
-            db.InsertAll(DNS_list);
+                foreach (DNS dns in DNS_list)
+                    dns.Connection_Id = connId;
+
+                db.InsertAll(DNS_list);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: '{0}'", e);
+            }
         }
 
         public void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId)
         {
             string table_name = "Gateway";
-            if (!isTableExists(table_name, db))            
-             db.CreateTable<Gateway>();            
+            try
+            {
+                if (!isTableExists(table_name, db))
+                    db.CreateTable<Gateway>();
 
-            foreach (Gateway gtw in Gateway_list)
-              gtw.Connection_Id = connId;
-            
-            db.InsertAll(Gateway_list);
+                foreach (Gateway gtw in Gateway_list)
+                    gtw.Connection_Id = connId;
+
+                db.InsertAll(Gateway_list);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: '{0}'", e);
+            }
         }
 
         public List<Connection> ReadConnectionHistory()
         {
             const string table_name = "Connection";
             List<Connection> Connection_list = new List<Connection>();
-
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
-            {
-                if (isTableExists(table_name, db))
+            try { 
+                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
                 {
-                    var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} order by Date desc", table_name));
-                    Connection_list.Capacity = connections.Count;
-                    Connection_list.AddRange(connections);
+                    if (isTableExists(table_name, db))
+                    {
+                        var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} order by Date desc", table_name));
+                        Connection_list.Capacity = connections.Count;
+                        Connection_list.AddRange(connections);
+                    }
                 }
+            }
+            catch (Exception e)
+             {
+                Console.WriteLine("Ошибка: '{0}'", e);
             }
             return Connection_list;
         }
@@ -99,15 +126,21 @@ namespace CheckConnection.Methods
         {
             const string table_name = "DNS";
             List<DNS> DNS_list = new List<DNS>();
-
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+            try
             {
-                if (isTableExists(table_name, db))
+                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
                 {
-                    var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name, Connection_Id));
-                    DNS_list.Capacity = dns_array.Count;
-                    DNS_list.AddRange(dns_array);
+                    if (isTableExists(table_name, db))
+                    {
+                        var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name, Connection_Id));
+                        DNS_list.Capacity = dns_array.Count;
+                        DNS_list.AddRange(dns_array);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: '{0}'", e);
             }
             return DNS_list;
         }
@@ -116,15 +149,21 @@ namespace CheckConnection.Methods
         {
             const string table_name = "Gateway";
             List<Gateway> Gateway_list = new List<Gateway>();
-
-            using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+            try
             {
-                if (isTableExists(table_name, db))
+                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
                 {
-                    var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Id asc", table_name, Connection_Id));
-                    Gateway_list.Capacity = gateway_array.Count;
-                    Gateway_list.AddRange(gateway_array);
+                    if (isTableExists(table_name, db))
+                    {
+                        var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Id asc", table_name, Connection_Id));
+                        Gateway_list.Capacity = gateway_array.Count;
+                        Gateway_list.AddRange(gateway_array);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: '{0}'", e);
             }
             return Gateway_list;
         }
@@ -133,13 +172,19 @@ namespace CheckConnection.Methods
         {
             if (db != null && !String.IsNullOrWhiteSpace(tableName))
             {
-                int count = db.ExecuteScalar<int>("SELECT count(tbl_name) from sqlite_master where tbl_name = '" + tableName + "'");
-                if (count > 0)
+                try
                 {
-                    return true;
-                }
+                    int count = db.ExecuteScalar<int>("SELECT count(tbl_name) from sqlite_master where tbl_name = '" + tableName + "'");
+                    if (count > 0)
+                    {
+                        return true;
+                    }
             }
-
+                 catch (Exception e)
+            {
+                Console.WriteLine("Ошибка: '{0}'", e);
+            }
+        }
             return false;
         }
     }

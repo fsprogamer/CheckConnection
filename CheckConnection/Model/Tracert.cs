@@ -3,7 +3,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-    class Tracert
+   public class Tracert
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }
@@ -17,7 +17,7 @@ namespace CheckConnection.Model
         public string Ip_Address { get; set; }       
     }
 
-    class Hop
+    public class Hop
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }
