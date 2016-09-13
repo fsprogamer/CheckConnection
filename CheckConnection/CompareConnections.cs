@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using CheckConnection.Methods;
 
 namespace CheckConnection
 {
@@ -61,7 +63,7 @@ namespace CheckConnection
             {
                 width += column.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, false);
             }
-            resultDataGridView.Width = width + resultDataGridView.RowHeadersWidth+140;
+            resultDataGridView.Width = width + resultDataGridView.RowHeadersWidth+145;
             int height = 0;
             foreach (DataGridViewRow row in resultDataGridView.Rows)
             {
@@ -75,8 +77,9 @@ namespace CheckConnection
             formSize = resultDataGridView.Width;
             int colWidth = resultDataGridView.Columns[1].GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, false);
             resultDataGridView.Columns[1].AutoSizeMode=DataGridViewAutoSizeColumnMode.NotSet;
-            resultDataGridView.Columns[1].Width = colWidth-5;
-            
+            resultDataGridView.Columns[1].Width = colWidth;
+            resultDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            resultDataGridView.ColumnHeadersHeight = 38;
         }
 
         void InputTable(DataGridViewRow dgvRow, int index, int cellIndex)
@@ -107,6 +110,7 @@ namespace CheckConnection
             {
                 resultDataGridView.Columns[1].Width += (resultDataGridView.Width - formSize);
                 formSize = resultDataGridView.Width;
+                
             }
         }
     }

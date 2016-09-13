@@ -36,8 +36,8 @@
             this.PingtoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TracerttoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.ViewComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -58,18 +58,22 @@
             this.ConnectionsdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 30);
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
+            this.ConnectionsdataGridView.ReadOnly = true;
             this.ConnectionsdataGridView.Size = new System.Drawing.Size(786, 128);
             this.ConnectionsdataGridView.TabIndex = 0;
             this.ConnectionsdataGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_CellEnter);
             // 
             // HistorydataGridView
             // 
+            this.HistorydataGridView.AllowUserToAddRows = false;
+            this.HistorydataGridView.AllowUserToDeleteRows = false;
             this.HistorydataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.HistorydataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.HistorydataGridView.Location = new System.Drawing.Point(0, 20);
             this.HistorydataGridView.Name = "HistorydataGridView";
+            this.HistorydataGridView.ReadOnly = true;
             this.HistorydataGridView.Size = new System.Drawing.Size(786, 198);
             this.HistorydataGridView.TabIndex = 1;
             // 
@@ -138,15 +142,6 @@
             this.ComparetoolStripButton.Text = "Compare";
             this.ComparetoolStripButton.Click += new System.EventHandler(this.ComparetoolStripButton_Click);
             // 
-            // ConnectionHistorylabel
-            // 
-            this.ConnectionHistorylabel.AutoSize = true;
-            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
-            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
-            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
-            this.ConnectionHistorylabel.TabIndex = 2;
-            this.ConnectionHistorylabel.Text = "История подключений";
-            // 
             // ViewComparetoolStripButton
             // 
             this.ViewComparetoolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -157,6 +152,15 @@
             this.ViewComparetoolStripButton.Text = "View Compare";
             this.ViewComparetoolStripButton.Click += new System.EventHandler(this.ViewComparetoolStripButton_Click);
             // 
+            // ConnectionHistorylabel
+            // 
+            this.ConnectionHistorylabel.AutoSize = true;
+            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
+            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
+            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
+            this.ConnectionHistorylabel.TabIndex = 2;
+            this.ConnectionHistorylabel.Text = "История подключений";
+            // 
             // DisplayConnections
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -164,6 +168,7 @@
             this.ClientSize = new System.Drawing.Size(786, 413);
             this.Controls.Add(this.splitContainer1);
             this.Name = "DisplayConnections";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Сетевые подключения";
             this.Load += new System.EventHandler(this.DisplayConnections_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).EndInit();

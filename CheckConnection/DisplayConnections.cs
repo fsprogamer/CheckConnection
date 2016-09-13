@@ -2,8 +2,6 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
-using TracertForm;
-
 using CheckConnection.Methods;
 using CheckConnection.Model;
 using PingForm;
@@ -22,6 +20,7 @@ namespace CheckConnection
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
         {
+            
             BindConnectionGrid(ref ConnectionsdataGridView);
             ConnectionsdataGridView.DefaultCellStyle.WrapMode=DataGridViewTriState.True;
             ConnectionsdataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
@@ -32,7 +31,11 @@ namespace CheckConnection
             WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
             CorrectWindowSize();
             HistorydataGridView.Rows[0].Selected=true;
-
+            int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
+            int x = widthScreen - this.ClientSize.Width;
+            int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
+            int y = heightScreen - this.ClientSize.Height;
+            this.Location=new Point((x/2),(y/2));
             #region Test_grid
 
 
@@ -367,6 +370,7 @@ namespace CheckConnection
             List<Ping> Ping_list = new List<Ping>();
 
             var PingForm = new PingForm.MainPingForm();
+            PingForm.StartPosition=FormStartPosition.CenterScreen;
             PingForm.Show();
         }
 
@@ -375,6 +379,7 @@ namespace CheckConnection
             List<Tracert> Tracert_list = new List<Tracert>();            
 
             var TracertForm = new TracertForm.MainForm();
+            TracertForm.StartPosition=FormStartPosition.CenterScreen;
             TracertForm.Show();
         }
 
@@ -430,6 +435,7 @@ namespace CheckConnection
             else
             {
                 int rowIndex = -1;
+                int count = 0;
                 if (CheckSelectRow(ref rowIndex))
                 {
                     for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
@@ -443,8 +449,28 @@ namespace CheckConnection
                                 ConnectionsdataGridView.Rows[0].Cells[i].Style.BackColor = Color.LightGray;
                                 ConnectionsdataGridView.Rows[0].Cells[i].Style.ForeColor = Color.Red;
                             }
+                            else
+                            {
+                                count++;
+                            }
+                        }
+                        else
+                        {
+                            if (ConnectionsdataGridView.Rows[0].Cells[i].Value == null)
+                            {
+                                count++;
+                            }
+                            else
+                            {
+                                ConnectionsdataGridView.Rows[0].Cells[i].Style.BackColor = Color.LightGray;
+                                ConnectionsdataGridView.Rows[0].Cells[i].Style.ForeColor = Color.Red;
+                            }
                         }
                     }
+                }
+                if (count == (ConnectionsdataGridView.ColumnCount-1))
+                {
+                    var message = MessageBox.Show("Параметры подключений совпадают", "Проверка совпадений", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -463,6 +489,7 @@ namespace CheckConnection
                 if (CheckSelectRow(ref rowIndex))
                 {
                     CompareConnections compareForm = new CompareConnections();
+                    compareForm.StartPosition=FormStartPosition.CenterScreen;
                     compareForm.NewDataTable(ConnectionsdataGridView, HistorydataGridView.Rows[rowIndex]);
                     compareForm.Show();
                 }
