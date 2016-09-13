@@ -95,10 +95,7 @@ namespace ConnectionWizard.Methods
             {
                 using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (isTableExists(table_name, db))
-                    {
-                        queryId = db.ExecuteScalar<int>(String.Format("SELECT Id_Query FROM {0} where Id_Ans = {1}", table_name, answerId));
-                    }
+                   queryId = db.ExecuteScalar<int>(String.Format("SELECT Id_Query FROM {0} where Id_Ans = {1}", table_name, answerId));
                 }
             }
             catch (Exception e)
