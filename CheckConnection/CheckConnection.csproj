@@ -69,9 +69,11 @@
     <Compile Include="DisplayConnections.Designer.cs">
       <DependentUpon>DisplayConnections.cs</DependentUpon>
     </Compile>
+    <Compile Include="Methods\DBInterface.cs" />
     <Compile Include="Methods\DbMethods.cs" />
     <Compile Include="Methods\DbMethodsNotUsed.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="Methods\WMIInterface.cs" />
     <Compile Include="Methods\WMIMethods.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\DNS.cs" />

@@ -6,7 +6,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    public partial class DbMethods : DBConnection
+    public partial class DbMethods : DBConnection,DBInterface
     {
 
         public DbMethods()

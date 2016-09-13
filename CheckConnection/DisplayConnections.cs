@@ -12,9 +12,13 @@ namespace CheckConnection
     {
         delegate void SetComboBoxCellType(int iRowIndex);
         bool bIsComboBox = false;
+        private DBInterface db;
+        private WMIInterface wmi;
 
-        public DisplayConnections()
+        public DisplayConnections(DBInterface dbparam, WMIInterface wmiparam)
         {
+            db = dbparam;
+            wmi = wmiparam;
             InitializeComponent();
         }
 
@@ -54,9 +58,7 @@ namespace CheckConnection
             //}
 
             #endregion
-        }
-
-       
+        }       
 
         /// <summary>
         /// 
@@ -186,9 +188,8 @@ namespace CheckConnection
         }
 
         private void BindConnectionGrid(ref DataGridView dgv)
-        {            
-            WMIMethods methods = new WMIMethods();
-            List<Connection> connlist = methods.GetNetworkDevices();
+        {                        
+            List<Connection> connlist = wmi.GetNetworkDevices();
 
             AddColumn(ref dgv);
             //dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
@@ -206,9 +207,8 @@ namespace CheckConnection
 
         }
         private void SetTextBox(ref DataGridView dgv)
-        {
-            WMIMethods methods = new WMIMethods();
-            List<Connection> connlist = methods.GetNetworkDevices();
+        {            
+            List<Connection> connlist = wmi.GetNetworkDevices();
 
             //Добавление данных
             DataGridViewRow row = new DataGridViewRow();
@@ -265,9 +265,8 @@ namespace CheckConnection
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells,
 
             }; 
-
-            WMIMethods methods = new WMIMethods();
-            List<DNS> dnslist = methods.GetDNSArray(conn_id);
+            
+            List<DNS> dnslist = wmi.GetDNSArray(conn_id);
 
             if (dnslist.Count > 0)
             {
@@ -293,8 +292,8 @@ namespace CheckConnection
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill,
 
             }; 
-            WMIMethods methods = new WMIMethods();            
-            List<Gateway> gtwlist = methods.GetGatewayArray(conn_id);
+                      
+            List<Gateway> gtwlist = wmi.GetGatewayArray(conn_id);
 
             if (gtwlist.Count > 0)
             {
@@ -308,15 +307,15 @@ namespace CheckConnection
 
         private void BindHistoryGrid(ref DataGridView dgv)
         {            
-            DbMethods DB = new DbMethods();
-            List<Connection> connlist = DB.ReadConnectionHistory();
+            //DbMethods DB = new DbMethods();
+            List<Connection> connlist = db.ReadConnectionHistory();
 
             AddColumn(ref dgv);
 
             foreach (Connection conn in connlist)
             {
-                List<DNS> dnslist = DB.ReadDNSHistory(conn.Id);
-                List<Gateway> gtwlist = DB.ReadGatewayHistory(conn.Id);
+                List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
+                List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
 
                 foreach (DNS dns in dnslist) { 
                     conn.DNSServer = conn.DNSServer + dns.DNSServer + "; ";
@@ -345,14 +344,12 @@ namespace CheckConnection
         {
             base.OnFormClosing(e);
 
-            DbMethods DB = new DbMethods();
-            WMIMethods methods = new WMIMethods();
-            List<Connection> Connection_list = methods.GetNetworkDevices();
-            List<DNS> DNS_list = methods.GetDNSArray(Connection_list[0].Id);
-            List<Gateway> Gateway_list = methods.GetGatewayArray(Connection_list[0].Id);
+            List<Connection> Connection_list = wmi.GetNetworkDevices();
+            List<DNS> DNS_list = wmi.GetDNSArray(Connection_list[0].Id);
+            List<Gateway> Gateway_list = wmi.GetGatewayArray(Connection_list[0].Id);
 
             if (Connection_list.Count > 0)            
-                DB.SaveConnectionTable(Connection_list, DNS_list, Gateway_list);
+                db.SaveConnectionTable(Connection_list, DNS_list, Gateway_list);
 
             //DB.ReadConnectionHistory(ref Connection_list);
 
@@ -398,9 +395,8 @@ namespace CheckConnection
         private void ChangeCellToComboBox(int iRowIndex)
         {
             if (bIsComboBox == false)
-            {
-                WMIMethods methods = new WMIMethods();
-                List<DNS> dt = methods.GetDNSArray(0);
+            {                
+                List<DNS> dt = wmi.GetDNSArray(0);
 
                 DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
                 dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
