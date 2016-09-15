@@ -6,7 +6,7 @@ using Common;
 
 namespace ConnectionWizard.Methods
 {
-    public partial class DBMethods : DBConnection
+    public partial class DBMethods : DBConnection, DBInterface
     {
         public DBMethods()
         {

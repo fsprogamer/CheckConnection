@@ -12,60 +12,66 @@ namespace ConnectionWizard
     {
         //int page_index = 0;
         const string FlowPanelName = "FlowPanel";
-        public MainWizard()
-        {            
+        private DBInterface db;
+        private int forms_visit_id = 0;
+
+        public MainWizard(DBInterface dbparam)
+        {
+            db = dbparam;
             InitializeComponent();
         }
 
         private void MainWizard_Load(object sender, EventArgs e)
-        {            
-            DBMethods db = new DBMethods();
-            Wizard_Init( db.GetFormsById(271) );                  
+        {
+            Forms forms = db.GetFormsById(271);
+            Wizard_Init(forms);
+            forms_visit_id = db.SetFormVisit(forms.Id_Form);
         }
 
         void wizardPage_Commit(object sender, AeroWizard.WizardPageConfirmEventArgs e)
         {
-            // If the user hasn't provided a sufficiently long zip code, don't allow the commit
-            DBMethods db = new DBMethods();
-            int forms_visit_id = 0;
-
-            #region Save_results
-            Forms forms = db.GetFormsById(271);
-            forms_visit_id = db.SetFormVisit(forms.Id_Form);
 
             FlowLayoutPanel flpanel = (FlowLayoutPanel)e.Page.Controls[FlowPanelName];
-            RadioButton rb = new RadioButton();
-            foreach (Control cntrl in flpanel.Controls)
+            if (flpanel != null)
             {
-                rb = (RadioButton)cntrl;
 
-                if (rb.Checked == true)
-                {                     
-                    db.SetFormAnsAbo(new Form_Ans_Abo() { Id_Query = ((Form_Ans)rb.Tag).Id_Query, Id_Ans = ((Form_Ans)rb.Tag).Id_Ans, Id_Visit = forms_visit_id });
-                    break;
+                #region Save_results
+                RadioButton rb = new RadioButton();
+                foreach (Control cntrl in flpanel.Controls)
+                {
+                    rb = (RadioButton)cntrl;
+
+                    if (rb.Checked == true)
+                    {
+                        db.SetFormAnsAbo(new Form_Ans_Abo() { Id_Query = ((Form_Ans)rb.Tag).Id_Query, Id_Ans = ((Form_Ans)rb.Tag).Id_Ans, Id_Visit = forms_visit_id });
+                        break;
+                    }
                 }
-            }
-            #endregion
+                #endregion
 
-            #region GetNext
-            Form_Query form_query = db.GetNextQuery(forms_visit_id, ((Form_Ans)rb.Tag).Id_Query);
-            if (form_query.Num_Query != 0)
-            {                
-                e.Page.NextPage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Id_Query == form_query.Id_Query; });
+                #region GetNext
+                Form_Query form_query = db.GetNextQuery(forms_visit_id, ((Form_Ans)rb.Tag).Id_Query);
+                if (form_query.Num_Query != 0)
+                {
+                    e.Page.NextPage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Id_Query == form_query.Id_Query; });
+                }
+                else
+                {
+                    e.Page.NextPage = wizardControl.Pages[wizardControl.Pages.Count - 1];
+                }
+                #endregion
             }
             else
             {
                 e.Page.NextPage = wizardControl.Pages[wizardControl.Pages.Count - 1];
             }
-            #endregion
         }
 
         void Wizard_Init(Forms form)
         {
-            DBMethods db = new DBMethods();
             List<Form_Query> query_list = db.GetQueryTable();
 
-            wizardControl.Pages.Capacity = query_list.Count;
+            wizardControl.Pages.Capacity = query_list.Count+1;
             wizardControl.Text = form.Name;
 
             #region Find first question
@@ -88,11 +94,8 @@ namespace ConnectionWizard
                 wizardControl.Pages.Add(page);
             }
 
-            #region Finish page
-            WizardPage finish_page = new WizardPage();
-            finish_page.IsFinishPage = true;
-            finish_page.Text = "Конец";
-            wizardControl.Pages.Add(finish_page);
+            #region Finish page            
+            wizardControl.Pages[wizardControl.Pages.Count - 1].IsFinishPage = true;
             #endregion
 
             wizardControl.RestartPages();
@@ -100,7 +103,6 @@ namespace ConnectionWizard
 
         FlowLayoutPanel AddAnswerToPanel(int queryid)
         {
-            DBMethods db = new DBMethods();
             List<Form_Ans> form_answer_list = db.GetQueryAnswer(queryid);
             FlowLayoutPanel flpanel = new FlowLayoutPanel();
 

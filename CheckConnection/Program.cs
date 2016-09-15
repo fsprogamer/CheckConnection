@@ -18,7 +18,7 @@ namespace CheckConnection
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DBInterface db = new DbMethods();
+            DBInterface db = new DBMethods();
             WMIInterface wmi = new WMIMethods();
             Application.Run(new DisplayConnections(db,wmi));
         }

@@ -6,10 +6,10 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    public partial class DbMethods : DBConnection,DBInterface
+    public partial class DBMethods : DBConnection,DBInterface
     {
 
-        public DbMethods()
+        public DBMethods()
         {
             conn_string = Properties.Settings.Default.DBConnectionString;
         }

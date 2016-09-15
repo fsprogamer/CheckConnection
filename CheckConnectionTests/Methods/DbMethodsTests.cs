@@ -6,13 +6,13 @@ using CheckConnection.Model;
 namespace CheckConnection.Methods.Tests
 {
     [TestClass()]
-    public class DbMethodsTests: DbMethods
+    public class DbMethodsTests: DBMethods
     {
     
         [TestMethod()]
         public void ReadConnectionHistoryTest()
         {
-            DbMethods DB = new DbMethods();
+            DBMethods DB = new DBMethods();
             List<Connection> connlist = DB.ReadConnectionHistory();
             Assert.AreNotEqual(0, connlist.Count);
         }
@@ -20,7 +20,7 @@ namespace CheckConnection.Methods.Tests
         [TestMethod()]
         public void ReadDNSHistoryTest()
         {
-            DbMethods DB = new DbMethods();
+            DBMethods DB = new DBMethods();
             List<Connection> connlist = DB.ReadConnectionHistory();
             Assert.AreNotEqual(0, connlist.Count);
             foreach (Connection conn in connlist)
@@ -32,7 +32,7 @@ namespace CheckConnection.Methods.Tests
         [TestMethod()]
         public void ReadGatewayHistoryTest()
         {
-            DbMethods DB = new DbMethods();
+            DBMethods DB = new DBMethods();
             List<Connection> connlist = DB.ReadConnectionHistory();
             Assert.AreNotEqual(0, connlist.Count);
             foreach (Connection conn in connlist)
@@ -45,7 +45,7 @@ namespace CheckConnection.Methods.Tests
         public void isTableExistsTest()
         {
             const string table_name = "Connection";
-            DbMethods db = new DbMethods();
+            DBMethods db = new DBMethods();
             using (var conn = new SQLiteConnection(conn_string, true))
             {
                 Assert.AreEqual(true, db.isTableExists(table_name, conn));

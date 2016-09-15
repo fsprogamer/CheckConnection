@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
-using AeroWizard;
+
+using ConnectionWizard.Methods;
 
 
 namespace ConnectionWizard
@@ -17,7 +16,9 @@ namespace ConnectionWizard
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWizard());
+
+            DBInterface db = new ConnectionWizard.Methods.DBMethods();
+            Application.Run(new MainWizard(db));
         }
     }
 }

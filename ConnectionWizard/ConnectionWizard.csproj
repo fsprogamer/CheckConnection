@@ -50,6 +50,7 @@
       <DependentUpon>MainWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Methods\DBInitialize.cs" />
+    <Compile Include="Methods\DBInterface.cs" />
     <Compile Include="Methods\DBMethods.cs" />
     <Compile Include="Model\Forms.cs" />
     <Compile Include="Model\Form_Ans.cs" />

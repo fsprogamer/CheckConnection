@@ -5,7 +5,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    partial class DbMethods : DBConnection
+    partial class DBMethods : DBConnection
     {
         public void SavePingTable(ref List<Ping> Ping_list)
         {
