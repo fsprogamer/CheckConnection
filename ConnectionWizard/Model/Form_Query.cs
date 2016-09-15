@@ -13,5 +13,6 @@ namespace ConnectionWizard.Model
         [NotNull]
         public int Num_Query { get; set; }
         public string Hint_User { get; set; }
+        public string Action { get; set; }
     }
 }

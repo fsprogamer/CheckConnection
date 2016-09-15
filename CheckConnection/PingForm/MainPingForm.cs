@@ -2,6 +2,7 @@
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
+using PingForm.Methods;
 
 namespace PingForm
 {
@@ -19,23 +20,15 @@ namespace PingForm
 
         private void startTrace_Click(object sender, EventArgs e)
         {
-            Ping pingSender = new Ping();
-            PingOptions options = new PingOptions();
             string strHostName = destination.Text;
-
             if (String.IsNullOrEmpty(strHostName))
             {
                 strHostName = "localhost";
             }
-            // Use the default Ttl value which is 128,
-            // but change the fragmentation behavior.
-            options.DontFragment = true;
 
-            // Create a buffer of 32 bytes of data to be transmitted.
-            string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
-            int timeout = 120;
-            PingReply reply = pingSender.Send(strHostName, timeout, buffer, options);
+            PingMethods pm = new PingMethods();
+            PingReply reply = pm.GetPing(strHostName);
+
             if (reply.Status == IPStatus.Success)
             {
                 //Console.WriteLine("Address: {0}", reply.Address.ToString());

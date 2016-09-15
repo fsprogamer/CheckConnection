@@ -5,7 +5,7 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    class WMIMethods: WMIInterface
+    public class WMIMethods: WMIInterface
     {
         private ManagementObjectCollection moCollection;
 
@@ -151,9 +151,9 @@ namespace CheckConnection.Methods
             return Gateway_list;
         }
 
-        public List<Ping> GetPingResult(string PingAddress )
+        public List<PingResult> GetPingResult(string PingAddress )
         {
-            List<Ping> Ping_list = new List<Ping>();
+            List<PingResult> Ping_list = new List<PingResult>();
             string query = "SELECT * FROM Win32_PingStatus WHERE Address = '{0}'";
             query = String.Format(query, PingAddress);
 
@@ -163,7 +163,7 @@ namespace CheckConnection.Methods
             //enumerate the collection.
             foreach (ManagementObject mo in moCollection) 
 	        {
-              Ping item = new Ping();
+                PingResult item = new PingResult();
 
               // access properties of the WMI object
               Console.WriteLine("StatusCode : {0}", mo["StatusCode"]);

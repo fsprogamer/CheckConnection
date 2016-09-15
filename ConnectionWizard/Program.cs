@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 
 using ConnectionWizard.Methods;
-
+using CheckConnection.Methods;
 
 namespace ConnectionWizard
 {
@@ -17,8 +17,9 @@ namespace ConnectionWizard
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            DBInterface db = new ConnectionWizard.Methods.DBMethods();
-            Application.Run(new MainWizard(db));
+            ConnectionWizard.Methods.DBInterface db = new ConnectionWizard.Methods.DBMethods();
+            WMIInterface wmi = new WMIMethods();
+            Application.Run(new MainWizard(db,wmi));
         }
     }
 }

@@ -2,9 +2,14 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using AeroWizard;
+using System.ComponentModel;
+using System.Drawing;
 
 using ConnectionWizard.Methods;
 using ConnectionWizard.Model;
+
+using CheckConnection.Methods;
+using CheckConnection.Model;
 
 namespace ConnectionWizard
 {
@@ -12,12 +17,14 @@ namespace ConnectionWizard
     {
         //int page_index = 0;
         const string FlowPanelName = "FlowPanel";
-        private DBInterface db;
+        private ConnectionWizard.Methods.DBInterface db;
+        private WMIInterface wmi;
         private int forms_visit_id = 0;
 
-        public MainWizard(DBInterface dbparam)
+        public MainWizard(ConnectionWizard.Methods.DBInterface dbparam, WMIInterface wmiparam)
         {
             db = dbparam;
+            wmi = wmiparam;
             InitializeComponent();
         }
 
@@ -38,13 +45,15 @@ namespace ConnectionWizard
                 #region Save_results
                 RadioButton rb = new RadioButton();
                 foreach (Control cntrl in flpanel.Controls)
-                {
-                    rb = (RadioButton)cntrl;
+                {                   
+                    if (cntrl is RadioButton) {
+                        rb = (RadioButton)cntrl;
 
-                    if (rb.Checked == true)
-                    {
-                        db.SetFormAnsAbo(new Form_Ans_Abo() { Id_Query = ((Form_Ans)rb.Tag).Id_Query, Id_Ans = ((Form_Ans)rb.Tag).Id_Ans, Id_Visit = forms_visit_id });
-                        break;
+                        if (rb.Checked == true)
+                        {
+                            db.SetFormAnsAbo(new Form_Ans_Abo() { Id_Query = ((Form_Ans)rb.Tag).Id_Query, Id_Ans = ((Form_Ans)rb.Tag).Id_Ans, Id_Visit = forms_visit_id });
+                            break;
+                        }
                     }
                 }
                 #endregion
@@ -53,7 +62,22 @@ namespace ConnectionWizard
                 Form_Query form_query = db.GetNextQuery(forms_visit_id, ((Form_Ans)rb.Tag).Id_Query);
                 if (form_query.Num_Query != 0)
                 {
-                    e.Page.NextPage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Id_Query == form_query.Id_Query; });
+                    e.Page.NextPage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Id_Query == form_query.Id_Query; });                    
+                     
+                    if (form_query.Action == "GetNetworkDevices")
+                    {
+                        FlowLayoutPanel nextflpanel = (FlowLayoutPanel)e.Page.NextPage.Controls[FlowPanelName];
+                        AddConnGridToPanel(ref nextflpanel);
+                    }      
+                    else if (form_query.Action == "GetPing")
+                    {
+
+                    }
+                    else if (form_query.Action == "GetTrace")
+                    {
+
+                    }
+
                 }
                 else
                 {
@@ -128,6 +152,24 @@ namespace ConnectionWizard
             return flpanel;
         }
 
+        FlowLayoutPanel AddConnGridToPanel(ref FlowLayoutPanel flpanel)
+        {
+            var ctrl = flpanel.Controls.Find(WinObjMethods.ConnGridName, false);
+            if (ctrl.Length == 0 ){
+                DataGridView dgv = WinObjMethods.GetConnectionGrid();
+                List<Connection> connlist = wmi.GetNetworkDevices();
+                if (connlist.Count > 0)
+                {
+                    var bindsList = new BindingList<Connection>(connlist);
+                    //Bind BindingList directly to the DataGrid
+                    var source = new BindingSource(bindsList, null);
+                    dgv.DataSource = source;
+                }
+                flpanel.Controls.Add(dgv);
+            }
+            return flpanel;
+        }
+
         WizardPage FillPage(Form_Query query)
         {
             WizardPage page = new WizardPage();
@@ -135,9 +177,12 @@ namespace ConnectionWizard
             page.Tag = query;
             page.Text = query.Query;
             page.Commit += wizardPage_Commit;
-            page.Controls.Add(AddAnswerToPanel(query.Id_Query));
+       
+            FlowLayoutPanel flpanel = AddAnswerToPanel(query.Id_Query);       
+            page.Controls.Add(flpanel);            
 
             return page;
         }
+
     }
 }

@@ -13,7 +13,7 @@ namespace CheckConnection
         delegate void SetComboBoxCellType(int iRowIndex);
         bool bIsComboBox = false;
         private DBInterface db;
-        private WMIInterface wmi;
+        private WMIInterface wmi;        
 
         public DisplayConnections(DBInterface dbparam, WMIInterface wmiparam)
         {
@@ -24,7 +24,7 @@ namespace CheckConnection
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
         {
-            
+            ConnectionsdataGridView.Name = WinObjMethods.ConnGridName;
             BindConnectionGrid(ref ConnectionsdataGridView);
             ConnectionsdataGridView.DefaultCellStyle.WrapMode=DataGridViewTriState.True;
             ConnectionsdataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
@@ -64,134 +64,12 @@ namespace CheckConnection
         /// 
         /// </summary>
         /// <param name="dgv"></param>
-        private void AddColumn(ref DataGridView dgv)
-        {
-            dgv.AutoGenerateColumns = false;
-
-            //dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-            //create the column programatically
-            DataGridViewCell cell = new DataGridViewTextBoxCell();
-            DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "Date",
-                HeaderText = "Дата и время",
-                DataPropertyName = "Date", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "Name",
-                HeaderText = "Название подключения",
-                DataPropertyName = "Name", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "MAC",
-                HeaderText = "MAC адрес",
-                DataPropertyName = "MAC", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "Ip_Address_v4",
-                HeaderText = "IP адрес",
-                DataPropertyName = "Ip_Address_v4", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "Ip_Address_v6",
-                HeaderText = "IP адрес v6",
-                DataPropertyName = "Ip_Address_v6", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "DHCP_Enabled",
-                HeaderText = "DHCP включен",
-                DataPropertyName = "DHCP_Enabled", // Tell the column which property it should use
-                //Width = 100,
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "DHCPServer",
-                HeaderText = "DHCP сервер",
-                DataPropertyName = "DHCPServer", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "DNSDomain",
-                HeaderText = "Основной DNS-суффикс",
-                DataPropertyName = "DNSDomain", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "IPSubnetMask",
-                HeaderText = "Маска подсети",
-                DataPropertyName = "IPSubnetMask", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "IPGateway",
-                HeaderText = "Шлюзы ...",
-                DataPropertyName = "IPGateway", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells
-            };
-            dgv.Columns.Add(colName);
-
-            colName = new DataGridViewTextBoxColumn()
-            {
-                CellTemplate = cell,
-                Name = "DNSServer",
-                HeaderText = "DNS-серверы...",
-                DataPropertyName = "DNSServer", // Tell the column which property it should use
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill
-            };
-
-            dgv.Columns.Add(colName);
-            //dgv.Columns["DNSServer"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            //dgv.Columns["DNSServer"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-        }
-
+   
         private void BindConnectionGrid(ref DataGridView dgv)
         {                        
             List<Connection> connlist = wmi.GetNetworkDevices();
 
-            AddColumn(ref dgv);
+            WinObjMethods.AddColumn(ref dgv);
             //dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
             //dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
 
@@ -310,7 +188,7 @@ namespace CheckConnection
             //DbMethods DB = new DbMethods();
             List<Connection> connlist = db.ReadConnectionHistory();
 
-            AddColumn(ref dgv);
+            WinObjMethods.AddColumn(ref dgv);
 
             foreach (Connection conn in connlist)
             {
@@ -364,7 +242,7 @@ namespace CheckConnection
 
         private void PingtoolStripButton_Click(object sender, System.EventArgs e)
         {
-            List<Ping> Ping_list = new List<Ping>();
+            //List<Ping> Ping_list = new List<Ping>();
 
             var PingForm = new PingForm.MainPingForm();
             PingForm.StartPosition=FormStartPosition.CenterScreen;

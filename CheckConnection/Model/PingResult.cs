@@ -3,7 +3,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-   public class Ping
+   public class PingResult
     {
 
             [PrimaryKey, AutoIncrement, Unique]

@@ -11,6 +11,6 @@ namespace CheckConnection.Methods
 
         List<Gateway> GetGatewayArray(int Connection_Id);
 
-        List<Ping> GetPingResult(string PingAddress);
+        List<PingResult> GetPingResult(string PingAddress);
     }
 }

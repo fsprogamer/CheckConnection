@@ -78,12 +78,10 @@
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\DNS.cs" />
     <Compile Include="Model\Gateway.cs" />
-    <Compile Include="Model\Ping.cs" />
+    <Compile Include="Model\PingResult.cs" />
     <Compile Include="Model\Tracert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLite.cs" />
-    <Compile Include="SQLiteAsync.cs" />
     <EmbeddedResource Include="CompareConnections.resx">
       <DependentUpon>CompareConnections.cs</DependentUpon>
     </EmbeddedResource>

@@ -7,12 +7,12 @@ namespace CheckConnection.Methods
 {
     partial class DBMethods : DBConnection
     {
-        public void SavePingTable(ref List<Ping> Ping_list)
+        public void SavePingTable(ref List<PingResult> Ping_list)
         {
             using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
             {
-                db.CreateTable<Ping>();
-                foreach (Ping png in Ping_list)
+                db.CreateTable<PingResult>();
+                foreach (PingResult png in Ping_list)
                 {
                     db.Insert(png);
                 }

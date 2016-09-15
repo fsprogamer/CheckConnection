@@ -34,11 +34,15 @@
             // 
             // wizardControl
             // 
+            this.wizardControl.BackButtonToolTipText = "Возврат на предыдущую страницу";
             this.wizardControl.BackColor = System.Drawing.Color.White;
+            this.wizardControl.CancelButtonText = "&Отмена";
             this.wizardControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardControl.FinishButtonText = "&Завершение";
             this.wizardControl.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardControl.Location = new System.Drawing.Point(0, 0);
             this.wizardControl.Name = "wizardControl";
+            this.wizardControl.NextButtonText = "&Следующий";
             this.wizardControl.Size = new System.Drawing.Size(574, 415);
             this.wizardControl.TabIndex = 0;
             this.wizardControl.Title = "Навигация";
@@ -47,6 +51,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(574, 415);
             this.Controls.Add(this.wizardControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
