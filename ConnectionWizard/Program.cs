@@ -3,6 +3,7 @@ using System.Windows.Forms;
 
 using ConnectionWizard.Methods;
 using CheckConnection.Methods;
+using PingForm.Methods;
 
 namespace ConnectionWizard
 {
@@ -19,7 +20,8 @@ namespace ConnectionWizard
 
             ConnectionWizard.Methods.DBInterface db = new ConnectionWizard.Methods.DBMethods();
             WMIInterface wmi = new WMIMethods();
-            Application.Run(new MainWizard(db,wmi));
+            PingInterface png = new PingMethods();
+            Application.Run(new MainWizard(db, wmi, png));
         }
     }
 }

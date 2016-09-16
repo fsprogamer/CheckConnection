@@ -4,17 +4,19 @@ using System.Text;
 
 namespace PingForm.Methods
 {
-    public class PingMethods
+    public class PingMethods:PingInterface
     {
+        private Ping pingSender;
+        private PingOptions options;
+
         public PingMethods()
         {
+            pingSender = new Ping();
+            options = new PingOptions();
         }
 
         public PingReply GetPing(string destination)
         {
-            Ping pingSender = new Ping();
-            PingOptions options = new PingOptions();
-
             // Use the default Ttl value which is 128,
             // but change the fragmentation behavior.
             options.DontFragment = true;

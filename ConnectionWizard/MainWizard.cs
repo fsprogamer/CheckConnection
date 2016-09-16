@@ -3,13 +3,15 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using AeroWizard;
 using System.ComponentModel;
-using System.Drawing;
+using System.Text;
 
 using ConnectionWizard.Methods;
 using ConnectionWizard.Model;
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
+
+using PingForm.Methods;
 
 namespace ConnectionWizard
 {
@@ -19,12 +21,16 @@ namespace ConnectionWizard
         const string FlowPanelName = "FlowPanel";
         private ConnectionWizard.Methods.DBInterface db;
         private WMIInterface wmi;
+        private PingInterface png;
         private int forms_visit_id = 0;
 
-        public MainWizard(ConnectionWizard.Methods.DBInterface dbparam, WMIInterface wmiparam)
+        public MainWizard(ConnectionWizard.Methods.DBInterface dbparam, 
+                                                  WMIInterface wmiparam,
+                                                  PingInterface pngparam)
         {
             db = dbparam;
             wmi = wmiparam;
+            png = pngparam;
             InitializeComponent();
         }
 
@@ -59,25 +65,17 @@ namespace ConnectionWizard
                 #endregion
 
                 #region GetNext
-                Form_Query form_query = db.GetNextQuery(forms_visit_id, ((Form_Ans)rb.Tag).Id_Query);
+                Form_Query form_query = new Form_Query();
+                if (rb.Tag != null)
+                {
+                    form_query = db.GetNextQuery(forms_visit_id, ((Form_Ans)rb.Tag).Id_Query);
+                }
+
                 if (form_query.Num_Query != 0)
                 {
-                    e.Page.NextPage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Id_Query == form_query.Id_Query; });                    
-                     
-                    if (form_query.Action == "GetNetworkDevices")
-                    {
-                        FlowLayoutPanel nextflpanel = (FlowLayoutPanel)e.Page.NextPage.Controls[FlowPanelName];
-                        AddConnGridToPanel(ref nextflpanel);
-                    }      
-                    else if (form_query.Action == "GetPing")
-                    {
-
-                    }
-                    else if (form_query.Action == "GetTrace")
-                    {
-
-                    }
-
+                    e.Page.NextPage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Id_Query == form_query.Id_Query; });
+                    
+                    AddControlByAction(form_query, e);
                 }
                 else
                 {
@@ -130,42 +128,23 @@ namespace ConnectionWizard
             List<Form_Ans> form_answer_list = db.GetQueryAnswer(queryid);
             FlowLayoutPanel flpanel = new FlowLayoutPanel();
 
+            #region Panel                
+             flpanel.FlowDirection = FlowDirection.TopDown;
+             flpanel.AutoSize = true;
+             flpanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+             flpanel.WrapContents = true;
+             flpanel.Dock = DockStyle.Fill;
+             flpanel.Name = FlowPanelName;
+            #endregion
+
             foreach (Form_Ans form_answer in form_answer_list)
             {
-                #region Panel                
-                flpanel.FlowDirection = FlowDirection.TopDown;
-                flpanel.AutoSize = true;
-                flpanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                flpanel.WrapContents = true;
-                flpanel.Dock = DockStyle.Fill;
-                flpanel.Name = FlowPanelName;
-                #endregion
-
                 RadioButton box = new RadioButton();
                 box.Text = form_answer.Answer;
                 box.AutoSize = true;
                 box.Dock = System.Windows.Forms.DockStyle.Fill;
                 box.Tag = form_answer;
                 flpanel.Controls.Add(box);
-            }
-
-            return flpanel;
-        }
-
-        FlowLayoutPanel AddConnGridToPanel(ref FlowLayoutPanel flpanel)
-        {
-            var ctrl = flpanel.Controls.Find(WinObjMethods.ConnGridName, false);
-            if (ctrl.Length == 0 ){
-                DataGridView dgv = WinObjMethods.GetConnectionGrid();
-                List<Connection> connlist = wmi.GetNetworkDevices();
-                if (connlist.Count > 0)
-                {
-                    var bindsList = new BindingList<Connection>(connlist);
-                    //Bind BindingList directly to the DataGrid
-                    var source = new BindingSource(bindsList, null);
-                    dgv.DataSource = source;
-                }
-                flpanel.Controls.Add(dgv);
             }
             return flpanel;
         }
@@ -182,6 +161,96 @@ namespace ConnectionWizard
             page.Controls.Add(flpanel);            
 
             return page;
+        }
+
+        void AddControlByAction(Form_Query form_query, AeroWizard.WizardPageConfirmEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(form_query.Action)) {
+                if (form_query.Action.Contains("GetNetworkDevices"))
+                {
+                    FlowLayoutPanel nextflpanel = (FlowLayoutPanel)e.Page.NextPage.Controls[FlowPanelName];
+                    AddConnGridToPanel(ref nextflpanel);
+                }
+                if ( form_query.Action.Contains("GetPingLocal"))
+                {
+                    FlowLayoutPanel nextflpanel = (FlowLayoutPanel)e.Page.NextPage.Controls[FlowPanelName];
+
+                    WizardPage wzpage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Action == "GetNetworkDevices"; });
+                    FlowLayoutPanel currflpanel = (FlowLayoutPanel)wzpage.Controls[FlowPanelName];
+                    DataGridView dgv = (DataGridView)currflpanel.Controls[WinObjMethods.ConnGridName];
+                    if (dgv != null && dgv.Rows.Count > 0) {
+                        string destination = dgv.Rows[0].Cells["Ip_Address_v4"].Value.ToString();
+                        if (destination != null)
+                            AddPingResultToPanel(destination, ref nextflpanel);
+                        else
+                            destination = "localhost";
+                    }
+                }
+                if (!String.IsNullOrEmpty(form_query.Action) && form_query.Action.Contains("GetPingGate"))
+                {
+                    FlowLayoutPanel nextflpanel = (FlowLayoutPanel)e.Page.NextPage.Controls[FlowPanelName];
+
+                    WizardPage wzpage = wizardControl.Pages.Find(delegate (WizardPage pg) { return ((Form_Query)pg.Tag).Action == "GetNetworkDevices"; });
+                    FlowLayoutPanel currflpanel = (FlowLayoutPanel)wzpage.Controls[FlowPanelName];
+                    DataGridView dgv = (DataGridView)currflpanel.Controls[WinObjMethods.ConnGridName];
+                    if (dgv != null && dgv.Rows.Count > 0)
+                    {
+                        string destination = dgv.Rows[0].Cells["IPGateway"].Value.ToString();
+                        destination = destination.Substring(0, (destination.IndexOf(";") > 0) ? destination.IndexOf(";") : destination.Length);
+                        if (destination != null)
+                            AddPingResultToPanel(destination, ref nextflpanel);
+                        else
+                            destination = "localhost";
+                    }
+                }
+                if (!String.IsNullOrEmpty(form_query.Action) && form_query.Action.Contains("GetTrace"))
+                {
+
+                }
+            }
+        }
+
+        void AddConnGridToPanel(ref FlowLayoutPanel flpanel)
+        {
+            var ctrl = flpanel.Controls.Find(WinObjMethods.ConnGridName, false);
+            if (ctrl.Length == 0)
+            {
+                DataGridView dgv = WinObjMethods.GetConnectionGrid();
+                List<Connection> connlist = wmi.GetNetworkDevices();
+                if (connlist.Count > 0)
+                {
+                    var bindsList = new BindingList<Connection>(connlist);
+                    //Bind BindingList directly to the DataGrid
+                    var source = new BindingSource(bindsList, null);
+                    dgv.DataSource = source;
+                }
+                flpanel.Controls.Add(dgv);
+            }
+        }
+
+        void AddPingResultToPanel(string destination, ref FlowLayoutPanel flpanel)
+        {
+            const string pingresultTB = "pingresultTextBox";
+            //var ctrl = flpanel.Controls.Find(pingresultTB, false);
+            //if (ctrl.Length == 0)
+            //{
+                Label pingresult = new Label();
+                pingresult.Name = pingresultTB;
+                pingresult.BorderStyle = BorderStyle.None;
+                pingresult.AutoSize = true;
+                pingresult.Dock = DockStyle.Left | DockStyle.Top;
+
+                System.Net.NetworkInformation.PingReply pngreply = png.GetPing(destination);
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine();
+                sb.AppendLine("IP-адрес: " + pngreply.Address.ToString() );
+                sb.AppendLine("Время отклика: " + (pngreply.Status == System.Net.NetworkInformation.IPStatus.Success ? pngreply.RoundtripTime.ToString() : "*" ));
+
+                pingresult.Text = sb.ToString();
+
+                flpanel.Controls.Add(pingresult);
+            //}
         }
 
     }

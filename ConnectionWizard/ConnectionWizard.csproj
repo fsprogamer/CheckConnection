@@ -91,6 +91,10 @@
       <Project>{9e74be01-b0c1-419b-b760-a80289104b44}</Project>
       <Name>CheckConnection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CheckConnection\PingForm\PingForm.csproj">
+      <Project>{2c80c7c4-be99-4616-9273-965e191b5d7b}</Project>
+      <Name>PingForm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{2e728e94-a37e-4b82-97d1-e22a51319659}</Project>
       <Name>Common</Name>
