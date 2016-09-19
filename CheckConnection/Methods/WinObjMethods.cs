@@ -148,6 +148,12 @@ namespace CheckConnection.Methods
             //dgv.Columns["DNSServer"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
 
+        public static void AddColumnForWizard(ref DataGridView dgv)
+        {
+            AddColumn(ref dgv);
+            dgv.Columns["DNSServer"].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells;
+        }
+
         public static DataGridView GetConnectionGrid()
         {
             DataGridView dgv = new DataGridView();
@@ -158,7 +164,10 @@ namespace CheckConnection.Methods
             dgv.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
             dgv.AutoSize = true;
 
-            AddColumn(ref dgv);
+            dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            AddColumnForWizard(ref dgv);
             return dgv;
         }
     }

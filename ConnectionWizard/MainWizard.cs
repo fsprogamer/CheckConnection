@@ -215,7 +215,7 @@ namespace ConnectionWizard
             var ctrl = flpanel.Controls.Find(WinObjMethods.ConnGridName, false);
             if (ctrl.Length == 0)
             {
-                DataGridView dgv = WinObjMethods.GetConnectionGrid();
+                DataGridView dgv = WinObjMethods.GetConnectionGrid();                
                 List<Connection> connlist = wmi.GetNetworkDevices();
                 if (connlist.Count > 0)
                 {
@@ -224,7 +224,7 @@ namespace ConnectionWizard
                     var source = new BindingSource(bindsList, null);
                     dgv.DataSource = source;
                 }
-                flpanel.Controls.Add(dgv);
+                flpanel.Controls.Add(dgv);                
             }
         }
 
