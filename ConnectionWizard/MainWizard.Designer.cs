@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWizard));
             this.wizardControl = new AeroWizard.WizardControl();
             ((System.ComponentModel.ISupportInitialize)(this.wizardControl)).BeginInit();
             this.SuspendLayout();
@@ -46,6 +47,7 @@
             this.wizardControl.Size = new System.Drawing.Size(574, 415);
             this.wizardControl.TabIndex = 0;
             this.wizardControl.Title = "Навигация";
+            this.wizardControl.TitleIcon = ((System.Drawing.Icon)(resources.GetObject("wizardControl.TitleIcon")));
             // 
             // MainWizard
             // 

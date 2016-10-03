@@ -34,12 +34,15 @@ namespace CheckConnection
             HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
             WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
             CorrectWindowSize();
-            HistorydataGridView.Rows[0].Selected=true;
+
+            if(HistorydataGridView.Rows.Count>0)
+                HistorydataGridView.Rows[0].Selected = true;
             int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
             int x = widthScreen - this.ClientSize.Width;
             int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
             int y = heightScreen - this.ClientSize.Height;
-            this.Location=new Point((x/2),(y/2));
+            this.Location = new Point((x / 2), (y / 2));
+
             #region Test_grid
 
 
