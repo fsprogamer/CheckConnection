@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using SQLite;
 
 namespace CheckConnection.Model
@@ -9,28 +10,30 @@ namespace CheckConnection.Model
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }
         [NotNull, Indexed]
+        [Display(Name = "Дата и время")]
         public DateTime Date { get; set; }
         [NotNull]
+        [Display(Name = "Название подключения")]
         public string Name { get; set; }
-        //[NotNull]
-        //public string Type { get; set; }
-        //[NotNull]
+        [Display(Name = "MAC адрес")]
         public string MAC { get; set; }
-        //[NotNull]
+        [Display(Name = "IP адрес")]
         public string Ip_Address_v4 { get; set; }
-        //[NotNull]
+        [Display(Name = "IP адрес v6")]
         public string Ip_Address_v6 { get; set; }
-        //[NotNull]
+        [Display(Name = "DHCP включен")]
         public string DHCP_Enabled { get; set; }
-        //[NotNull]
+        [Display(Name = "DHCP сервер")]
         public string DHCPServer { get; set; }
-        //[NotNull]
+        [Display(Name = "Основной DNS-суффикс")]
         public string DNSDomain { get; set; }
-        //[NotNull]
+        [Display(Name = "Маска подсети")]
         public string IPSubnetMask { get; set; }
-        [Ignore]
+        [Ignore]        
+        [Display(Name = "Шлюзы...")]
         public string IPGateway { get; set; }
         [Ignore]
+        [Display(Name = "DNS-серверы...")]
         public string DNSServer { get; set; }
     }
 

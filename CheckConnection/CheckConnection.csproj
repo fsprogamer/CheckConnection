@@ -55,6 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Management" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -75,6 +76,7 @@
     <Compile Include="Methods\DBInterface.cs" />
     <Compile Include="Methods\DBMethods.cs" />
     <Compile Include="Methods\DBMethodsNotUsed.cs" />
+    <Compile Include="Methods\NetworkMethods.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Methods\WMIInterface.cs" />
     <Compile Include="Methods\WMIMethods.cs" />

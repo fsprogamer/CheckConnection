@@ -416,6 +416,11 @@ namespace CheckConnection
             }
         }
 
+        private void toolStripButtonGetInfo_Click(object sender, System.EventArgs e)
+        {
+            //wmi.
+        }
+
         #endregion
 
         //private void ChangeCellToComboBox(int iRowIndex)

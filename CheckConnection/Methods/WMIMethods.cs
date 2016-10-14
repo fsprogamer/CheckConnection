@@ -5,14 +5,15 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    public class WMIMethods: WMIInterface
+    public partial class WMIMethods: WMIInterface
     {
         private ManagementObjectCollection moCollection;
 
         public WMIMethods()
         {
             string query = "SELECT * FROM Win32_NetworkAdapterConfiguration"
-             + " WHERE IPEnabled = 'TRUE'";
+             + " WHERE IPEnabled = 'TRUE'"
+             ;
 
             ManagementObjectSearcher moSearch = new ManagementObjectSearcher(query);
             moCollection = moSearch.Get();
@@ -96,7 +97,7 @@ namespace CheckConnection.Methods
                     Connection_list.Add(item);
                 }
                 //Только одно подключение
-                break;
+                //break;
             }
 
             return Connection_list;
