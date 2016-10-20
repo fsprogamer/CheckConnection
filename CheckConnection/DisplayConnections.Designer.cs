@@ -37,8 +37,9 @@
             this.TracerttoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ViewComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonChangeConnection = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -60,9 +61,10 @@
             this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 30);
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
             this.ConnectionsdataGridView.ReadOnly = true;
+            this.ConnectionsdataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ConnectionsdataGridView.Size = new System.Drawing.Size(786, 128);
             this.ConnectionsdataGridView.TabIndex = 0;
-            this.ConnectionsdataGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_CellEnter);
+            this.ConnectionsdataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_RowEnter);
             // 
             // HistorydataGridView
             // 
@@ -107,7 +109,8 @@
             this.TracerttoolStripButton,
             this.ComparetoolStripButton,
             this.ViewComparetoolStripButton,
-            this.toolStripButton1});
+            this.toolStripButtonChangeConnection,
+            this.toolStripButtonRefresh});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(786, 25);
@@ -142,6 +145,7 @@
             this.ComparetoolStripButton.Name = "ComparetoolStripButton";
             this.ComparetoolStripButton.Size = new System.Drawing.Size(23, 22);
             this.ComparetoolStripButton.Text = "Compare";
+            this.ComparetoolStripButton.ToolTipText = "Сравнить";
             this.ComparetoolStripButton.Click += new System.EventHandler(this.ComparetoolStripButton_Click);
             // 
             // ViewComparetoolStripButton
@@ -152,7 +156,30 @@
             this.ViewComparetoolStripButton.Name = "ViewComparetoolStripButton";
             this.ViewComparetoolStripButton.Size = new System.Drawing.Size(23, 22);
             this.ViewComparetoolStripButton.Text = "View Compare";
+            this.ViewComparetoolStripButton.ToolTipText = "Сравнить поэлементно";
             this.ViewComparetoolStripButton.Click += new System.EventHandler(this.ViewComparetoolStripButton_Click);
+            // 
+            // toolStripButtonChangeConnection
+            // 
+            this.toolStripButtonChangeConnection.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonChangeConnection.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonChangeConnection.Image")));
+            this.toolStripButtonChangeConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonChangeConnection.Name = "toolStripButtonChangeConnection";
+            this.toolStripButtonChangeConnection.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonChangeConnection.Text = "ChangeConnectionParam";
+            this.toolStripButtonChangeConnection.ToolTipText = "Изменить параметры подключения";
+            this.toolStripButtonChangeConnection.Click += new System.EventHandler(this.toolStripButtonChangeConnection_Click);
+            // 
+            // toolStripButtonRefresh
+            // 
+            this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRefresh.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRefresh.Image")));
+            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRefresh.Text = "Refresh";
+            this.toolStripButtonRefresh.ToolTipText = "Обновить отображаемые параметры";
+            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
             // ConnectionHistorylabel
             // 
@@ -162,16 +189,6 @@
             this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
             this.ConnectionHistorylabel.TabIndex = 2;
             this.ConnectionHistorylabel.Text = "История подключений";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButtonGetInfo";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButtonGetInfo_Click);
             // 
             // DisplayConnections
             // 
@@ -209,6 +226,7 @@
         private System.Windows.Forms.ToolStripButton TracerttoolStripButton;
         private System.Windows.Forms.ToolStripButton ComparetoolStripButton;
         private System.Windows.Forms.ToolStripButton ViewComparetoolStripButton;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonChangeConnection;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
     }
 }

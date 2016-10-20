@@ -5,5 +5,14 @@
     <Setting Name="DBConnectionString" Type="System.String" Scope="User">
       <Value Profile="(Default)">Connections.db</Value>
     </Setting>
+    <Setting Name="IPAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.10</Value>
+    </Setting>
+    <Setting Name="SubnetMask" Type="System.String" Scope="User">
+      <Value Profile="(Default)">255.255.254.0</Value>
+    </Setting>
+    <Setting Name="Gateway" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

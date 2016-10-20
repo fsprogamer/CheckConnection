@@ -54,13 +54,26 @@
     <ApplicationIcon>20gear2.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Management" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeConnectionForm.Designer.cs">
+      <DependentUpon>ChangeConnectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CompareConnections.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,12 +94,16 @@
     <Compile Include="Methods\WMIInterface.cs" />
     <Compile Include="Methods\WMIMethods.cs" />
     <Compile Include="Model\Connection.cs" />
+    <Compile Include="Model\ConnectionParam.cs" />
     <Compile Include="Model\DNS.cs" />
     <Compile Include="Model\Gateway.cs" />
     <Compile Include="Model\PingResult.cs" />
     <Compile Include="Model\Tracert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChangeConnectionForm.resx">
+      <DependentUpon>ChangeConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CompareConnections.resx">
       <DependentUpon>CompareConnections.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,6 +120,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="CheckConnection.exe.log4net" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -121,6 +139,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{2e728e94-a37e-4b82-97d1-e22a51319659}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ipaddresscontrollib\VS2015\IPAddressControlLib\IPAddressControlLib.csproj">
+      <Project>{A5ED2B33-5644-47C4-BC30-A4840F67FF87}</Project>
+      <Name>IPAddressControlLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TracertForm\TracertForm.csproj">
       <Project>{32b24586-8bb7-44d6-bfa1-8f0c612f69d8}</Project>

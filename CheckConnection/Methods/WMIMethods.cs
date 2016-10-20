@@ -1,31 +1,50 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Management;
 using CheckConnection.Model;
+using log4net;
 
 namespace CheckConnection.Methods
 {
     public partial class WMIMethods: WMIInterface
     {
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ManagementObjectCollection moCollection;
+
+        private const string IPEnabled_query = "SELECT * FROM Win32_NetworkAdapterConfiguration";
+                                             //  + " WHERE IPEnabled = 'TRUE'";
 
         public WMIMethods()
         {
-            string query = "SELECT * FROM Win32_NetworkAdapterConfiguration"
-             + " WHERE IPEnabled = 'TRUE'"
-             ;
-
-            ManagementObjectSearcher moSearch = new ManagementObjectSearcher(query);
-            moCollection = moSearch.Get();
+            QueryWMI(IPEnabled_query);
         }
 
-        public List<Connection> GetNetworkDevices( )
+        private int QueryWMI(string query)
         {
-            int Conn_id = 0;
-            List<Connection> Connection_list = new List<Connection>();
+            int ret = 0; 
+            ManagementObjectSearcher moSearch = new ManagementObjectSearcher(query);
+            moCollection = moSearch.Get();
+            if(moCollection!=null)
+             ret = moCollection.Count;
+            return ret;
+        }
+
+        public int GetNetworkDevicesConfig()
+        {
+           return QueryWMI(IPEnabled_query);
+        }
+
+        public List<ConnectionParam> GetNetworkDevices( )
+        {
+            //DNS и Gateway связаны с подключением через Connection_id
+            //При чтении через WMI Connection_id формируется искусственно
+            int Connection_id = 0;
+            List<ConnectionParam> connparam_list = new List<ConnectionParam>(10);
 
             foreach (ManagementObject mo in moCollection)
             {
+                ConnectionParam connparam = new ConnectionParam();
                 try
                 {
                     Connection item = new Connection();
@@ -33,7 +52,7 @@ namespace CheckConnection.Methods
                     if (mo["Description"] != null)
                         item.Name = mo["Description"].ToString();
 
-                    item.Id = Conn_id;
+                    item.Id = Connection_id;
                     item.Date = DateTime.Now;
 
                     if (mo["DHCPEnabled"] != null)
@@ -65,9 +84,117 @@ namespace CheckConnection.Methods
                     if (mo["DefaultIPGateway"] != null)
                     {
                         string[] defaultgateways = (string[])mo["DefaultIPGateway"];
+                        connparam.Gateway_list = new List<Gateway>(2);
+
+                        foreach (string defaultipgateway_str in defaultgateways)
+                        {
+                            Gateway gtw = new Gateway
+                            {
+                                IPGateway = defaultipgateway_str,
+                                Connection_Id = Connection_id
+                            };
+                            connparam.Gateway_list.Add(gtw);
+
+                            item.IPGateway += defaultipgateway_str + "; ";                            
+                        }
+                        item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
+                    }
+
+                    if (mo["DNSServerSearchOrder"] != null)
+                    {
+                        string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
+                        int Order_Id = 0;
+
+                        connparam.DNS_list = new List<DNS>(2);
+
+                        foreach (string dns_str in DNSarray)
+                        {
+                            DNS _dns = new DNS
+                            {
+                                DNSServer = dns_str,
+                                Connection_Id = Connection_id,
+                                Order_Id = Order_Id
+                            };
+                            connparam.DNS_list.Add(_dns);                            
+
+                            item.DNSServer += dns_str + "; ";     
+                            
+                            Order_Id++;                       
+                        }
+                        item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
+                    }                    
+
+                    if (mo["DHCPServer"] != null)
+                        item.DHCPServer = mo["DHCPServer"].ToString();
+
+                    connparam.Connection = item;
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Ошибка при чтении параметров подключения", ex);
+                    Connection item = new Connection();
+                    item.Name = "empty";
+                    item.Id = Connection_id;
+                    connparam.Connection = item;
+                }
+
+                connparam_list.Add(connparam);
+                Connection_id++;
+            }            
+
+            return connparam_list.OrderByDescending(p => p.Connection.Ip_Address_v4).ToList(); ;
+        }
+
+        public List<Connection> GetNetworkDevicesList()
+        {
+            int Conn_id = 0;
+            List<Connection> Connection_list = new List<Connection>(10);
+
+            foreach (ManagementObject mo in moCollection)
+            {
+                try
+                {
+                    Connection item = new Connection();
+
+                    if (mo["Description"] != null)
+                        item.Name = mo["Description"].ToString();
+
+                    item.Id = Conn_id;
+                    item.Date = DateTime.Now;
+
+                    if (mo["DHCPEnabled"] != null)
+                        item.DHCP_Enabled = mo["DHCPEnabled"].ToString();
+
+                    if (mo["IPAddress"] != null)
+                    {
+                        string[] addresses = (string[])mo["IPAddress"];
+                        item.Ip_Address_v4 = addresses[0];
+                        if (addresses.Length > 1)
+                            item.Ip_Address_v6 = addresses[1];
+                    }
+
+                    if (mo["MACAddress"] != null)
+                        item.MAC = mo["MACAddress"].ToString();
+
+                    if (mo["DNSDomain"] != null)
+                        item.DNSDomain = mo["DNSDomain"].ToString();
+
+                    if (mo["IPSubnet"] != null)
+                    {
+                        string[] subnets = (string[])mo["IPSubnet"];
+                        foreach (string ipsubnet in subnets)
+                        {
+                            item.IPSubnetMask = ipsubnet;
+                            break;
+                        }
+                    }
+
+                    if (mo["DefaultIPGateway"] != null)
+                    {
+                        string[] defaultgateways = (string[])mo["DefaultIPGateway"];
                         foreach (string defaultipgateway in defaultgateways)
                         {
-                            item.IPGateway = item.IPGateway + defaultipgateway + "; ";                            
+                            item.IPGateway = item.IPGateway + defaultipgateway + "; ";
                         }
                         item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
                     }
@@ -77,17 +204,17 @@ namespace CheckConnection.Methods
                         string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
                         foreach (string dns in DNSarray)
                         {
-                            item.DNSServer = item.DNSServer + dns + "; ";                            
+                            item.DNSServer = item.DNSServer + dns + "; ";
                         }
                         item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
                     }
-                    
+
 
                     if (mo["DHCPServer"] != null)
                         item.DHCPServer = mo["DHCPServer"].ToString();
 
                     Connection_list.Add(item);
-                    Conn_id++;                    
+                    Conn_id++;
                 }
                 catch (Exception)
                 {
@@ -100,23 +227,105 @@ namespace CheckConnection.Methods
                 //break;
             }
 
-            return Connection_list;
+            return Connection_list.OrderByDescending(p => p.Ip_Address_v4).ToList(); ;
         }
 
-        public List<DNS> GetDNSArray(int Connection_Id )
+
+        public Connection GetNetworkDeviceByName(string conndesc)
         {
-            List<DNS> DNS_list = new List<DNS>();
+            int Conn_id = 0;
+            Connection item = new Connection();
+
+            foreach (ManagementObject mo in moCollection)
+            {
+                string description = mo["Description"] as string;
+                if (string.Compare(description, conndesc, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    try
+                    {
+                        if (mo["Description"] != null)
+                            item.Name = mo["Description"].ToString();
+
+                        item.Id = Conn_id;
+                        item.Date = DateTime.Now;
+
+                        if (mo["DHCPEnabled"] != null)
+                            item.DHCP_Enabled = mo["DHCPEnabled"].ToString();
+
+                        if (mo["IPAddress"] != null)
+                        {
+                            string[] addresses = (string[])mo["IPAddress"];
+                            item.Ip_Address_v4 = addresses[0];
+                            if (addresses.Length > 1)
+                                item.Ip_Address_v6 = addresses[1];
+                        }
+
+                        if (mo["MACAddress"] != null)
+                            item.MAC = mo["MACAddress"].ToString();
+
+                        if (mo["DNSDomain"] != null)
+                            item.DNSDomain = mo["DNSDomain"].ToString();
+
+                        if (mo["IPSubnet"] != null)
+                        {
+                            string[] subnets = (string[])mo["IPSubnet"];
+                            foreach (string ipsubnet in subnets)
+                            {
+                                item.IPSubnetMask = ipsubnet;
+                                break;
+                            }
+                        }
+
+                        if (mo["DefaultIPGateway"] != null)
+                        {
+                            string[] defaultgateways = (string[])mo["DefaultIPGateway"];
+                            foreach (string defaultipgateway in defaultgateways)
+                            {
+                                item.IPGateway = item.IPGateway + defaultipgateway + "; ";
+                            }
+                            item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
+                        }
+
+                        if (mo["DNSServerSearchOrder"] != null)
+                        {
+                            string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
+                            foreach (string dns in DNSarray)
+                            {
+                                item.DNSServer = item.DNSServer + dns + "; ";
+                            }
+                            item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
+                        }
+
+
+                        if (mo["DHCPServer"] != null)
+                            item.DHCPServer = mo["DHCPServer"].ToString();
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Ошибка при чтении параметров подключения", ex);
+                    }
+                    break;
+                }
+            }
+
+            return item;
+        }
+
+        public List<DNS> GetDNSArray(int Connection_Id = 0 )
+        {
+            List<DNS> DNS_list = new List<DNS>(2);
             int Order_Id = 0;
 
             foreach (ManagementObject mo in moCollection)
             {
                 if (mo["DNSServerSearchOrder"] != null)
-                {                    
+                {
                     string[] str_array = (string[])mo["DNSServerSearchOrder"];
                     foreach (string str in str_array)
                     {
                         DNS dns = new DNS();
-                        dns.DNSServer = str;                        
+                        dns.DNSServer = str;
                         dns.Connection_Id = Connection_Id;
                         dns.Order_Id = Order_Id;
                         DNS_list.Add(dns);
@@ -124,19 +333,19 @@ namespace CheckConnection.Methods
                     }
                 }
                 //Только одно подключение
-                break;
+                break;             
             }
             return DNS_list;
         }
 
-        public List<Gateway> GetGatewayArray(int Connection_Id )
+        public List<Gateway> GetGatewayArray(int Connection_Id = 0 )
         {
-            List<Gateway> Gateway_list = new List<Gateway>();
+            List<Gateway> Gateway_list = new List<Gateway>(2);
             foreach (ManagementObject mo in moCollection)
             {
                 if (mo["DefaultIPGateway"] != null)
                 {
-                    
+
                     string[] defaultgateways = (string[])mo["DefaultIPGateway"];
                     foreach (string defaultipgateway in defaultgateways)
                     {
@@ -147,7 +356,7 @@ namespace CheckConnection.Methods
                     }
                 }
                 //Только одно подключение
-                break;
+                break;             
             }
             return Gateway_list;
         }
@@ -164,16 +373,16 @@ namespace CheckConnection.Methods
             //enumerate the collection.
             foreach (ManagementObject mo in moCollection) 
 	        {
-                PingResult item = new PingResult();
+              PingResult item = new PingResult();
 
               // access properties of the WMI object
-              Console.WriteLine("StatusCode : {0}", mo["StatusCode"]);
+              log.ErrorFormat("StatusCode : {0}", mo["StatusCode"]);
 
-              Console.WriteLine("strStatusCode : {0}", GetStatusCode(Convert.ToInt32(mo["StatusCode"])));
+              log.ErrorFormat("strStatusCode : {0}", GetStatusCode(Convert.ToInt32(mo["StatusCode"])));
 
-              Console.WriteLine("ResponseTime : {0} ms", mo["ResponseTime"]);
-              Console.WriteLine("TimeToLive : {0} ms", mo["TimeToLive"]);
-              Console.WriteLine("Timeout : {0} ms", mo["Timeout"]);
+              log.ErrorFormat("ResponseTime : {0} ms", mo["ResponseTime"]);
+              log.ErrorFormat("TimeToLive : {0} ms", mo["TimeToLive"]);
+              log.ErrorFormat("Timeout : {0} ms", mo["Timeout"]);
 
               item.StatusCode = mo["StatusCode"].ToString();
               item.Connection_Id = 1;
@@ -184,7 +393,6 @@ namespace CheckConnection.Methods
 
               Ping_list.Add(item);
             }
-
             return Ping_list;
         }
 

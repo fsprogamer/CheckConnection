@@ -5,12 +5,21 @@ namespace CheckConnection.Methods
 {
     public interface WMIInterface
     {
-        List<Connection> GetNetworkDevices();
+        int GetNetworkDevicesConfig();
 
-        List<DNS> GetDNSArray(int Connection_Id);
+        List<ConnectionParam> GetNetworkDevices();
 
-        List<Gateway> GetGatewayArray(int Connection_Id);
+        List<Connection> GetNetworkDevicesList();
+
+        //Connection GetNetworkDeviceByName(string conndesc);
+
+        List<DNS> GetDNSArray(/*string conndesc, */int Connection_Id = 0);
+
+        List<Gateway> GetGatewayArray(/*string conndesc, */int Connection_Id = 0);
 
         List<PingResult> GetPingResult(string PingAddress);
+        int setStaticIP(string ip_address, string subnet_mask);
+
+        int setDinamicIP();
     }
 }

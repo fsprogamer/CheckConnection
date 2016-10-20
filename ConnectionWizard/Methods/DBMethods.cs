@@ -3,11 +3,13 @@ using SQLite;
 using ConnectionWizard.Model;
 using System.Collections.Generic;
 using Common;
+using log4net;
 
 namespace ConnectionWizard.Methods
 {
     public partial class DBMethods : DBConnection, DBInterface
     {
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public DBMethods()
         {
             conn_string = Properties.Settings.Default.DBConnectionString;
@@ -26,7 +28,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return form;
         }
@@ -44,7 +46,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return form;
         }
@@ -63,7 +65,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return form_query_list;
         }
@@ -82,7 +84,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return form_ans_list;
         }
@@ -100,7 +102,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return queryId;
         }
@@ -121,7 +123,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return form_answer;
         }
@@ -181,7 +183,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return v_next;
         }
@@ -199,7 +201,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return formquery;
         }
@@ -242,7 +244,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return form_ans_abo_list;
         }
@@ -268,7 +270,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return 0; 
         }
@@ -288,7 +290,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return 0;
         }
@@ -318,7 +320,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
 
             return form_visit.Id_Visit;
@@ -339,7 +341,7 @@ namespace ConnectionWizard.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return false;
         }

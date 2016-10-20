@@ -216,10 +216,10 @@ namespace ConnectionWizard
             if (ctrl.Length == 0)
             {
                 DataGridView dgv = WinObjMethods.GetConnectionGrid();                
-                List<Connection> connlist = wmi.GetNetworkDevices();
+                List<ConnectionParam> connlist = wmi.GetNetworkDevices();
                 if (connlist.Count > 0)
                 {
-                    var bindsList = new BindingList<Connection>(connlist);
+                    var bindsList = new BindingList<ConnectionParam>(connlist);
                     //Bind BindingList directly to the DataGrid
                     var source = new BindingSource(bindsList, null);
                     dgv.DataSource = source;

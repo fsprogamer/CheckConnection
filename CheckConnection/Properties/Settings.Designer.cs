@@ -34,5 +34,41 @@ namespace CheckConnection.Properties {
                 this["DBConnectionString"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.10")]
+        public string IPAddress {
+            get {
+                return ((string)(this["IPAddress"]));
+            }
+            set {
+                this["IPAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("255.255.254.0")]
+        public string SubnetMask {
+            get {
+                return ((string)(this["SubnetMask"]));
+            }
+            set {
+                this["SubnetMask"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.1")]
+        public string Gateway {
+            get {
+                return ((string)(this["Gateway"]));
+            }
+            set {
+                this["Gateway"] = value;
+            }
+        }
     }
 }

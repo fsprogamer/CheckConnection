@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using SQLite;
 using CheckConnection.Model;
 using Common;
+using log4net;
 
 namespace CheckConnection.Methods
 {
     public partial class DBMethods : DBConnection,DBInterface
     {
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public DBMethods()
         {
             conn_string = Properties.Settings.Default.DBConnectionString;
         }
-        public void SaveConnectionTable( List<Connection> Connection_list, 
-                                         List<DNS> DNS_list,
-                                         List<Gateway> Gateway_list
-                                            )
+        public void SaveConnectionTable( List<ConnectionParam> connparam )
         {
             const string table_name = "Connection";
 
@@ -27,59 +26,65 @@ namespace CheckConnection.Methods
                     if (!isTableExists(table_name, db))
                         db.CreateTable<Connection>();
 
-                    foreach (Connection conn in Connection_list)
+                    foreach (ConnectionParam conn in connparam)
                     {
                         db.RunInTransaction(() =>
                         {
-                            db.Insert(conn);
-                            conn.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
-                            SaveDNSTable(DNS_list, db, conn.Id);
-                            SaveGatewayTable(Gateway_list, db, conn.Id);
+                            db.Insert(conn.Connection);
+                            conn.Connection.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
+                            SaveDNSTable(conn.DNS_list, db, conn.Connection.Id);
+                            SaveGatewayTable(conn.Gateway_list, db, conn.Connection.Id);
                         });
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
         }
 
         public void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId)
         {
             string table_name = "DNS";
-            try
+            if (DNS_list != null)
             {
-                if (!isTableExists(table_name, db))
-                    db.CreateTable<DNS>();
+                try
+                {
+                    if (!isTableExists(table_name, db))
+                        db.CreateTable<DNS>();
 
-                foreach (DNS dns in DNS_list)
-                    dns.Connection_Id = connId;
+                    foreach (DNS dns in DNS_list)
+                        dns.Connection_Id = connId;
 
-                db.InsertAll(DNS_list);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                    db.InsertAll(DNS_list);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                }
             }
         }
 
         public void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId)
         {
             string table_name = "Gateway";
-            try
+            if (Gateway_list != null)
             {
-                if (!isTableExists(table_name, db))
-                    db.CreateTable<Gateway>();
+                try
+                {
+                    if (!isTableExists(table_name, db))
+                        db.CreateTable<Gateway>();
 
-                foreach (Gateway gtw in Gateway_list)
-                    gtw.Connection_Id = connId;
+                    foreach (Gateway gtw in Gateway_list)
+                        gtw.Connection_Id = connId;
 
-                db.InsertAll(Gateway_list);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                    db.InsertAll(Gateway_list);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                }
             }
         }
 
@@ -99,8 +104,31 @@ namespace CheckConnection.Methods
                 }
             }
             catch (Exception e)
-             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+            {
+                log.Error("Ошибка: '{0}'", e);
+            }
+            return Connection_list;
+        }
+
+        public List<Connection> ReadConnectionHistory(string name)
+        {
+            const string table_name = "Connection";
+            List<Connection> Connection_list = new List<Connection>();
+            try
+            {
+                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+                {
+                    if (isTableExists(table_name, db))
+                    {
+                        var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} where Name='{1}' order by Date desc", table_name, name));
+                        Connection_list.Capacity = connections.Count;
+                        Connection_list.AddRange(connections);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error("Ошибка: '{0}'", e);
             }
             return Connection_list;
         }
@@ -140,7 +168,7 @@ namespace CheckConnection.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return DNS_list;
         }
@@ -163,7 +191,7 @@ namespace CheckConnection.Methods
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                log.Error("Ошибка: '{0}'", e);
             }
             return Gateway_list;
         }
@@ -182,7 +210,7 @@ namespace CheckConnection.Methods
             }
                  catch (Exception e)
             {
-                Console.WriteLine("Ошибка: '{0}'", e);
+                    log.Error("Ошибка: '{0}'", e);
             }
         }
             return false;

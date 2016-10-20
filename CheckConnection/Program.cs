@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using System.Windows.Forms;
 using CheckConnection.Methods;
 
@@ -17,10 +15,11 @@ namespace CheckConnection
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(@"CheckConnection.exe.log4net"));//Если файл с настройками в папке с exe файлом        
 
             DBInterface db = new DBMethods();
             WMIInterface wmi = new WMIMethods();
-            Application.Run(new DisplayConnections(db,wmi));
+            Application.Run(new DisplayConnections(db,wmi));            
         }
     }
 }

@@ -7,15 +7,14 @@ namespace CheckConnection.Methods
 {
     public interface DBInterface
     {
-        void SaveConnectionTable(List<Connection> Connection_list,
-                                 List<DNS> DNS_list,
-                                 List<Gateway> Gateway_list
-                                    );
+        void SaveConnectionTable( List<ConnectionParam> connparam );
         void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId);
 
         void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId);
 
         List<Connection> ReadConnectionHistory();
+
+        List<Connection> ReadConnectionHistory(string name);
 
         List<DNS> ReadDNSHistory(int Connection_Id);
 

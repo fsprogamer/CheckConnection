@@ -2,9 +2,11 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System;
 using CheckConnection.Methods;
 using CheckConnection.Model;
-using PingForm;
+using log4net;
 
 namespace CheckConnection
 {
@@ -13,54 +15,50 @@ namespace CheckConnection
         delegate void SetComboBoxCellType(int iRowIndex);
         bool bIsComboBox = false;
         private DBInterface db;
-        private WMIInterface wmi;        
+        private WMIInterface wmi;
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private bool FormLoadComplete = false;
 
         public DisplayConnections(DBInterface dbparam, WMIInterface wmiparam)
         {
             db = dbparam;
             wmi = wmiparam;
-            InitializeComponent();
+            InitializeComponent();           
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
         {
             ConnectionsdataGridView.Name = WinObjMethods.ConnGridName;
+
+            WinObjMethods.AddColumn(ref ConnectionsdataGridView);
             BindConnectionGrid(ref ConnectionsdataGridView);
+
             ConnectionsdataGridView.DefaultCellStyle.WrapMode=DataGridViewTriState.True;
             ConnectionsdataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
-            BindHistoryGrid(ref HistorydataGridView);
-            HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
-            WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
-            CorrectWindowSize();
 
-            if(HistorydataGridView.Rows.Count>0)
-                HistorydataGridView.Rows[0].Selected = true;
-            int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
-            int x = widthScreen - this.ClientSize.Width;
-            int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
-            int y = heightScreen - this.ClientSize.Height;
-            this.Location = new Point((x / 2), (y / 2));
+            WinObjMethods.AddColumn(ref HistorydataGridView);
 
-            #region Test_grid
+            string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            if (!String.IsNullOrEmpty(SelectedConnectionName))
+            {
+                BindHistoryGrid(ref HistorydataGridView, SelectedConnectionName);
 
+                HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+                HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+                WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
+                CorrectWindowSize();
 
-            //WMIMethods methods = new WMIMethods();
-            //List<Connection> dt = methods.GetNetworkDevices();
+                if (HistorydataGridView.Rows.Count > 0)
+                    HistorydataGridView.Rows[0].Selected = true;
+                int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
+                int x = widthScreen - this.ClientSize.Width;
+                int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
+                int y = heightScreen - this.ClientSize.Height;
+                this.Location = new Point((x / 2), (y / 2));
 
-            //AddColumn(ref ConnectionsdataGridView);
-
-
-            //if (dt.Count > 0)
-            //{
-            //    var bindsList = new BindingList<Connection>(dt); // <-- BindingList
-            //    //Bind BindingList directly to the DataGrid
-            //    var source = new BindingSource(bindsList, null);
-            //    ConnectionsdataGridView.DataSource = source;
-            //}
-
-            #endregion
+            }
+            FormLoadComplete = true;
         }       
 
         /// <summary>
@@ -69,13 +67,10 @@ namespace CheckConnection
         /// <param name="dgv"></param>
    
         private void BindConnectionGrid(ref DataGridView dgv)
-        {                        
-            List<Connection> connlist = wmi.GetNetworkDevices();
-
-            WinObjMethods.AddColumn(ref dgv);
+        {
+            List<Connection> connlist = wmi.GetNetworkDevicesList();            
             //dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
             //dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
-
             //SetDNSComboBox(ref ConnectionsdataGridView);
 
             if (connlist.Count > 0)
@@ -89,7 +84,7 @@ namespace CheckConnection
         }
         private void SetTextBox(ref DataGridView dgv)
         {            
-            List<Connection> connlist = wmi.GetNetworkDevices();
+            List<ConnectionParam> connlist = wmi.GetNetworkDevices();
 
             //Добавление данных
             DataGridViewRow row = new DataGridViewRow();
@@ -144,7 +139,6 @@ namespace CheckConnection
                 ValueMember = "DNSServer",
                 //Width = 120,
                 AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells,
-
             }; 
             
             List<DNS> dnslist = wmi.GetDNSArray(conn_id);
@@ -186,28 +180,34 @@ namespace CheckConnection
             return cmb;
         }
 
-        private void BindHistoryGrid(ref DataGridView dgv)
+        private void BindHistoryGrid(ref DataGridView dgv, string name)
         {            
-            //DbMethods DB = new DbMethods();
-            List<Connection> connlist = db.ReadConnectionHistory();
-
-            WinObjMethods.AddColumn(ref dgv);
+            List<Connection> connlist = db.ReadConnectionHistory().Where(p => p.Name == name).ToList<Connection>();               
 
             foreach (Connection conn in connlist)
-            {
+            {                
                 List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
                 List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
 
-                foreach (DNS dns in dnslist) { 
-                    conn.DNSServer = conn.DNSServer + dns.DNSServer + "; ";
-                }
-                conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
-
-                foreach (Gateway gtw in gtwlist)
+                if (dnslist.Count > 0)
                 {
-                    conn.IPGateway = conn.IPGateway + gtw.IPGateway + "; ";
+                    foreach (DNS dns in dnslist)
+                    {
+                        conn.DNSServer += dns.DNSServer + "; ";
+                    }
+                    if (conn.DNSServer.Length > 2)
+                        conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
                 }
-                conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
+                if (gtwlist.Count > 0)
+                {
+                    foreach (Gateway gtw in gtwlist)
+                    {
+                        conn.IPGateway += gtw.IPGateway + "; ";
+                    }
+                    if (conn.IPGateway.Length > 2)
+                        conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
+                }
+
             }
 
             if (connlist.Count > 0)
@@ -223,19 +223,13 @@ namespace CheckConnection
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            base.OnFormClosing(e);
+            base.OnFormClosing(e);            
+            List<ConnectionParam> connparam = wmi.GetNetworkDevices();
 
-            List<Connection> Connection_list = wmi.GetNetworkDevices();
-            List<DNS> DNS_list = wmi.GetDNSArray(Connection_list[0].Id);
-            List<Gateway> Gateway_list = wmi.GetGatewayArray(Connection_list[0].Id);
-
-            if (Connection_list.Count > 0)            
-                db.SaveConnectionTable(Connection_list, DNS_list, Gateway_list);
-
-            //DB.ReadConnectionHistory(ref Connection_list);
+            if (connparam.Count > 0)            
+                db.SaveConnectionTable(connparam);
 
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
-
         }
         public void CorrectWindowSize()
         {
@@ -245,8 +239,6 @@ namespace CheckConnection
 
         private void PingtoolStripButton_Click(object sender, System.EventArgs e)
         {
-            //List<Ping> Ping_list = new List<Ping>();
-
             var PingForm = new PingForm.MainPingForm();
             PingForm.StartPosition=FormStartPosition.CenterScreen;
             PingForm.Show();
@@ -273,11 +265,11 @@ namespace CheckConnection
         }
 
         #region Test grid
-        private void ChangeCellToComboBox(int iRowIndex)
+        private void ChangeCellToComboBox(string conndesc, int iRowIndex)
         {
             if (bIsComboBox == false)
             {                
-                List<DNS> dt = wmi.GetDNSArray(0);
+                List<DNS> dt = wmi.GetDNSArray(iRowIndex);
 
                 DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
                 dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
@@ -296,10 +288,6 @@ namespace CheckConnection
                 ConnectionsdataGridView.Rows[iRowIndex].Cells[ConnectionsdataGridView.CurrentCell.ColumnIndex] = dgComboCell;
                 bIsComboBox = true;
             }
-        }
-
-        private void ConnectionsdataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
         }
 
         private void ComparetoolStripButton_Click(object sender, System.EventArgs e)
@@ -375,8 +363,11 @@ namespace CheckConnection
 
         private bool CheckSelectRow(ref int rowSelectIndex)
         {
+            log.Info("HistorydataGridView.SelectedRows.Count="+ HistorydataGridView.SelectedRows.Count.ToString());
+
             if (HistorydataGridView.SelectedRows.Count == 0)
             {
+                log.Info("HistorydataGridView.SelectedCells[0].RowIndex=" + HistorydataGridView.SelectedCells[0].RowIndex.ToString());
                 int rowIndex = HistorydataGridView.SelectedCells[0].RowIndex;
                 int count = 0;
                 foreach (DataGridViewCell cell in HistorydataGridView.SelectedCells)
@@ -401,9 +392,11 @@ namespace CheckConnection
             }
             else
             {
+                log.Info("HistorydataGridView.SelectedRows.Count=" + HistorydataGridView.SelectedRows.Count.ToString());
+
                 if (HistorydataGridView.SelectedRows.Count > 1)
                 {
-                    var message = MessageBox.Show("Выберите только одну строку для сравнения", "Ошибка подключения",
+                    MessageBox.Show("Выберите только одну строку для сравнения", "Ошибка подключения",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                     return false;
@@ -416,11 +409,59 @@ namespace CheckConnection
             }
         }
 
-        private void toolStripButtonGetInfo_Click(object sender, System.EventArgs e)
+        private void toolStripButtonChangeConnection_Click(object sender, System.EventArgs e)
         {
-            //wmi.
+            int selectedrow = GetSelectedRow(ConnectionsdataGridView);           
+
+            if ( ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value != null) {
+            string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();
+            ConnectionParam connparam = wmi.GetNetworkDevices().Where(p => p.Connection.Name == Name).First<ConnectionParam>();
+
+            var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam);
+            ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+            ChangeConnectionForm.Show(this);
+            }
+            else
+            {
+                log.Info("Соединение с таким наименованием отсутствуют");
+                MessageBox.Show("Соединение с таким наименованием отсутствуют", "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
 
+        private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
+        {
+            wmi.GetNetworkDevicesConfig();
+            BindConnectionGrid(ref ConnectionsdataGridView);
+        }
+
+        int GetSelectedRow(DataGridView dgv)
+        {
+            int selectedrow = 0;
+            if (dgv.SelectedRows.Count > 0)
+                selectedrow = dgv.SelectedRows[0].Index;            
+            return selectedrow;
+        }
+
+        string GetSelectedConnectionParam(DataGridView dgv, string paramname)
+        {
+            int selectedrow = GetSelectedRow(dgv);
+            string Name = string.Empty;
+            if (ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value != null)
+                Name = ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value.ToString();
+            return Name;
+        }
+
+        private void ConnectionsdataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (FormLoadComplete)
+            {
+                string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+                if (!String.IsNullOrEmpty(name))
+                    BindHistoryGrid(ref HistorydataGridView, name);
+            }
+        }
         #endregion
 
         //private void ChangeCellToComboBox(int iRowIndex)
