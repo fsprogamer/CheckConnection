@@ -37,11 +37,11 @@ namespace CheckConnection
             for (int i = 0; i < resultDataGridView.RowCount; i++)
             {
                 resultDataGridView.Rows[i].HeaderCell.Value = dgv1.Columns[i + 1].HeaderCell.Value;
-                InputTable(dgv1.Rows[0], i, 0);
+                InputTable(dgv1.Rows[dgv1.SelectedRows[0].Index], i, 0);
                 InputTable(dgv2Row, i, 1);
                 if (resultDataGridView.Rows[i].Cells[1].Value != null)
                 {
-                    if (!string.IsNullOrEmpty(resultDataGridView.Rows[i].Cells[1].Value.ToString()))
+                    if ((resultDataGridView.Rows[i].Cells[1].Value != null )&&(resultDataGridView.Rows[i].Cells[0].Value != null))
                     {
                         if (!resultDataGridView.Rows[i].Cells[0].Value.ToString().Equals(resultDataGridView.Rows[i].Cells[1].Value.ToString()))
                         {

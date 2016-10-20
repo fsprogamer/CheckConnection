@@ -217,6 +217,11 @@ namespace CheckConnection
                 var source = new BindingSource(bindsList, null);
                 dgv.DataSource = source;
             }
+            else
+            {
+                dgv.DataSource = null;
+                dgv.Refresh();
+            }
 
             WinObjMethods.ResizeGrid(ref dgv);
             CorrectWindowSize();            
@@ -305,14 +310,14 @@ namespace CheckConnection
                 {
                     for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
                     {
-                        if (HistorydataGridView.Rows[rowIndex].Cells[i].Value != null)
+                        if ((HistorydataGridView.Rows[rowIndex].Cells[i].Value != null)&&(ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Value != null))
                         {
                             if (
-                                !ConnectionsdataGridView.Rows[0].Cells[i].Value.ToString()
+                                !ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Value.ToString()
                                     .Equals(HistorydataGridView.Rows[rowIndex].Cells[i].Value.ToString()))
                             {
-                                ConnectionsdataGridView.Rows[0].Cells[i].Style.BackColor = Color.LightGray;
-                                ConnectionsdataGridView.Rows[0].Cells[i].Style.ForeColor = Color.Red;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.BackColor = Color.LightGray;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.ForeColor = Color.Red;
                             }
                             else
                             {
@@ -321,14 +326,14 @@ namespace CheckConnection
                         }
                         else
                         {
-                            if (ConnectionsdataGridView.Rows[0].Cells[i].Value == null)
+                            if (ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Value == null)
                             {
                                 count++;
                             }
                             else
                             {
-                                ConnectionsdataGridView.Rows[0].Cells[i].Style.BackColor = Color.LightGray;
-                                ConnectionsdataGridView.Rows[0].Cells[i].Style.ForeColor = Color.Red;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.BackColor = Color.LightGray;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.ForeColor = Color.Red;
                             }
                         }
                     }
