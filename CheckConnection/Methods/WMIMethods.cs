@@ -35,6 +35,18 @@ namespace CheckConnection.Methods
            return QueryWMI(IPEnabled_query);
         }
 
+        public ManagementObject GetManagementObject(string connname)
+        {
+            foreach (ManagementObject mo in moCollection)
+            {
+                string description = mo["Description"] as string;
+                if (string.Compare(description, connname, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    return mo;
+                }
+            }
+            return null;
+        }
         public List<ConnectionParam> GetNetworkDevices( )
         {
             //DNS и Gateway связаны с подключением через Connection_id
@@ -144,7 +156,6 @@ namespace CheckConnection.Methods
 
             return connparam_list.OrderByDescending(p => p.Connection.Ip_Address_v4).ToList(); ;
         }
-
         public List<Connection> GetNetworkDevicesList()
         {
             int Conn_id = 0;
@@ -230,82 +241,75 @@ namespace CheckConnection.Methods
             return Connection_list.OrderByDescending(p => p.Ip_Address_v4).ToList(); ;
         }
 
-
-        public Connection GetNetworkDeviceByName(string conndesc)
+        public Connection GetNetworkDeviceByName(string connname)
         {
             int Conn_id = 0;
             Connection item = new Connection();
+            ManagementObject mo = GetManagementObject(connname);
 
-            foreach (ManagementObject mo in moCollection)
-            {
-                string description = mo["Description"] as string;
-                if (string.Compare(description, conndesc, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if (mo != null) {
+                try
                 {
-                    try
+                    if (mo["Description"] != null)
+                        item.Name = mo["Description"].ToString();
+
+                    item.Id = Conn_id;
+                    item.Date = DateTime.Now;
+
+                    if (mo["DHCPEnabled"] != null)
+                        item.DHCP_Enabled = mo["DHCPEnabled"].ToString();
+
+                    if (mo["IPAddress"] != null)
                     {
-                        if (mo["Description"] != null)
-                            item.Name = mo["Description"].ToString();
-
-                        item.Id = Conn_id;
-                        item.Date = DateTime.Now;
-
-                        if (mo["DHCPEnabled"] != null)
-                            item.DHCP_Enabled = mo["DHCPEnabled"].ToString();
-
-                        if (mo["IPAddress"] != null)
-                        {
-                            string[] addresses = (string[])mo["IPAddress"];
-                            item.Ip_Address_v4 = addresses[0];
-                            if (addresses.Length > 1)
-                                item.Ip_Address_v6 = addresses[1];
-                        }
-
-                        if (mo["MACAddress"] != null)
-                            item.MAC = mo["MACAddress"].ToString();
-
-                        if (mo["DNSDomain"] != null)
-                            item.DNSDomain = mo["DNSDomain"].ToString();
-
-                        if (mo["IPSubnet"] != null)
-                        {
-                            string[] subnets = (string[])mo["IPSubnet"];
-                            foreach (string ipsubnet in subnets)
-                            {
-                                item.IPSubnetMask = ipsubnet;
-                                break;
-                            }
-                        }
-
-                        if (mo["DefaultIPGateway"] != null)
-                        {
-                            string[] defaultgateways = (string[])mo["DefaultIPGateway"];
-                            foreach (string defaultipgateway in defaultgateways)
-                            {
-                                item.IPGateway = item.IPGateway + defaultipgateway + "; ";
-                            }
-                            item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
-                        }
-
-                        if (mo["DNSServerSearchOrder"] != null)
-                        {
-                            string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
-                            foreach (string dns in DNSarray)
-                            {
-                                item.DNSServer = item.DNSServer + dns + "; ";
-                            }
-                            item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
-                        }
-
-
-                        if (mo["DHCPServer"] != null)
-                            item.DHCPServer = mo["DHCPServer"].ToString();
-                        
+                        string[] addresses = (string[])mo["IPAddress"];
+                        item.Ip_Address_v4 = addresses[0];
+                        if (addresses.Length > 1)
+                            item.Ip_Address_v6 = addresses[1];
                     }
-                    catch (Exception ex)
+
+                    if (mo["MACAddress"] != null)
+                        item.MAC = mo["MACAddress"].ToString();
+
+                    if (mo["DNSDomain"] != null)
+                        item.DNSDomain = mo["DNSDomain"].ToString();
+
+                    if (mo["IPSubnet"] != null)
                     {
-                        log.ErrorFormat("Ошибка при чтении параметров подключения", ex);
+                        string[] subnets = (string[])mo["IPSubnet"];
+                        foreach (string ipsubnet in subnets)
+                        {
+                            item.IPSubnetMask = ipsubnet;
+                            break;
+                        }
                     }
-                    break;
+
+                    if (mo["DefaultIPGateway"] != null)
+                    {
+                        string[] defaultgateways = (string[])mo["DefaultIPGateway"];
+                        foreach (string defaultipgateway in defaultgateways)
+                        {
+                            item.IPGateway = item.IPGateway + defaultipgateway + "; ";
+                        }
+                        item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
+                    }
+
+                    if (mo["DNSServerSearchOrder"] != null)
+                    {
+                        string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
+                        foreach (string dns in DNSarray)
+                        {
+                            item.DNSServer = item.DNSServer + dns + "; ";
+                        }
+                        item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
+                    }
+
+                    if (mo["DHCPServer"] != null)
+                        item.DHCPServer = mo["DHCPServer"].ToString();
+
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorFormat("Ошибка при чтении параметров подключения", ex);
                 }
             }
 

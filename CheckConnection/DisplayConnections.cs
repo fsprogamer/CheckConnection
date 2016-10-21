@@ -419,12 +419,11 @@ namespace CheckConnection
             int selectedrow = GetSelectedRow(ConnectionsdataGridView);           
 
             if ( ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value != null) {
-            string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();
-            ConnectionParam connparam = wmi.GetNetworkDevices().Where(p => p.Connection.Name == Name).First<ConnectionParam>();
+                string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();            
+                var ChangeConnectionForm = new ChangeConnectionForm(wmi, Name);
 
-            var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam);
-            ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-            ChangeConnectionForm.Show(this);
+                ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+                ChangeConnectionForm.Show(this);
             }
             else
             {

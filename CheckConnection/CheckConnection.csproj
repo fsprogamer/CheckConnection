@@ -97,6 +97,9 @@
     <Compile Include="Model\ConnectionParam.cs" />
     <Compile Include="Model\DNS.cs" />
     <Compile Include="Model\Gateway.cs" />
+    <Compile Include="Model\MObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Model\PingResult.cs" />
     <Compile Include="Model\Tracert.cs" />
     <Compile Include="Program.cs" />
