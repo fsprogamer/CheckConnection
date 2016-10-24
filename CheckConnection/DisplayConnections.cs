@@ -423,7 +423,7 @@ namespace CheckConnection
                 var ChangeConnectionForm = new ChangeConnectionForm(wmi, Name);
 
                 ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-                ChangeConnectionForm.Show(this);
+                ChangeConnectionForm.Show();
             }
             else
             {
@@ -465,6 +465,13 @@ namespace CheckConnection
                 if (!String.IsNullOrEmpty(name))
                     BindHistoryGrid(ref HistorydataGridView, name);
             }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            var TestIpTextBox = new TestIpTextBox();
+            TestIpTextBox.StartPosition = FormStartPosition.CenterScreen;
+            TestIpTextBox.Show();
         }
         #endregion
 

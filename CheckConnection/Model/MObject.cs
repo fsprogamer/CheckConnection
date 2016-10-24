@@ -6,10 +6,18 @@ namespace CheckConnection.Model
 {
     class MObject: ManagementObject
     {
+        private ManagementObject _objMO;
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public MObject()
-        {            
+        public MObject(ManagementObject pobjMO)
+        {
+            _objMO = pobjMO;
         }
+
+        public bool IpEnabled()
+        {
+            return (bool)_objMO["IPEnabled"];
+        }
+       
 
         public int setStaticIP(string ip_address, string subnet_mask)
         {
@@ -17,11 +25,11 @@ namespace CheckConnection.Model
             try
             {
                 // Set IPAddress and Subnet Mask
-                ManagementBaseObject newIP = this.GetMethodParameters("EnableStatic");
+                ManagementBaseObject newIP = _objMO.GetMethodParameters("EnableStatic");
                 newIP["IPAddress"] = new string[] { ip_address };
                 newIP["SubnetMask"] = new string[] { subnet_mask };
 
-                this.InvokeMethod("EnableStatic", newIP, null);
+                _objMO.InvokeMethod("EnableStatic", newIP, null);
                 ret = 1;
             }
             catch (Exception ex)
@@ -37,7 +45,7 @@ namespace CheckConnection.Model
             int ret = 0;
             try
             {
-                this.InvokeMethod("EnableDHCP", null);                
+                _objMO.InvokeMethod("EnableDHCP", null);                
                 ret = 1;
             }
             catch (Exception ex)
@@ -60,12 +68,12 @@ namespace CheckConnection.Model
             {
                 ManagementBaseObject setGateway;
                 ManagementBaseObject newGateway =
-                    this.GetMethodParameters("SetGateways");
+                    _objMO.GetMethodParameters("SetGateways");
 
                 newGateway["DefaultIPGateway"] = new string[] { gateway };
                 newGateway["GatewayCostMetric"] = new int[] { 1 };
 
-                setGateway = this.InvokeMethod("SetGateways", newGateway, null);
+                setGateway = _objMO.InvokeMethod("SetGateways", newGateway, null);
                 ret = 1;
             }
             catch (Exception ex)
@@ -91,10 +99,10 @@ namespace CheckConnection.Model
                 try
                 {
                     ManagementBaseObject newDNS =
-                        this.GetMethodParameters("SetDNSServerSearchOrder");
+                        _objMO.GetMethodParameters("SetDNSServerSearchOrder");
                     newDNS["DNSServerSearchOrder"] = DNS.Split(',');
                     ManagementBaseObject setDNS =
-                        this.InvokeMethod("SetDNSServerSearchOrder", newDNS, null);
+                        _objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null);
                     ret = 1;
                 }
                 catch (Exception ex)
@@ -123,11 +131,11 @@ namespace CheckConnection.Model
                 {
                     ManagementBaseObject setWINS;
                     ManagementBaseObject wins =
-                    this.GetMethodParameters("SetWINSServer");
+                    _objMO.GetMethodParameters("SetWINSServer");
                     wins.SetPropertyValue("WINSPrimaryServer", priWINS);
                     wins.SetPropertyValue("WINSSecondaryServer", secWINS);
 
-                    setWINS = this.InvokeMethod("SetWINSServer", wins, null);
+                    setWINS = _objMO.InvokeMethod("SetWINSServer", wins, null);
                     ret = 1;
                 }
                 catch (Exception ex)
@@ -145,10 +153,10 @@ namespace CheckConnection.Model
             try
             {
                 ManagementBaseObject setdnsDomain;
-                ManagementBaseObject DNSDomain = this.GetMethodParameters("DNSDomain");
+                ManagementBaseObject DNSDomain = _objMO.GetMethodParameters("DNSDomain");
 
                 DNSDomain["DNSDomain"] = name;
-                setdnsDomain = this.InvokeMethod("SetDNSDomain", DNSDomain, null);
+                setdnsDomain = _objMO.InvokeMethod("SetDNSDomain", DNSDomain, null);
                 ret = 1;
             }
             catch (Exception ex)
@@ -159,5 +167,24 @@ namespace CheckConnection.Model
             return ret;
         }
 
+        public int SetDNSServerSearchOrder(string[] name)
+        {
+            int ret = 0;
+            try
+            {
+                ManagementBaseObject newDNS = _objMO.GetMethodParameters("SetDNSServerSearchOrder");
+                newDNS["DNSServerSearchOrder"] = name;
+                ManagementBaseObject setDNS =
+                    _objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null);
+
+                ret = 1;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Ошибка при изменении SetDNSServerSearchOrder", ex);
+                throw;
+            }
+            return ret;
+        }       
     }
 }

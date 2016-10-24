@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Linq;
 using log4net;
+using System.Collections.Generic;
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
@@ -95,88 +96,168 @@ namespace CheckConnection
             connparam.Connection.DNSDomain = textBoxDNSDomain.Text;
             log.InfoFormat("connparam.Connection.DNSDomain = {0}", connparam.Connection.DNSDomain);
 
+            log.InfoFormat("DNSControl1.Text = {0}", DNSControl1.Text);
+
+            connparam.DNS_list.Clear();
+            connparam.DNS_list = null;
+            connparam.Gateway_list.Clear();
+            connparam.Gateway_list = null;
+
             if (DNSControl1.Text != "...")
             {
-                if (connparam.DNS_list.Count == 0)
+                log.Info("in if DNSControl1.Text != \"...\"");                
+                if (connparam.DNS_list == null) 
                 {
+                    log.Info("connparam.DNS_list == null");
+                    log.Info("Before connparam.DNS_list.Add");
+                    connparam.DNS_list = new List<DNS>(2);
                     connparam.DNS_list.Add(new DNS() { DNSServer = DNSControl1.Text, Connection_Id = connparam.Connection.Id });
+                    log.Info("After connparam.DNS_list.Add");
                 }
                 else
                 {
-                    connparam.DNS_list[0].DNSServer = DNSControl1.Text;
-                    
-                }
-                log.InfoFormat("connparam.DNS_list[0].DNSServer = {0}", connparam.DNS_list[0].DNSServer);
-            }
+                    log.InfoFormat("connparam.DNS_list[0].DNSServer = {0}", connparam.DNS_list[0].DNSServer);
+                    connparam.DNS_list[0].DNSServer = DNSControl1.Text;                    
+                }                
+                log.InfoFormat("connparam.DNS_list[0].DNSServer = {0}", connparam.DNS_list[0].DNSServer);                              
+            }                     
             else
             {
-                if (connparam.DNS_list.Count == 1)
+                log.Info("in if DNSControl1.Text == \"...\"");
+                if (connparam.DNS_list != null)
                 {
-                    connparam.DNS_list.RemoveAt(1);
+                    log.Info("connparam.DNS_list != null");
+                    if (connparam.DNS_list.Count > 0)
+                    {
+                        log.InfoFormat("RemoveAt(0),connparam.DNS_list.Count = {0}", connparam.DNS_list.Count);
+                        connparam.DNS_list.RemoveAt(0);
+                    }
                 }
+                else log.Info("connparam.DNS_list == null");
             }
-
+            
             if (DNSControl2.Text != "...")
             {
-                if (connparam.DNS_list.Count == 1)
+                log.Info("in if DNSControl2.Text != \"...\"");
+                if (connparam.DNS_list == null)                    
                 {
+                    log.Info("connparam.DNS_list == null");
+                    log.Info("Before connparam.DNS_list.Add");
+                    connparam.DNS_list = new List<DNS>(2);
                     connparam.DNS_list.Add(new DNS() { DNSServer = DNSControl2.Text, Connection_Id = connparam.Connection.Id });
+                    log.Info("After connparam.DNS_list.Add");
                 }
                 else
                 {
-                    connparam.DNS_list[1].DNSServer = DNSControl2.Text;
-
+                    if (connparam.DNS_list.Count == 1)
+                    {
+                        if (DNSControl2.Text != connparam.DNS_list[0].DNSServer)
+                        {
+                            log.InfoFormat("connparam.DNS_list.Count = {0}", connparam.DNS_list.Count);
+                            log.Info("Before connparam.DNS_list.Add");
+                            connparam.DNS_list.Add(new DNS() { DNSServer = DNSControl2.Text, Connection_Id = connparam.Connection.Id });
+                            log.Info("After connparam.DNS_list.Add");
+                        }
+                    }
+                    else
+                    {
+                        log.InfoFormat("connparam.DNS_list[1].DNSServer = {0}", connparam.DNS_list[0].DNSServer);
+                        connparam.DNS_list[1].DNSServer = DNSControl2.Text;
+                    }
                 }
-                log.InfoFormat("connparam.DNS_list[1].DNSServer = {0}", connparam.DNS_list[1].DNSServer);
+                log.InfoFormat("connparam.DNS_list.Count = {0}", connparam.DNS_list.Count);
             }
             else
             {
-                if (connparam.DNS_list.Count == 2) {
-                    connparam.DNS_list.RemoveAt(2);
+                log.Info("in if DNSControl1.Text == \"...\"");
+                if (connparam.DNS_list != null)
+                {
+                    log.Info("connparam.DNS_list != null");
+                    if (connparam.DNS_list.Count > 1)
+                    {
+                        log.InfoFormat("RemoveAt(),connparam.DNS_list.Count = {0}", connparam.DNS_list.Count);
+                        connparam.DNS_list.RemoveAt(connparam.DNS_list.Count - 1);
+                    }
                 }
-            }
-
+                else log.Info("connparam.DNS_list == null");
+            }            
+            
             if (GatewayControl1.Text != "...")
             {
-                if (connparam.Gateway_list.Count == 0)
+                if (connparam.Gateway_list == null)
                 {
+                    log.Info("connparam.Gateway_list == null");
+                    log.Info("Before connparam.Gateway_list.Add");
+                    connparam.Gateway_list = new List<Gateway>(2);
                     connparam.Gateway_list.Add(new Gateway() { IPGateway = GatewayControl1.Text, Connection_Id = connparam.Connection.Id });
+                    log.Info("After connparam.Gateway_list.Add");
                 }
                 else
                 {
+                    log.InfoFormat("Gateway_list[0].DNSServer = {0}", connparam.Gateway_list[0].IPGateway);
                     connparam.Gateway_list[0].IPGateway = GatewayControl1.Text;
                 }
                 log.InfoFormat("connparam.Gateway_list[0].IPGateway = {0}", connparam.Gateway_list[0].IPGateway);
             }
             else
             {
-                if (connparam.Gateway_list.Count == 1)
+                log.Info("in if GatewayControl1.Text == \"...\"");
+                if (connparam.Gateway_list != null)
                 {
-                    connparam.Gateway_list.RemoveAt(1);
+                    log.Info("connparam.Gateway_list != null");
+                    if (connparam.Gateway_list.Count > 0)
+                    {
+                        log.InfoFormat("RemoveAt(0),connparam.Gateway_list.Count = {0}", connparam.Gateway_list.Count);
+                        connparam.Gateway_list.RemoveAt(0);
+                    }
                 }
+                else log.Info("connparam.Gateway_list == null");
             }
 
             if (GatewayControl2.Text != "...")
             {
-                if (connparam.Gateway_list.Count == 1)
+                if (connparam.Gateway_list == null)
                 {
+                    log.Info("connparam.Gateway_list == null");
+                    log.Info("Before connparam.Gateway_list.Add");
+                    connparam.Gateway_list = new List<Gateway>(2);
                     connparam.Gateway_list.Add(new Gateway() { IPGateway = GatewayControl2.Text, Connection_Id = connparam.Connection.Id });
+                    log.Info("After connparam.Gateway_list.Add");
                 }
                 else
                 {
-                    connparam.Gateway_list[1].IPGateway = GatewayControl2.Text;
+                    if (connparam.Gateway_list.Count == 1)
+                    {
+                        log.InfoFormat("connparam.Gateway_list.Count = {0}", connparam.Gateway_list.Count);
+                        log.Info("Before connparam.Gateway_list.Add");
+                        connparam.Gateway_list.Add(new Gateway() { IPGateway = GatewayControl2.Text, Connection_Id = connparam.Connection.Id });
+                        log.Info("After connparam.Gateway_list.Add");
+                    }
+                    else { 
+                        log.InfoFormat("Gateway_list[0].IPGateway = {0}", connparam.Gateway_list[0].IPGateway);
+                        connparam.Gateway_list[1].IPGateway = GatewayControl2.Text;
+                    }
                 }
-                log.InfoFormat("connparam.Gateway_list[1].IPGateway = {0}", connparam.Gateway_list[1].IPGateway);
+                log.InfoFormat("connparam.Gateway_list.Count = {0}", connparam.Gateway_list.Count);
             }
             else
             {
-                if (connparam.Gateway_list.Count == 2)
+                log.Info("in if GatewayControl2.Text == \"...\"");
+                if (connparam.Gateway_list != null)
                 {
-                    connparam.Gateway_list.RemoveAt(2);
+                    log.Info("connparam.Gateway_list != null");
+                    if (connparam.Gateway_list.Count > 1)
+                    {
+                        log.InfoFormat("RemoveAt(),connparam.Gateway_list.Count = {0}", connparam.Gateway_list.Count);
+                        connparam.Gateway_list.RemoveAt(connparam.Gateway_list.Count - 1);
+                    }
                 }
+                else log.Info("connparam.Gateway_list == null");
             }
-
+            
+            log.Info("Before SaveConnectionParam");
             ret = wmi.SaveConnectionParam(connparam);
+            log.Info("After SaveConnectionParam");
 
             this.Cursor = Cursors.Default;
             if (ret == 1)

@@ -9,33 +9,47 @@ namespace CheckConnection.Methods
         public int SaveConnectionParam( ConnectionParam param )
         {
             int ret = 0;
-            MObject objMO = (MObject)GetManagementObject(param.Connection.Name);
 
-            if ((bool)objMO["IPEnabled"])
+            MObject objMO = new MObject(GetManagementObject(param.Connection.Name));
+
+            if (objMO.IpEnabled())
             {
                 if (param.Connection.DHCP_Enabled == "True")
                 {
+                    log.Info("Before setDinamicIP");
                     objMO.setDinamicIP();
+                    log.Info("After setDinamicIP");
                 }
                 else
-                {                    
+                {
+                    log.Info("Before setStaticIP");
                     objMO.setStaticIP(param.Connection.Ip_Address_v4, param.Connection.IPSubnetMask);
+                    log.Info("After setStaticIP");
 
-                    if ((param.DNS_list[0] != null) &&
-                    (!String.IsNullOrEmpty(param.DNS_list[0].DNSServer))
-                    )
-                        objMO.setDNS("1", param.DNS_list[0].DNSServer);
+                    //log.Info("Before SetDNSServerSearchOrder");
+                    //string[] sDns = new string[2];
+                    //if ((param.DNS_list[0] != null) &&
+                    //(!String.IsNullOrEmpty(param.DNS_list[0].DNSServer))
+                    //)
+                    //{
+                    //    sDns[0] = param.DNS_list[0].DNSServer;
+                    //    if ((param.DNS_list[1] != null) &&
+                    //        (!String.IsNullOrEmpty(param.DNS_list[1].DNSServer))
+                    //        )
+                    //        sDns[1] = param.DNS_list[1].DNSServer;
 
-                    if ((param.DNS_list[1] != null) &&
-                        (!String.IsNullOrEmpty(param.DNS_list[1].DNSServer))
-                        )
-                        objMO.setDNS("2", param.DNS_list[1].DNSServer);
+                    //    objMO.SetDNSServerSearchOrder(sDns);
+                    //}
+                    //log.Info("After SetDNSServerSearchOrder");
 
-                    if ((param.Gateway_list[0] != null) &&
-                        (!String.IsNullOrEmpty(param.Gateway_list[0].IPGateway))
-                        )
-                        objMO.setGateway(param.Gateway_list[0].IPGateway);
-                }                
+                    //log.Info("Before setGateway");
+                    //if ((param.Gateway_list[0] != null) &&
+                    //    (!String.IsNullOrEmpty(param.Gateway_list[0].IPGateway))
+                    //    )
+                    //    objMO.setGateway(param.Gateway_list[0].IPGateway);
+                    //log.Info("After setGateway");
+
+                }
 
                 ret = 1;     
             }
