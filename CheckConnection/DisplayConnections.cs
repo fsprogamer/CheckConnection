@@ -316,8 +316,8 @@ namespace CheckConnection
                                 !ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Value.ToString()
                                     .Equals(HistorydataGridView.Rows[rowIndex].Cells[i].Value.ToString()))
                             {
-                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.BackColor = Color.LightGray;
-                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.ForeColor = Color.Red;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = Color.LightGray;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = Color.Red;
                             }
                             else
                             {
@@ -332,14 +332,20 @@ namespace CheckConnection
                             }
                             else
                             {
-                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.BackColor = Color.LightGray;
-                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.ForeColor = Color.Red;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = Color.LightGray;
+                                ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = Color.Red;
                             }
                         }
                     }
                 }
                 if (count == (ConnectionsdataGridView.ColumnCount-1))
                 {
+                    for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
+                    {
+                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = ConnectionsdataGridView.DefaultCellStyle.SelectionBackColor;
+                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = ConnectionsdataGridView.DefaultCellStyle.SelectionForeColor;
+                    }
+
                     var message = MessageBox.Show("Параметры подключений совпадают", "Проверка совпадений", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -464,15 +470,67 @@ namespace CheckConnection
                 string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
                 if (!String.IsNullOrEmpty(name))
                     BindHistoryGrid(ref HistorydataGridView, name);
+
+                for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
+                {
+                    if (ConnectionsdataGridView.SelectedRows.Count > 0)
+                    {
+                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = ConnectionsdataGridView.DefaultCellStyle.SelectionBackColor;
+                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = ConnectionsdataGridView.DefaultCellStyle.SelectionForeColor;
+                    }
+                }
+
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void toolStripButtonRestore_Click(object sender, EventArgs e)
         {
-            var TestIpTextBox = new TestIpTextBox();
-            TestIpTextBox.StartPosition = FormStartPosition.CenterScreen;
-            TestIpTextBox.Show();
+            int selectedRow = GetSelectedRow(ConnectionsdataGridView);
+
+            if (ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value != null)
+            {
+                string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
+                int selectedHistoryRow = GetSelectedRow(HistorydataGridView);
+
+                ConnectionParam connparam = new ConnectionParam();
+                connparam.Connection = new Connection();
+
+                //Прописываем название подключения, для которого изменяются параметы
+                connparam.Connection.Name = Name;
+
+                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value != null)
+                    connparam.Connection.Ip_Address_v4 = HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value.ToString();
+
+                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value != null)
+                    connparam.Connection.IPSubnetMask = HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value.ToString();
+
+                if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value!=null)
+                    connparam.Connection.DNSDomain = HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value.ToString();
+
+                if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value!=null)
+                    connparam.Connection.DHCP_Enabled = HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value.ToString();
+
+                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value != null)
+                    connparam.setDNSServerSearchOrder(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value.ToString());
+
+                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value != null)
+                    connparam.setGateway(HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value.ToString());
+
+                var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam );
+
+                ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+                ChangeConnectionForm.Show();
+            }
+            else
+            {
+                log.Info("Соединение с таким наименованием отсутствуют");
+                MessageBox.Show("Соединение с таким наименованием отсутствуют", "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+
         }
+
         #endregion
 
         //private void ChangeCellToComboBox(int iRowIndex)

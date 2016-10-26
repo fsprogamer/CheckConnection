@@ -61,7 +61,7 @@ namespace CheckConnection.Model
         /// </summary> 
         /// <param name="gateway">The Gateway IP Address</param> 
         /// <remarks>Requires a reference to the System.Management namespace</remarks> 
-        public int setGateway(string gateway)
+        public int setGateway(string[] gateway)
         {
             int ret = 0;
             try
@@ -70,8 +70,8 @@ namespace CheckConnection.Model
                 ManagementBaseObject newGateway =
                     _objMO.GetMethodParameters("SetGateways");
 
-                newGateway["DefaultIPGateway"] = new string[] { gateway };
-                newGateway["GatewayCostMetric"] = new int[] { 1 };
+                newGateway["DefaultIPGateway"] = gateway ;
+                newGateway["GatewayCostMetric"] = new int[] { 1,2 };
 
                 setGateway = _objMO.InvokeMethod("SetGateways", newGateway, null);
                 ret = 1;
@@ -153,7 +153,7 @@ namespace CheckConnection.Model
             try
             {
                 ManagementBaseObject setdnsDomain;
-                ManagementBaseObject DNSDomain = _objMO.GetMethodParameters("DNSDomain");
+                ManagementBaseObject DNSDomain = _objMO.GetMethodParameters("SetDNSDomain");
 
                 DNSDomain["DNSDomain"] = name;
                 setdnsDomain = _objMO.InvokeMethod("SetDNSDomain", DNSDomain, null);
@@ -167,7 +167,7 @@ namespace CheckConnection.Model
             return ret;
         }
 
-        public int SetDNSServerSearchOrder(string[] name)
+        public int setDNSServerSearchOrder(string[] name)
         {
             int ret = 0;
             try
@@ -185,6 +185,23 @@ namespace CheckConnection.Model
                 throw;
             }
             return ret;
-        }       
+        }
+
+        public int RenewDHCPLease()
+        {
+            int ret = 0;
+            try
+            {
+                _objMO.InvokeMethod("RenewDHCPLease", null);
+                ret = 1;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Ошибка при изменении ip-адреса", ex);
+                throw;
+            }
+            return ret;
+        }
+        
     }
 }

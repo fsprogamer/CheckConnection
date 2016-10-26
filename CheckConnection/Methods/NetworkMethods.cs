@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Management;
+using System.Collections.Generic;
 using CheckConnection.Model;
 
 namespace CheckConnection.Methods
@@ -26,30 +26,52 @@ namespace CheckConnection.Methods
                     objMO.setStaticIP(param.Connection.Ip_Address_v4, param.Connection.IPSubnetMask);
                     log.Info("After setStaticIP");
 
-                    //log.Info("Before SetDNSServerSearchOrder");
-                    //string[] sDns = new string[2];
-                    //if ((param.DNS_list[0] != null) &&
-                    //(!String.IsNullOrEmpty(param.DNS_list[0].DNSServer))
-                    //)
-                    //{
-                    //    sDns[0] = param.DNS_list[0].DNSServer;
-                    //    if ((param.DNS_list[1] != null) &&
-                    //        (!String.IsNullOrEmpty(param.DNS_list[1].DNSServer))
-                    //        )
-                    //        sDns[1] = param.DNS_list[1].DNSServer;
+                    log.Info("Before setDNSDomain");
+                    if(!String.IsNullOrEmpty(param.Connection.DNSDomain))
+                        objMO.setDNSDomain(param.Connection.DNSDomain);
+                    log.Info("After setDNSDomain");                                     
 
-                    //    objMO.SetDNSServerSearchOrder(sDns);
-                    //}
-                    //log.Info("After SetDNSServerSearchOrder");
-
-                    //log.Info("Before setGateway");
-                    //if ((param.Gateway_list[0] != null) &&
-                    //    (!String.IsNullOrEmpty(param.Gateway_list[0].IPGateway))
-                    //    )
-                    //    objMO.setGateway(param.Gateway_list[0].IPGateway);
-                    //log.Info("After setGateway");
-
+                    log.Info("Before setGateway");
+                    List<string> sGateway = new List<string>(2);
+                    if (param.Gateway_list != null)
+                    {
+                        if ((param.Gateway_list[0] != null) &&
+                        (!String.IsNullOrEmpty(param.Gateway_list[0].IPGateway))
+                        )
+                        {
+                            sGateway.Add(param.Gateway_list[0].IPGateway);
+                            if (param.Gateway_list.Count > 1)
+                            {
+                                if ((param.Gateway_list[1] != null) &&
+                                (!String.IsNullOrEmpty(param.Gateway_list[1].IPGateway))
+                                )
+                                    sGateway.Add(param.Gateway_list[1].IPGateway);
+                            }
+                            objMO.setGateway(sGateway.ToArray());
+                        }
+                    }
+                    log.Info("After setGateway");
                 }
+
+                log.Info("Before SetDNSServerSearchOrder");
+                List<string> sDns = new List<string>(2);
+                if (param.DNS_list != null)
+                {
+                    if ((param.DNS_list[0] != null) &&
+                    (!String.IsNullOrEmpty(param.DNS_list[0].DNSServer))
+                    )
+                    {
+                        sDns.Add(param.DNS_list[0].DNSServer);
+                        if (param.DNS_list.Count > 1) {
+                            if ((param.DNS_list[1] != null) &&
+                                (!String.IsNullOrEmpty(param.DNS_list[1].DNSServer))
+                                )
+                                sDns.Add(param.DNS_list[1].DNSServer);
+                        }
+                        objMO.setDNSServerSearchOrder(sDns.ToArray());
+                    }
+                }
+                log.Info("After SetDNSServerSearchOrder");
 
                 ret = 1;     
             }

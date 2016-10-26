@@ -33,6 +33,14 @@ namespace CheckConnection
             InitializeComponent();
         }
 
+        public ChangeConnectionForm(WMIInterface wmiparam, ConnectionParam pconnparam)
+        {
+            wmi = wmiparam;
+            connparam = pconnparam;
+
+            InitializeComponent();
+        }
+
         private void ChangeConnectionForm_Load(object sender, EventArgs e)
         {            
 
@@ -98,9 +106,20 @@ namespace CheckConnection
 
             log.InfoFormat("DNSControl1.Text = {0}", DNSControl1.Text);
 
-            connparam.DNS_list.Clear();
+            if (connparam.DNS_list != null)
+            {
+                log.Info("if connparam.DNS_list != null, Clear");
+                connparam.DNS_list.Clear();
+            }
+            log.Info("connparam.DNS_list = null");
             connparam.DNS_list = null;
-            connparam.Gateway_list.Clear();
+            
+            if (connparam.Gateway_list != null)
+            {
+                log.Info("if connparam.Gateway_list != null, Clear");
+                connparam.Gateway_list.Clear();
+            }
+            log.Info("connparam.Gateway_list = null");
             connparam.Gateway_list = null;
 
             if (DNSControl1.Text != "...")
@@ -275,7 +294,6 @@ namespace CheckConnection
                                 MessageBoxIcon.Error);
                 
             }
-
         }
 
         private void radioButtonDHCP_CheckedChanged(object sender, EventArgs e)
@@ -292,8 +310,8 @@ namespace CheckConnection
                 DHCPServerControl.ReadOnly = true;
                 textBoxDNSDomain.ReadOnly = true;
 
-                DNSControl1.ReadOnly = true;
-                DNSControl2.ReadOnly = true;
+                //DNSControl1.ReadOnly = true;
+                //DNSControl2.ReadOnly = true;
 
                 GatewayControl1.ReadOnly = true;
                 GatewayControl2.ReadOnly = true;
@@ -305,8 +323,8 @@ namespace CheckConnection
                 DHCPServerControl.ReadOnly = false;
                 textBoxDNSDomain.ReadOnly = false;
 
-                DNSControl1.ReadOnly = false;
-                DNSControl2.ReadOnly = false;
+                //DNSControl1.ReadOnly = false;
+                //DNSControl2.ReadOnly = false;
 
                 GatewayControl1.ReadOnly = false;
                 GatewayControl2.ReadOnly = false;

@@ -38,9 +38,9 @@
             this.ComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ViewComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonChangeConnection = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRestore = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -60,6 +60,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ConnectionsdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 30);
+            this.ConnectionsdataGridView.MultiSelect = false;
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
             this.ConnectionsdataGridView.ReadOnly = true;
             this.ConnectionsdataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -76,8 +77,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.HistorydataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.HistorydataGridView.Location = new System.Drawing.Point(0, 20);
+            this.HistorydataGridView.MultiSelect = false;
             this.HistorydataGridView.Name = "HistorydataGridView";
             this.HistorydataGridView.ReadOnly = true;
+            this.HistorydataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.HistorydataGridView.Size = new System.Drawing.Size(786, 198);
             this.HistorydataGridView.TabIndex = 1;
             // 
@@ -111,8 +114,8 @@
             this.ComparetoolStripButton,
             this.ViewComparetoolStripButton,
             this.toolStripButtonChangeConnection,
-            this.toolStripButtonRefresh,
-            this.toolStripButton1});
+            this.toolStripButtonRestore,
+            this.toolStripButtonRefresh});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(786, 25);
@@ -172,6 +175,17 @@
             this.toolStripButtonChangeConnection.ToolTipText = "Изменить параметры подключения";
             this.toolStripButtonChangeConnection.Click += new System.EventHandler(this.toolStripButtonChangeConnection_Click);
             // 
+            // toolStripButtonRestore
+            // 
+            this.toolStripButtonRestore.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRestore.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRestore.Image")));
+            this.toolStripButtonRestore.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRestore.Name = "toolStripButtonRestore";
+            this.toolStripButtonRestore.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRestore.Text = "RestoreConnectionParam";
+            this.toolStripButtonRestore.ToolTipText = "Восстановить параметры из истории";
+            this.toolStripButtonRestore.Click += new System.EventHandler(this.toolStripButtonRestore_Click);
+            // 
             // toolStripButtonRefresh
             // 
             this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -191,16 +205,6 @@
             this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
             this.ConnectionHistorylabel.TabIndex = 2;
             this.ConnectionHistorylabel.Text = "История подключений";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // DisplayConnections
             // 
@@ -240,6 +244,6 @@
         private System.Windows.Forms.ToolStripButton ViewComparetoolStripButton;
         private System.Windows.Forms.ToolStripButton toolStripButtonChangeConnection;
         private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRestore;
     }
 }
