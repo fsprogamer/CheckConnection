@@ -48,11 +48,8 @@ namespace CheckConnection
 
             if (HistorydataGridView.Rows.Count > 0)
                 HistorydataGridView.Rows[0].Selected = true;
-            int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
-            int x = widthScreen - this.ClientSize.Width;
-            int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
-            int y = heightScreen - this.ClientSize.Height;
-            this.Location = new Point((x / 2), (y / 2));
+
+            SetWindowPosition();
 
             FormLoadComplete = true;
         }       
@@ -190,6 +187,14 @@ namespace CheckConnection
         {
             int width = WinObjMethods.CountGridWidth(ConnectionsdataGridView);
             ClientSize = new Size(width, ClientSize.Height);
+        }
+        public void SetWindowPosition()
+        {
+            int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
+            int x = widthScreen/2 - this.ClientSize.Width;
+            int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
+            int y = heightScreen/2 - this.ClientSize.Height;
+            this.Location = new Point((x / 2), (y / 2));
         }
 
         private void PingtoolStripButton_Click(object sender, System.EventArgs e)
