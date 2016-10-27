@@ -14,7 +14,7 @@ namespace CheckConnection.Methods
 
         List<Connection> ReadConnectionHistory();
 
-        List<Connection> ReadConnectionHistory(string name);
+        List<Connection> ReadConnectionHistory(string name, int offset=0, int pagesize=0);
 
         List<DNS> ReadDNSHistory(int Connection_Id);
 

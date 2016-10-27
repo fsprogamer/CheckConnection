@@ -110,17 +110,31 @@ namespace CheckConnection.Methods
             return Connection_list;
         }
 
-        public List<Connection> ReadConnectionHistory(string name)
+        public List<Connection> ReadConnectionHistory(string name, int offset = 0, int pagesize = 0)
         {
             const string table_name = "Connection";
             List<Connection> Connection_list = new List<Connection>();
             try
             {
-                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+                using (var db = new SQLiteConnection(conn_string, true))
                 {
                     if (isTableExists(table_name, db))
                     {
-                        var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} where Name='{1}' order by Date desc", table_name, name));
+                        //var connections = db.Query<Connection>("SELECT * FROM Connection where Name=?", name);
+
+                        var connections = db.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
+                        from (SELECT *,
+                        (SELECT COUNT(*)
+                        FROM Connection AS t2
+                        WHERE t2.Date >= t1.Date
+
+                        and Name = ?
+		                ) AS row_Num
+                        FROM Connection AS t1
+                        where Name = ?
+                        ORDER BY Date desc) t3
+                        where row_Num between ? and ?", name, name, offset+1, offset+pagesize);
+
                         Connection_list.Capacity = connections.Count;
                         Connection_list.AddRange(connections);
                     }

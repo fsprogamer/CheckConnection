@@ -53,7 +53,7 @@ namespace CheckConnection.Methods
                 };
                 dgv.Columns.Add(colName);
             }
-            //dgv.Columns[dgv.ColumnCount - 1].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill;
+            dgv.Columns[dgv.ColumnCount - 1].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill;
         }
 
         //public static void AddColumn(ref DataGridView dgv)

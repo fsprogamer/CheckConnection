@@ -19,11 +19,15 @@ namespace CheckConnection
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private bool FormLoadComplete = false;
 
+        private const int HistorypageSize = 10;
+
         public DisplayConnections(DBInterface dbparam, WMIInterface wmiparam)
         {
             db = dbparam;
             wmi = wmiparam;
-            InitializeComponent();           
+            InitializeComponent();
+
+            HistorybindingNavigator.BindingSource = HistorybindingSource;            
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
@@ -38,26 +42,26 @@ namespace CheckConnection
 
             WinObjMethods.AddColumn(ref HistorydataGridView);
 
-            string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-            if (!String.IsNullOrEmpty(SelectedConnectionName))
-            {
-                BindHistoryGrid(ref HistorydataGridView, SelectedConnectionName);
+            //string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            //if (!String.IsNullOrEmpty(SelectedConnectionName))
+            //{
+            //    //BindHistoryGrid(ref HistorydataGridView, SelectedConnectionName);
 
-                HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-                HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
-                WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
-                CorrectWindowSize();
+            HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+            WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
+            CorrectWindowSize();
 
-                if (HistorydataGridView.Rows.Count > 0)
-                    HistorydataGridView.Rows[0].Selected = true;
-                int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
-                int x = widthScreen - this.ClientSize.Width;
-                int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
-                int y = heightScreen - this.ClientSize.Height;
-                this.Location = new Point((x / 2), (y / 2));
+            if (HistorydataGridView.Rows.Count > 0)
+                HistorydataGridView.Rows[0].Selected = true;
+            int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
+            int x = widthScreen - this.ClientSize.Width;
+            int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
+            int y = heightScreen - this.ClientSize.Height;
+            this.Location = new Point((x / 2), (y / 2));
 
-            }
+            //}
             FormLoadComplete = true;
         }       
 
@@ -180,52 +184,6 @@ namespace CheckConnection
             return cmb;
         }
 
-        private void BindHistoryGrid(ref DataGridView dgv, string name)
-        {            
-            List<Connection> connlist = db.ReadConnectionHistory().Where(p => p.Name == name).ToList<Connection>();               
-
-            foreach (Connection conn in connlist)
-            {                
-                List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
-                List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
-
-                if (dnslist.Count > 0)
-                {
-                    foreach (DNS dns in dnslist)
-                    {
-                        conn.DNSServer += dns.DNSServer + "; ";
-                    }
-                    if (conn.DNSServer.Length > 2)
-                        conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
-                }
-                if (gtwlist.Count > 0)
-                {
-                    foreach (Gateway gtw in gtwlist)
-                    {
-                        conn.IPGateway += gtw.IPGateway + "; ";
-                    }
-                    if (conn.IPGateway.Length > 2)
-                        conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
-                }
-
-            }
-
-            if (connlist.Count > 0)
-            {
-                var bindsList = new BindingList<Connection>(connlist);
-                //Bind BindingList directly to the DataGrid
-                var source = new BindingSource(bindsList, null);
-                dgv.DataSource = source;
-            }
-            else
-            {
-                dgv.DataSource = null;
-                dgv.Refresh();
-            }
-
-            WinObjMethods.ResizeGrid(ref dgv);
-            CorrectWindowSize();            
-        }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);            
@@ -269,7 +227,6 @@ namespace CheckConnection
             //}
         }
 
-        #region Test grid
         private void ChangeCellToComboBox(string conndesc, int iRowIndex)
         {
             if (bIsComboBox == false)
@@ -469,7 +426,11 @@ namespace CheckConnection
             {
                 string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
                 if (!String.IsNullOrEmpty(name))
-                    BindHistoryGrid(ref HistorydataGridView, name);
+
+                //Get count
+                HistorybindingSource.DataSource = new PageOffsetList(/*Count*/);
+                HistorybindingSource.MoveFirst();
+                BindHistoryGrid();
 
                 for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
                 {
@@ -531,7 +492,50 @@ namespace CheckConnection
 
         }
 
-        #endregion
+        private void HistorybindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+            BindHistoryGrid();
+        }
+
+        private void BindHistoryGrid()
+        {
+            string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            if (!String.IsNullOrEmpty(SelectedConnectionName))
+            {
+                // The desired page has changed, so fetch the page of records using the "Current" offset 
+                int offset = (int)HistorybindingSource.Current;
+                List<Connection> connlist = db.ReadConnectionHistory(SelectedConnectionName, offset, HistorypageSize);
+
+                foreach (Connection conn in connlist)
+                {
+                    List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
+                    List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
+
+                    if (dnslist.Count > 0)
+                    {
+                        foreach (DNS dns in dnslist)
+                        {
+                            conn.DNSServer += dns.DNSServer + "; ";
+                        }
+                        if (conn.DNSServer.Length > 2)
+                            conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
+                    }
+                    if (gtwlist.Count > 0)
+                    {
+                        foreach (Gateway gtw in gtwlist)
+                        {
+                            conn.IPGateway += gtw.IPGateway + "; ";
+                        }
+                        if (conn.IPGateway.Length > 2)
+                            conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
+                    }
+
+                }
+
+                HistorydataGridView.DataSource = connlist;
+            }
+        }
+
 
         //private void ChangeCellToComboBox(int iRowIndex)
         //{
