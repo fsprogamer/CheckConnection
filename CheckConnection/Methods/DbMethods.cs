@@ -127,7 +127,6 @@ namespace CheckConnection.Methods
                         (SELECT COUNT(*)
                         FROM Connection AS t2
                         WHERE t2.Date >= t1.Date
-
                         and Name = ?
 		                ) AS row_Num
                         FROM Connection AS t1
@@ -145,6 +144,27 @@ namespace CheckConnection.Methods
                 log.Error("Ошибка: '{0}'", e);
             }
             return Connection_list;
+        }
+
+        public int ReadConnectionHistoryCount(string name)
+        {
+            const string table_name = "Connection";
+            int reccount = 0;
+            List<Connection> Connection_list = new List<Connection>();
+            try
+            {
+                using (var db = new SQLiteConnection(conn_string, true))
+                {
+                    if (!isTableExists(table_name, db))
+                        db.CreateTable<Connection>();
+                    reccount = db.ExecuteScalar<int>("SELECT count(*) FROM Connection where Name=?", name);                                        
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error("Ошибка: '{0}'", e);
+            }
+            return reccount;
         }
         //public List<Connection> ReadFullConnectionHistory()
         //{
@@ -174,7 +194,7 @@ namespace CheckConnection.Methods
                 {
                     if (isTableExists(table_name, db))
                     {
-                        var dns_array = db.Query<DNS>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Order_Id asc", table_name, Connection_Id));
+                        var dns_array = db.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", Connection_Id);
                         DNS_list.Capacity = dns_array.Count;
                         DNS_list.AddRange(dns_array);
                     }
@@ -197,7 +217,7 @@ namespace CheckConnection.Methods
                 {
                     if (isTableExists(table_name, db))
                     {
-                        var gateway_array = db.Query<Gateway>(String.Format("SELECT * FROM {0} where connection_id = {1} order by Id asc", table_name, Connection_Id));
+                        var gateway_array = db.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc",  Connection_Id);
                         Gateway_list.Capacity = gateway_array.Count;
                         Gateway_list.AddRange(gateway_array);
                     }
@@ -216,7 +236,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    int count = db.ExecuteScalar<int>("SELECT count(tbl_name) from sqlite_master where tbl_name = '" + tableName + "'");
+                    int count = db.ExecuteScalar<int>("SELECT count(tbl_name) from sqlite_master where tbl_name = ?", tableName);
                     if (count > 0)
                     {
                         return true;

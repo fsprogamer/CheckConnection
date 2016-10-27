@@ -37,21 +37,14 @@ namespace CheckConnection
             WinObjMethods.AddColumn(ref ConnectionsdataGridView);
             BindConnectionGrid(ref ConnectionsdataGridView);
 
-            ConnectionsdataGridView.DefaultCellStyle.WrapMode=DataGridViewTriState.True;
-            ConnectionsdataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
+            //ConnectionsdataGridView.DefaultCellStyle.WrapMode=DataGridViewTriState.True;
+            //ConnectionsdataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
 
             WinObjMethods.AddColumn(ref HistorydataGridView);
 
-            //string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-            //if (!String.IsNullOrEmpty(SelectedConnectionName))
-            //{
-            //    //BindHistoryGrid(ref HistorydataGridView, SelectedConnectionName);
-
-            HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
-            WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
-            CorrectWindowSize();
+            //HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            //HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            //HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
             if (HistorydataGridView.Rows.Count > 0)
                 HistorydataGridView.Rows[0].Selected = true;
@@ -61,7 +54,6 @@ namespace CheckConnection
             int y = heightScreen - this.ClientSize.Height;
             this.Location = new Point((x / 2), (y / 2));
 
-            //}
             FormLoadComplete = true;
         }       
 
@@ -422,22 +414,27 @@ namespace CheckConnection
 
         private void ConnectionsdataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
+            int rowcnt=0;
             if (FormLoadComplete)
             {
                 string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
                 if (!String.IsNullOrEmpty(name))
 
                 //Get count
-                HistorybindingSource.DataSource = new PageOffsetList(/*Count*/);
-                HistorybindingSource.MoveFirst();
-                BindHistoryGrid();
-
-                for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
+                rowcnt = db.ReadConnectionHistoryCount(name);
+                if (rowcnt > 0)
                 {
-                    if (ConnectionsdataGridView.SelectedRows.Count > 0)
+                    HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
+                    HistorybindingSource.MoveFirst();
+                    BindHistoryGrid();
+
+                    for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
                     {
-                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = ConnectionsdataGridView.DefaultCellStyle.SelectionBackColor;
-                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = ConnectionsdataGridView.DefaultCellStyle.SelectionForeColor;
+                        if (ConnectionsdataGridView.SelectedRows.Count > 0)
+                        {
+                            ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = ConnectionsdataGridView.DefaultCellStyle.SelectionBackColor;
+                            ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = ConnectionsdataGridView.DefaultCellStyle.SelectionForeColor;
+                        }
                     }
                 }
 
@@ -503,39 +500,42 @@ namespace CheckConnection
             if (!String.IsNullOrEmpty(SelectedConnectionName))
             {
                 // The desired page has changed, so fetch the page of records using the "Current" offset 
-                int offset = (int)HistorybindingSource.Current;
-                List<Connection> connlist = db.ReadConnectionHistory(SelectedConnectionName, offset, HistorypageSize);
-
-                foreach (Connection conn in connlist)
+                if (HistorybindingSource.Current != null)
                 {
-                    List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
-                    List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
+                    int offset = (int)HistorybindingSource.Current;
+                    List<Connection> connlist = db.ReadConnectionHistory(SelectedConnectionName, offset, HistorypageSize);
 
-                    if (dnslist.Count > 0)
+                    foreach (Connection conn in connlist)
                     {
-                        foreach (DNS dns in dnslist)
-                        {
-                            conn.DNSServer += dns.DNSServer + "; ";
-                        }
-                        if (conn.DNSServer.Length > 2)
-                            conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
-                    }
-                    if (gtwlist.Count > 0)
-                    {
-                        foreach (Gateway gtw in gtwlist)
-                        {
-                            conn.IPGateway += gtw.IPGateway + "; ";
-                        }
-                        if (conn.IPGateway.Length > 2)
-                            conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
-                    }
+                        List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
+                        List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
 
+                        if (dnslist.Count > 0)
+                        {
+                            foreach (DNS dns in dnslist)
+                            {
+                                conn.DNSServer += dns.DNSServer + "; ";
+                            }
+                            if (conn.DNSServer.Length > 2)
+                                conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
+                        }
+                        if (gtwlist.Count > 0)
+                        {
+                            foreach (Gateway gtw in gtwlist)
+                            {
+                                conn.IPGateway += gtw.IPGateway + "; ";
+                            }
+                            if (conn.IPGateway.Length > 2)
+                                conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
+                        }
+                    }
+                    HistorydataGridView.DataSource = connlist;
+
+                    WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
+                    CorrectWindowSize();
                 }
-
-                HistorydataGridView.DataSource = connlist;
             }
         }
-
 
         //private void ChangeCellToComboBox(int iRowIndex)
         //{

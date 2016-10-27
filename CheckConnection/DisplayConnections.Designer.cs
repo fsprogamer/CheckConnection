@@ -41,17 +41,17 @@
             this.toolStripButtonChangeConnection = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRestore = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
-            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorPositionItem = new System.Windows.Forms.ToolStripTextBox();
-            this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorMoveNextItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
@@ -87,6 +87,7 @@
             // 
             this.HistorydataGridView.AllowUserToAddRows = false;
             this.HistorydataGridView.AllowUserToDeleteRows = false;
+            this.HistorydataGridView.AllowUserToOrderColumns = true;
             this.HistorydataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -213,15 +214,6 @@
             this.toolStripButtonRefresh.ToolTipText = "Обновить отображаемые параметры";
             this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
-            // ConnectionHistorylabel
-            // 
-            this.ConnectionHistorylabel.AutoSize = true;
-            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
-            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
-            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
-            this.ConnectionHistorylabel.TabIndex = 2;
-            this.ConnectionHistorylabel.Text = "История подключений";
-            // 
             // HistorybindingNavigator
             // 
             this.HistorybindingNavigator.AddNewItem = null;
@@ -247,6 +239,13 @@
             this.HistorybindingNavigator.Size = new System.Drawing.Size(786, 25);
             this.HistorybindingNavigator.TabIndex = 3;
             this.HistorybindingNavigator.Text = "HistorybindingNavigator1";
+            // 
+            // bindingNavigatorCountItem
+            // 
+            this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
+            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 22);
+            this.bindingNavigatorCountItem.Text = "of {0}";
+            this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
             // 
             // bindingNavigatorMoveFirstItem
             // 
@@ -280,16 +279,9 @@
             this.bindingNavigatorPositionItem.Text = "0";
             this.bindingNavigatorPositionItem.ToolTipText = "Current position";
             // 
-            // bindingNavigatorCountItem
-            // 
-            this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
-            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 22);
-            this.bindingNavigatorCountItem.Text = "of {0}";
-            this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
-            // 
             // bindingNavigatorSeparator1
             // 
-            this.bindingNavigatorSeparator1.Name = "bindingNavigatorSeparator";
+            this.bindingNavigatorSeparator1.Name = "bindingNavigatorSeparator1";
             this.bindingNavigatorSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // bindingNavigatorMoveNextItem
@@ -312,8 +304,17 @@
             // 
             // bindingNavigatorSeparator2
             // 
-            this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator";
+            this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
             this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ConnectionHistorylabel
+            // 
+            this.ConnectionHistorylabel.AutoSize = true;
+            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
+            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
+            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
+            this.ConnectionHistorylabel.TabIndex = 2;
+            this.ConnectionHistorylabel.Text = "История подключений";
             // 
             // HistorybindingSource
             // 
