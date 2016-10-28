@@ -461,7 +461,7 @@ namespace CheckConnection
         {
             int selectedRow = GetSelectedRow(ConnectionsdataGridView);
 
-            if (ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value != null)
+            if (HistorydataGridView.RowCount>0)//(ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value != null)
             {
                 string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
                 int selectedHistoryRow = GetSelectedRow(HistorydataGridView);
@@ -497,8 +497,8 @@ namespace CheckConnection
             }
             else
             {
-                log.Info("Соединение с таким наименованием отсутствуют");
-                MessageBox.Show("Соединение с таким наименованием отсутствуют", "Ошибка",
+                log.Info("Соединение с таким наименованием отсутствует в истории");
+                MessageBox.Show("Соединение с таким наименованием отсутствует в истории", "Ошибка",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
