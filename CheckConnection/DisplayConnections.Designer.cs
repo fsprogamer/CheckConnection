@@ -41,18 +41,21 @@
             this.toolStripButtonChangeConnection = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRestore = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
-            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorPositionItem = new System.Windows.Forms.ToolStripTextBox();
-            this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorMoveNextItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.toolStripDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -82,11 +85,13 @@
             this.ConnectionsdataGridView.Size = new System.Drawing.Size(786, 128);
             this.ConnectionsdataGridView.TabIndex = 0;
             this.ConnectionsdataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_RowEnter);
+            this.ConnectionsdataGridView.SelectionChanged += new System.EventHandler(this.ConnectionsdataGridView_SelectionChanged);
             // 
             // HistorydataGridView
             // 
             this.HistorydataGridView.AllowUserToAddRows = false;
             this.HistorydataGridView.AllowUserToDeleteRows = false;
+            this.HistorydataGridView.AllowUserToOrderColumns = true;
             this.HistorydataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -131,7 +136,8 @@
             this.ViewComparetoolStripButton,
             this.toolStripButtonChangeConnection,
             this.toolStripButtonRestore,
-            this.toolStripButtonRefresh});
+            this.toolStripButtonRefresh,
+            this.toolStripDropDownButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(786, 25);
@@ -213,15 +219,6 @@
             this.toolStripButtonRefresh.ToolTipText = "Обновить отображаемые параметры";
             this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
-            // ConnectionHistorylabel
-            // 
-            this.ConnectionHistorylabel.AutoSize = true;
-            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
-            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
-            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
-            this.ConnectionHistorylabel.TabIndex = 2;
-            this.ConnectionHistorylabel.Text = "История подключений";
-            // 
             // HistorybindingNavigator
             // 
             this.HistorybindingNavigator.AddNewItem = null;
@@ -248,6 +245,13 @@
             this.HistorybindingNavigator.TabIndex = 3;
             this.HistorybindingNavigator.Text = "HistorybindingNavigator1";
             // 
+            // bindingNavigatorCountItem
+            // 
+            this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
+            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 22);
+            this.bindingNavigatorCountItem.Text = "of {0}";
+            this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
+            // 
             // bindingNavigatorMoveFirstItem
             // 
             this.bindingNavigatorMoveFirstItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -256,6 +260,7 @@
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
+            this.bindingNavigatorMoveFirstItem.Click += new System.EventHandler(this.bindingNavigatorMoveFirstItem_Click);
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -280,16 +285,9 @@
             this.bindingNavigatorPositionItem.Text = "0";
             this.bindingNavigatorPositionItem.ToolTipText = "Current position";
             // 
-            // bindingNavigatorCountItem
-            // 
-            this.bindingNavigatorCountItem.Name = "bindingNavigatorCountItem";
-            this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 22);
-            this.bindingNavigatorCountItem.Text = "of {0}";
-            this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
-            // 
             // bindingNavigatorSeparator1
             // 
-            this.bindingNavigatorSeparator1.Name = "bindingNavigatorSeparator";
+            this.bindingNavigatorSeparator1.Name = "bindingNavigatorSeparator1";
             this.bindingNavigatorSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // bindingNavigatorMoveNextItem
@@ -312,12 +310,47 @@
             // 
             // bindingNavigatorSeparator2
             // 
-            this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator";
+            this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
             this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ConnectionHistorylabel
+            // 
+            this.ConnectionHistorylabel.AutoSize = true;
+            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
+            this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
+            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
+            this.ConnectionHistorylabel.TabIndex = 2;
+            this.ConnectionHistorylabel.Text = "История подключений";
             // 
             // HistorybindingSource
             // 
             this.HistorybindingSource.CurrentChanged += new System.EventHandler(this.HistorybindingSource_CurrentChanged);
+            // 
+            // toolStripDropDownButton
+            // 
+            this.toolStripDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.toolStripDropDownButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton.Image")));
+            this.toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton.Name = "toolStripDropDownButton";
+            this.toolStripDropDownButton.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton.Text = "toolStripDropDownButton1";
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // DisplayConnections
             // 
@@ -373,5 +406,8 @@
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveLastItem;
         private System.Windows.Forms.ToolStripSeparator bindingNavigatorSeparator2;
         private System.Windows.Forms.BindingSource HistorybindingSource;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

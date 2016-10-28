@@ -70,5 +70,17 @@ namespace CheckConnection.Properties {
                 this["Gateway"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int HistoryPageSize {
+            get {
+                return ((int)(this["HistoryPageSize"]));
+            }
+            set {
+                this["HistoryPageSize"] = value;
+            }
+        }
     }
 }

@@ -27,9 +27,9 @@ namespace CheckConnection.Methods
                     log.Info("After setStaticIP");
 
                     log.Info("Before setDNSDomain");
-                    if(!String.IsNullOrEmpty(param.Connection.DNSDomain))
+                    if (!String.IsNullOrEmpty(param.Connection.DNSDomain))
                         objMO.setDNSDomain(param.Connection.DNSDomain);
-                    log.Info("After setDNSDomain");                                     
+                    log.Info("After setDNSDomain");
 
                     log.Info("Before setGateway");
                     List<string> sGateway = new List<string>(2);
@@ -54,6 +54,7 @@ namespace CheckConnection.Methods
                 }
 
                 log.Info("Before SetDNSServerSearchOrder");
+                
                 List<string> sDns = new List<string>(2);
                 if (param.DNS_list != null)
                 {
@@ -62,7 +63,8 @@ namespace CheckConnection.Methods
                     )
                     {
                         sDns.Add(param.DNS_list[0].DNSServer);
-                        if (param.DNS_list.Count > 1) {
+                        if (param.DNS_list.Count > 1)
+                        {
                             if ((param.DNS_list[1] != null) &&
                                 (!String.IsNullOrEmpty(param.DNS_list[1].DNSServer))
                                 )
@@ -71,12 +73,18 @@ namespace CheckConnection.Methods
                         objMO.setDNSServerSearchOrder(sDns.ToArray());
                     }
                 }
+                else
+                {//Удаляем все DNS, передаем пустышку
+                    objMO.setDNSServerSearchOrder(sDns.ToArray());
+                }
                 log.Info("After SetDNSServerSearchOrder");
 
                 ret = 1;     
             }
             return ret;
         }
+
+
         //public int setStaticIP(string ip_address, string subnet_mask)
         //{
         //    int ret = 0;
@@ -261,6 +269,5 @@ namespace CheckConnection.Methods
         //            res += line + "\n";
         //    }
         //}
-
     }
 }

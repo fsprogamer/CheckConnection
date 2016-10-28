@@ -173,7 +173,11 @@ namespace CheckConnection.Model
             try
             {
                 ManagementBaseObject newDNS = _objMO.GetMethodParameters("SetDNSServerSearchOrder");
-                newDNS["DNSServerSearchOrder"] = name;
+                log.InfoFormat("name.Length == {0}", name.Length);
+                if( name.Length == 0 )
+                    newDNS["DNSServerSearchOrder"] = null;
+                else
+                    newDNS["DNSServerSearchOrder"] = name;
                 ManagementBaseObject setDNS =
                     _objMO.InvokeMethod("SetDNSServerSearchOrder", newDNS, null);
 
