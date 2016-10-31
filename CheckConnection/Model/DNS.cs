@@ -10,7 +10,7 @@ namespace CheckConnection.Model
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }
-        [NotNull]
+        [NotNull, Indexed]
         public int Connection_Id { get; set; }
         [NotNull]
         public string DNSServer { get; set; }

@@ -113,7 +113,7 @@ namespace CheckConnection.Methods
         public List<Connection> ReadConnectionHistory(string name, int offset = 0, int pagesize = 0)
         {
             const string table_name = "Connection";
-            List<Connection> Connection_list = new List<Connection>();
+            List<Connection> Connection_list = new List<Connection>(pagesize);
             try
             {
                 using (var db = new SQLiteConnection(conn_string, true))

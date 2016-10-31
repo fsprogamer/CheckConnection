@@ -609,6 +609,15 @@ namespace CheckConnection
 
         }
 
+        private void toolStripButtonRenewDHCP_Click(object sender, EventArgs e)
+        {
+            log.Info("Before toolStripButtonRenewDHCP_Click");
+            string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            MObject objMO = new MObject(wmi.GetManagementObject(name));
+            objMO.RenewDHCPLease();
+            log.Info("Before toolStripButtonRenewDHCP_Click");
+        }
+
         //private void ChangeCellToComboBox(int iRowIndex)
         //{
         //    if (bIsComboBox == false)

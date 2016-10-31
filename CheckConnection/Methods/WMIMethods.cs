@@ -165,10 +165,13 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    Connection item = new Connection();
+                    Connection item = new Connection();                    
 
                     if (mo["Description"] != null)
+                    {
                         item.Name = mo["Description"].ToString();
+                        log.InfoFormat("{0}, IPEnabled={1}", item.Name, mo["IPEnabled"].ToString());
+                    }
 
                     item.Id = Conn_id;
                     item.Date = DateTime.Now;

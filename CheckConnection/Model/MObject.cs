@@ -196,7 +196,8 @@ namespace CheckConnection.Model
             int ret = 0;
             try
             {
-                _objMO.InvokeMethod("RenewDHCPLease", null);
+                _objMO.InvokeMethod("ReleaseDHCPLease", null);
+                _objMO.InvokeMethod("RenewDHCPLease", null);                                
                 ret = 1;
             }
             catch (Exception ex)

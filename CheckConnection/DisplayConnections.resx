@@ -191,6 +191,22 @@
         gg==
 </value>
   </data>
+  <data name="toolStripButtonRenewDHCP.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJBSURBVEhLrZS9SxxRFMUHiyBWqVIGEbFKEYKFiLDst8gg
+        ElwR/wIRSwsLYQvxL9hiEYsUIWWQYJHC0tJCLCSIiGwRLKxkERFZ1t8ZzqyzOy6ssBfu3HfPOdx338e8
+        oJ8VCoXPHg7XKHycz+fnq9XqiKHhGEXP8Dsm+G6oY2AL+BH+iOY/XmPcf4UiJZKYcZvYJjaz2eyiOq9U
+        Kh/It/Bnc7FG8Yo441KvJtBkUhxF/BqfxlfA7oX3ahwvM5nMR5cMAiUC+4ibuVxuWd0Sr43dEjfCMBwj
+        TpDvG3/Gd6Nz0UeJQJMSTVCka4/Jl8TjLbamFHVk8wQHaNvoTkul0mSgD+CpQJESSUyuWxHGt4LxT1wT
+        H7HCUWFJY7JZ+Ab8I74Qn7BOtyHSuuggPQyKxeInOjlBI92a4S7zyg89+bYKbDs5jLvrNa1KW4OroznD
+        KaPOjmrhNSW6Xkp2zKeMjr/AX1D4Ev9mOGVoNlzrV3LvNs2njMJfKfhvgMJxx/WBOtby4bUN58Qpw12m
+        bYT7rVroBttjulxF84Cf6CANdx0wY/1gN8TUrRCY+iV1teD+4FrVD2Hubh79sXJdUcb7+Nv3WGR8j2Oj
+        wxx8S4Xho59FkfwOP2Os96UuHm+Rv/55AHsCTdYlVqfEdXL9vuqk4UdokbwpjLH0yfiut0Ku92KVqIco
+        ei/e0L77ddPDsqVutTomWCZPdqwV1crl8rhLpQ1h9B4TJX6iyF9iaLpj8J09NjQc87mETBDdiqGbVuhh
+        jwXBC7ctjs6XP8p7AAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="toolStripButtonRefresh.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
