@@ -14,18 +14,20 @@ namespace CheckConnection.Methods
         public DBMethods()
         {
             conn_string = Properties.Settings.Default.DBConnectionString;
+            using (var db = new SQLiteConnection(conn_string, true))
+            {
+                //Create the tables
+                db.CreateTable<Connection>();
+                db.CreateTable<DNS>();
+                db.CreateTable<Gateway>();                
+            }
         }
         public void SaveConnectionTable( List<ConnectionParam> connparam )
         {
-            const string table_name = "Connection";
-
             try
             {
-                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.Create,*/ true))
+                using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (!isTableExists(table_name, db))
-                        db.CreateTable<Connection>();
-
                     foreach (ConnectionParam conn in connparam)
                     {
                         db.RunInTransaction(() =>
@@ -46,14 +48,10 @@ namespace CheckConnection.Methods
 
         public void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId)
         {
-            string table_name = "DNS";
             if (DNS_list != null)
             {
                 try
                 {
-                    if (!isTableExists(table_name, db))
-                        db.CreateTable<DNS>();
-
                     foreach (DNS dns in DNS_list)
                         dns.Connection_Id = connId;
 
@@ -68,14 +66,10 @@ namespace CheckConnection.Methods
 
         public void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId)
         {
-            string table_name = "Gateway";
             if (Gateway_list != null)
             {
                 try
                 {
-                    if (!isTableExists(table_name, db))
-                        db.CreateTable<Gateway>();
-
                     foreach (Gateway gtw in Gateway_list)
                         gtw.Connection_Id = connId;
 
@@ -90,17 +84,13 @@ namespace CheckConnection.Methods
 
         public List<Connection> ReadConnectionHistory()
         {
-            const string table_name = "Connection";
             List<Connection> Connection_list = new List<Connection>();
             try { 
-                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+                using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (isTableExists(table_name, db))
-                    {
-                        var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} order by Date desc", table_name));
+                        var connections = db.Query<Connection>("SELECT * FROM Connection order by Date desc");
                         Connection_list.Capacity = connections.Count;
                         Connection_list.AddRange(connections);
-                    }
                 }
             }
             catch (Exception e)
@@ -112,16 +102,12 @@ namespace CheckConnection.Methods
 
         public List<Connection> ReadConnectionHistory(string name, int offset = 0, int pagesize = 0)
         {
-            const string table_name = "Connection";
             List<Connection> Connection_list = new List<Connection>(pagesize);
             try
             {
                 using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (isTableExists(table_name, db))
-                    {
                         //var connections = db.Query<Connection>("SELECT * FROM Connection where Name=?", name);
-
                         var connections = db.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
                         from (SELECT *,
                         (SELECT COUNT(*)
@@ -136,7 +122,6 @@ namespace CheckConnection.Methods
 
                         Connection_list.Capacity = connections.Count;
                         Connection_list.AddRange(connections);
-                    }
                 }
             }
             catch (Exception e)
@@ -148,15 +133,12 @@ namespace CheckConnection.Methods
 
         public int ReadConnectionHistoryCount(string name)
         {
-            const string table_name = "Connection";
             int reccount = 0;
             List<Connection> Connection_list = new List<Connection>();
             try
             {
                 using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (!isTableExists(table_name, db))
-                        db.CreateTable<Connection>();
                     reccount = db.ExecuteScalar<int>("SELECT count(*) FROM Connection where Name=?", name);                                        
                 }
             }
@@ -166,38 +148,17 @@ namespace CheckConnection.Methods
             }
             return reccount;
         }
-        //public List<Connection> ReadFullConnectionHistory()
-        //{
-        //    string[] table_name = new string[] { "Connection", "DNS", "Gateway" };
-        //    List<Connection> Connection_list = new List<Connection>();
 
-        //    using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
-        //    {
-        //        if (isTableExists(table_name, db))
-        //        {
-        //            var connections = db.Query<Connection>(String.Format("SELECT * FROM {0} order by Date desc", table_name));
-        //            foreach (var conn in connections)
-        //            {
-        //                Connection_list.Add(conn);
-        //            }
-        //        }
-        //    }
-        //    return Connection_list;
-        //}
         public List<DNS> ReadDNSHistory(int Connection_Id)
         {
-            const string table_name = "DNS";
             List<DNS> DNS_list = new List<DNS>();
             try
             {
-                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+                using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (isTableExists(table_name, db))
-                    {
-                        var dns_array = db.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", Connection_Id);
-                        DNS_list.Capacity = dns_array.Count;
-                        DNS_list.AddRange(dns_array);
-                    }
+                    var dns_array = db.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", Connection_Id);
+                    DNS_list.Capacity = dns_array.Count;
+                    DNS_list.AddRange(dns_array);
                 }
             }
             catch (Exception e)
@@ -209,18 +170,14 @@ namespace CheckConnection.Methods
 
         public List<Gateway> ReadGatewayHistory(int Connection_Id)
         {
-            const string table_name = "Gateway";
             List<Gateway> Gateway_list = new List<Gateway>();
             try
             {
-                using (var db = new SQLiteConnection(conn_string, /*SQLiteOpenFlags.ReadOnly,*/ true))
+                using (var db = new SQLiteConnection(conn_string, true))
                 {
-                    if (isTableExists(table_name, db))
-                    {
-                        var gateway_array = db.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc",  Connection_Id);
-                        Gateway_list.Capacity = gateway_array.Count;
-                        Gateway_list.AddRange(gateway_array);
-                    }
+                    var gateway_array = db.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc",  Connection_Id);
+                    Gateway_list.Capacity = gateway_array.Count;
+                    Gateway_list.AddRange(gateway_array);
                 }
             }
             catch (Exception e)
