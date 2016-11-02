@@ -6,7 +6,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-    public class DNS
+    public class DNS : IEntity
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }

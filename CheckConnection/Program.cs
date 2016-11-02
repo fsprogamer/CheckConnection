@@ -16,10 +16,9 @@ namespace CheckConnection
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(@"CheckConnection.exe.log4net"));//Если файл с настройками в папке с exe файлом        
-
-            DBInterface db = new DBMethods();
+            
             WMIInterface wmi = new WMIMethods();
-            Application.Run(new DisplayConnections(db,wmi));            
+            Application.Run(new DisplayConnections(wmi));            
         }
     }
 }

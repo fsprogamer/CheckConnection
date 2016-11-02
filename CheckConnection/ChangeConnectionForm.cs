@@ -28,7 +28,8 @@ namespace CheckConnection
         public ChangeConnectionForm(WMIInterface wmiparam, string pconnname)
         {            
             wmi = wmiparam;
-            connparam = wmi.GetNetworkDevices().Where(p => p.Connection.Name == pconnname).First<ConnectionParam>();
+            ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
+            connparam = cpmgr.GetItem(pconnname);
 
             InitializeComponent();
         }
@@ -275,7 +276,8 @@ namespace CheckConnection
             }
             
             log.Info("Before SaveConnectionParam");
-            ret = wmi.SaveConnectionParam(connparam);
+            ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
+            ret = cpmgr.SaveItem(connparam); //wmi.SaveConnectionParam(connparam);
             log.Info("After SaveConnectionParam");
 
             this.Cursor = Cursors.Default;

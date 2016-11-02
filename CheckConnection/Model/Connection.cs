@@ -4,7 +4,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-    public class Connection
+    public class Connection : INameEntity
     {
 
         [PrimaryKey, AutoIncrement, Unique]
@@ -12,7 +12,7 @@ namespace CheckConnection.Model
         [NotNull, Indexed]
         [Display(Name = "Дата и время")]
         public DateTime Date { get; set; }
-        [NotNull]
+        [NotNull, Indexed]
         [Display(Name = "Название подключения")]
         public string Name { get; set; }
         [Display(Name = "MAC адрес")]

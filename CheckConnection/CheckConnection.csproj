@@ -86,17 +86,26 @@
     <Compile Include="DisplayConnections.Designer.cs">
       <DependentUpon>DisplayConnections.cs</DependentUpon>
     </Compile>
+    <Compile Include="Methods\ConnectionManager.cs" />
+    <Compile Include="Methods\ConnectionParamManager.cs" />
+    <Compile Include="Methods\ConnectionRepo.cs" />
     <Compile Include="Methods\DBInterface.cs" />
     <Compile Include="Methods\DBMethods.cs" />
-    <Compile Include="Methods\DBMethodsNotUsed.cs" />
-    <Compile Include="Methods\NetworkMethods.cs" />
+    <Compile Include="Methods\DNSManager.cs" />
+    <Compile Include="Methods\DNSRepo.cs" />
+    <Compile Include="Methods\GatewayManager.cs" />
+    <Compile Include="Methods\GatewayRepo.cs" />
+    <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="Methods\WMIConnectionManager.cs" />
     <Compile Include="Methods\WMIInterface.cs" />
     <Compile Include="Methods\WMIMethods.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\ConnectionParam.cs" />
     <Compile Include="Model\DNS.cs" />
     <Compile Include="Model\Gateway.cs" />
+    <Compile Include="Model\IEntity.cs" />
+    <Compile Include="Model\INameEntity.cs" />
     <Compile Include="Model\MObject.cs">
       <SubType>Component</SubType>
     </Compile>

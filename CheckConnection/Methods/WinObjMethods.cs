@@ -14,7 +14,7 @@ namespace CheckConnection.Methods
                 foreach (DataGridViewColumn column in dgv.Columns)
                     if (column.Visible == true)
                         width += column.Width;
-                width += 100;
+                //width += 100;
                 return width/* += 20*/;
         }
 

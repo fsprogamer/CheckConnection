@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
+using SQLite;
 using System;
 using CheckConnection.Methods;
 using CheckConnection.Model;
@@ -12,188 +12,108 @@ namespace CheckConnection
 {
     public partial class DisplayConnections : Form
     {
-        delegate void SetComboBoxCellType(int iRowIndex);
-        bool bIsComboBox = false;
-        private DBInterface db;
+        delegate void SetComboBoxCellType(int iRowIndex);        
         private WMIInterface wmi;
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private bool FormLoadComplete = false;
 
         private int HistorypageSize = Properties.Settings.Default.HistoryPageSize;//10;
 
-        public DisplayConnections(DBInterface dbparam, WMIInterface wmiparam)
+        private SQLiteConnection sqlconn;
+        private ConnectionManager connmgr;
+        private DNSManager dnsmgr;
+        private GatewayManager gatewaymgr;
+
+        public DisplayConnections( WMIInterface wmiparam)
         {
-            db = dbparam;
             wmi = wmiparam;
             InitializeComponent();
 
-            HistorybindingNavigator.BindingSource = HistorybindingSource;            
+            HistorybindingNavigator.BindingSource = HistorybindingSource;
+
+            string conn_string = Properties.Settings.Default.DBConnectionString;
+            sqlconn = new SQLiteConnection(conn_string, true);
+
+            connmgr = new ConnectionManager(sqlconn);
+            dnsmgr = new DNSManager(sqlconn);
+            gatewaymgr = new GatewayManager(sqlconn);
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
         {
             ConnectionsdataGridView.Name = WinObjMethods.ConnGridName;
-
             WinObjMethods.AddColumn(ref ConnectionsdataGridView);
-            BindConnectionGrid(ref ConnectionsdataGridView);
 
-            //ConnectionsdataGridView.DefaultCellStyle.WrapMode=DataGridViewTriState.True;
-            //ConnectionsdataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
+            BindConnectionGrid();
 
             WinObjMethods.AddColumn(ref HistorydataGridView);
+            
+            int rowcnt = 0;
+            string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
 
+            if (!String.IsNullOrEmpty(name))
             {
-                int rowcnt=0;
-                string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-                if (!String.IsNullOrEmpty(name))
-                    //Get count
-                    rowcnt = db.ReadConnectionHistoryCount(name);
-                if (rowcnt > 0)
-                {
-                    HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
-                    HistorybindingSource.MoveFirst();
-                    BindHistoryGrid();
-                }
+                //Get count
+                rowcnt = connmgr.GetConnectionsAmountByName(name);
+            }
+            if (rowcnt > 0)
+            {
+                HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
+                HistorybindingSource.MoveFirst();
+                BindHistoryGrid(sqlconn);
             }
 
-            //HistorydataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            //HistorydataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            //HistorydataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
-
-            //if (HistorydataGridView.Rows.Count > 0)
-            //    HistorydataGridView.Rows[0].Selected = true;
-
             SetWindowPosition();
-
             FormLoadComplete = true;
         }       
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dgv"></param>
    
-        private void BindConnectionGrid(ref DataGridView dgv)
+        private void BindConnectionGrid()
         {
-            List<Connection> connlist = wmi.GetNetworkDevicesList();            
-            //dgv.Columns.Add( GetDNSComboBox(connlist[0].Id) );
-            //dgv.Columns.Add( GetGatewayComboBox(connlist[0].Id) );
-            //SetDNSComboBox(ref ConnectionsdataGridView);
+            WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
+            List<Connection> connlist = wconnmgr.GetItems();
 
             if (connlist.Count > 0)
             {
                 var bindsList = new BindingList<Connection>(connlist);
                 //Bind BindingList directly to the DataGrid
                 var source = new BindingSource(bindsList, null);
-                dgv.DataSource = source;
+                ConnectionsdataGridView.DataSource = source;
             }
-
-        }
-        private void SetTextBox(ref DataGridView dgv)
-        {            
-            List<ConnectionParam> connlist = wmi.GetNetworkDevices();
-
-            //Добавление данных
-            DataGridViewRow row = new DataGridViewRow();
-            DataGridViewTextBoxCell cell_txt = new DataGridViewTextBoxCell();
-            //Вписываем текст в заголовок строки
-            row.HeaderCell.Value = "1";
-            row.CreateCells(dgv);
-            //Создаем массив который будет помещен в ячейку
-            cell_txt.Value =
-            row.Cells[1] = cell_txt;
-
-            //выбираем строчку по умолчанию - здесь выбрана под номером 2.
-            row.Cells[1].Value = (row.Cells[1] as DataGridViewComboBoxCell).Items[2];
-            //Вносим в dataGridView
-            dgv.Rows.Add(row);
-        }
-        private void SetDNSComboBox(ref DataGridView dgv)
-        {
-            //Добавление столбца -тип ComboBox
-           //DataGridViewColumn column1 = new DataGridViewColumn();
-           // DataGridViewCell cell1 = new DataGridViewComboBoxCell();
-           // column1.HeaderText = "secondcolumn";
-           // column1.Name = "secondcolumn";
-           // column1.CellTemplate = cell1;
-           // dgv.Columns.Add(column1);
-
-            //Добавление данных
-            DataGridViewRow row = new DataGridViewRow();
-            DataGridViewComboBoxCell cell_CB = new DataGridViewComboBoxCell();
-            //Вписываем текст в заголовок строки
-            row.HeaderCell.Value = "1";
-            row.CreateCells(dgv);
-            //Создаем массив который будет помещен в ячейку
-            cell_CB.Items.AddRange(new string[] { "Первый", "Второй", "Третий", "Четвертый" });
-            row.Cells[1] = cell_CB;
-
-            //выбираем строчку по умолчанию - здесь выбрана под номером 2.
-            row.Cells[1].Value = (row.Cells[1] as DataGridViewComboBoxCell).Items[2];
-            //Вносим в dataGridView
-            dgv.Rows.Add(row);
-        }
-
-        private DataGridViewComboBoxColumn GetDNSComboBox(int conn_id)
-        {            
-            DataGridViewComboBoxColumn cmb = new DataGridViewComboBoxColumn()
-            {
-                //CellTemplate = cell,
-                Name = "DNSServer",
-                HeaderText = "DNS-серверы",
-                DataPropertyName = "DNSServer", // Tell the column which property it should use
-                DisplayMember = "DNSServer",
-                ValueMember = "DNSServer",
-                //Width = 120,
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.AllCells,
-            }; 
-            
-            List<DNS> dnslist = wmi.GetDNSArray(conn_id);
-
-            if (dnslist.Count > 0)
-            {
-                var bindsList = new BindingList<DNS>(dnslist); 
-                var source = new BindingSource(bindsList, null);
-                cmb.DataSource = source;
-            }        
-
-            return cmb;
-        }
-
-        private DataGridViewComboBoxColumn GetGatewayComboBox(int conn_id)
-        {
-            DataGridViewComboBoxColumn cmb = new DataGridViewComboBoxColumn()
-            {
-                //CellTemplate = cell,
-                Name = "IPGateway",
-                HeaderText = "Шлюзы",
-                DataPropertyName = "IPGateway", // Tell the column which property it should use
-                DisplayMember = "IPGateway",
-                ValueMember = "IPGateway",
-                //Width = 120,
-                AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill,
-
-            }; 
-                      
-            List<Gateway> gtwlist = wmi.GetGatewayArray(conn_id);
-
-            if (gtwlist.Count > 0)
-            {
-                var bindsList = new BindingList<Gateway>(gtwlist); 
-                var source = new BindingSource(bindsList, null);
-                cmb.DataSource = source;
-            }
-
-            return cmb;
-        }
+        }              
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            base.OnFormClosing(e);            
-            List<ConnectionParam> connparam = wmi.GetNetworkDevices();
+            base.OnFormClosing(e);
+            ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
+            List<ConnectionParam> connparam = cpmgr.GetItems();// wmi.GetNetworkDevices();
 
-            if (connparam.Count > 0)            
-                db.SaveConnectionTable(connparam);
+            if (connparam.Count > 0)
+            {
+                foreach (ConnectionParam conn in connparam)
+                {
+                    sqlconn.RunInTransaction(() =>
+                    {
+
+                        int ret = connmgr.SaveConnection(conn.Connection);
+                        conn.Connection.Id = connmgr.GetLastInsertRowId();
+
+                        if (conn.DNS_list != null)
+                        {
+                            foreach (DNS dns in conn.DNS_list)
+                                dns.Connection_Id = conn.Connection.Id;
+                            dnsmgr.SaveDNSs(conn.DNS_list);
+                        }
+
+                        if (conn.Gateway_list != null)
+                        {
+                            foreach (Gateway gtw in conn.Gateway_list)
+                                gtw.Connection_Id = conn.Connection.Id;
+                            gatewaymgr.SaveGateways(conn.Gateway_list);
+                        }
+                    });
+                }
+
+            }
 
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
         }
@@ -225,42 +145,6 @@ namespace CheckConnection
             var TracertForm = new TracertForm.MainForm();
             TracertForm.StartPosition=FormStartPosition.CenterScreen;
             TracertForm.Show();
-        }
-
-        private void ConnectionsdataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            //SetComboBoxCellType objChangeCellType = new SetComboBoxCellType(ChangeCellToComboBox);
-
-            //if (e.ColumnIndex == this.ConnectionsdataGridView.Columns["DNSServer"].Index)
-            //{
-            //    this.ConnectionsdataGridView.BeginInvoke(objChangeCellType, e.RowIndex);
-            //    bIsComboBox = false;
-            //}
-        }
-
-        private void ChangeCellToComboBox(string conndesc, int iRowIndex)
-        {
-            if (bIsComboBox == false)
-            {                
-                List<DNS> dt = wmi.GetDNSArray(iRowIndex);
-
-                DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
-                dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-               
-                if (dt.Count > 0)
-                {
-                    var bindsList = new BindingList<DNS>(dt);
-                    var source = new BindingSource(bindsList, null);
-                    dgComboCell.DataSource = source;
-                }
-
-                //dgComboCell.DataSource = dt;
-                dgComboCell.ValueMember = "DNSServer";
-                dgComboCell.DisplayMember = "DNSServer";
-
-                ConnectionsdataGridView.Rows[iRowIndex].Cells[ConnectionsdataGridView.CurrentCell.ColumnIndex] = dgComboCell;
-                bIsComboBox = true;
-            }
         }
 
         private void ComparetoolStripButton_Click(object sender, System.EventArgs e)
@@ -397,7 +281,7 @@ namespace CheckConnection
                 var ChangeConnectionForm = new ChangeConnectionForm(wmi, Name);
 
                 ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-                ChangeConnectionForm.Show();
+                ChangeConnectionForm.ShowDialog();
             }
             else
             {
@@ -411,7 +295,7 @@ namespace CheckConnection
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
             wmi.GetNetworkDevicesConfig();
-            BindConnectionGrid(ref ConnectionsdataGridView);
+            BindConnectionGrid();
         }
 
         int GetSelectedRow(DataGridView dgv)
@@ -510,11 +394,11 @@ namespace CheckConnection
             if (FormLoadComplete)
             {
                 if ((HistorybindingSource.Current != null)&&((int)HistorybindingSource.Current>0))
-                    BindHistoryGrid();
+                    BindHistoryGrid(sqlconn);
             }
         }
 
-        private void BindHistoryGrid()
+        private void BindHistoryGrid(SQLiteConnection sqlconn)
         {
             string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
             if (!String.IsNullOrEmpty(SelectedConnectionName))
@@ -523,12 +407,12 @@ namespace CheckConnection
                 if (HistorybindingSource.Current != null)
                 {
                     int offset = (int)HistorybindingSource.Current;
-                    List<Connection> connlist = db.ReadConnectionHistory(SelectedConnectionName, offset, HistorypageSize);
+                    IList<Connection> connlist = connmgr.GetConnectionsByName(SelectedConnectionName, offset, HistorypageSize);
 
                     foreach (Connection conn in connlist)
                     {
-                        List<DNS> dnslist = db.ReadDNSHistory(conn.Id);
-                        List<Gateway> gtwlist = db.ReadGatewayHistory(conn.Id);
+                        IList<DNS> dnslist = dnsmgr.GetDNSsByConnectionId(conn.Id);
+                        IList<Gateway> gtwlist = gatewaymgr.GetGatewaysByConnectionId(conn.Id);
 
                         if (dnslist.Count > 0)
                         {
@@ -564,13 +448,15 @@ namespace CheckConnection
             {
                 string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
                 if (!String.IsNullOrEmpty(name))
+                {
                     //Get count
-                    rowcnt = db.ReadConnectionHistoryCount(name);
+                    rowcnt = connmgr.GetConnectionsAmountByName(name);
+                }
                 if (rowcnt > 0)
                 {
                     HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
                     HistorybindingSource.MoveFirst();
-                    BindHistoryGrid();
+                    BindHistoryGrid(sqlconn);
                 }
                 for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
                 {
@@ -588,7 +474,7 @@ namespace CheckConnection
             if (FormLoadComplete)
             {
                 if (HistorybindingSource.Current != null) 
-                    BindHistoryGrid();
+                    BindHistoryGrid(sqlconn);
             }
         }
 
@@ -616,6 +502,15 @@ namespace CheckConnection
             MObject objMO = new MObject(wmi.GetManagementObject(name));
             objMO.RenewDHCPLease();
             log.Info("Before toolStripButtonRenewDHCP_Click");
+        }
+
+        private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
+        {
+            if (FormLoadComplete)
+            {
+                if (HistorybindingSource.Current != null)
+                    BindHistoryGrid(sqlconn);
+            }
         }
 
         //private void ChangeCellToComboBox(int iRowIndex)

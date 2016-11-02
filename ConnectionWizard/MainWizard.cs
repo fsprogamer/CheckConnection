@@ -215,8 +215,10 @@ namespace ConnectionWizard
             var ctrl = flpanel.Controls.Find(WinObjMethods.ConnGridName, false);
             if (ctrl.Length == 0)
             {
-                DataGridView dgv = WinObjMethods.GetConnectionGrid();                
-                List<ConnectionParam> connlist = wmi.GetNetworkDevices();
+                DataGridView dgv = WinObjMethods.GetConnectionGrid();
+                ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
+                   
+                List<ConnectionParam> connlist = cpmgr.GetItems();
                 if (connlist.Count > 0)
                 {
                     var bindsList = new BindingList<ConnectionParam>(connlist);

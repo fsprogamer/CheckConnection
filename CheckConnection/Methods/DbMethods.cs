@@ -1,44 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SQLite;
 using CheckConnection.Model;
+using System.Linq;
+using System;
 using Common;
 using log4net;
 
 namespace CheckConnection.Methods
 {
-    public partial class DBMethods : DBConnection,DBInterface
+    public partial class DBMethods : DBConnection
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        static object locker = new object();
 
-        public DBMethods()
+        SQLiteConnection db;
+        static readonly object Locker = new object();
+
+        public DBMethods(SQLiteConnection conn, string path)
         {
-            conn_string = Properties.Settings.Default.DBConnectionString;
-            using (var db = new SQLiteConnection(conn_string, true))
+            db = conn;
+            //Create the tables
+            try
             {
-                //Create the tables
                 db.CreateTable<Connection>();
                 db.CreateTable<DNS>();
-                db.CreateTable<Gateway>();                
-            }
-        }
-        public void SaveConnectionTable( List<ConnectionParam> connparam )
-        {
-            try
-            {
-                using (var db = new SQLiteConnection(conn_string, true))
-                {
-                    foreach (ConnectionParam conn in connparam)
-                    {
-                        db.RunInTransaction(() =>
-                        {
-                            db.Insert(conn.Connection);
-                            conn.Connection.Id = db.ExecuteScalar<int>("SELECT last_insert_rowid()");
-                            SaveDNSTable(conn.DNS_list, db, conn.Connection.Id);
-                            SaveGatewayTable(conn.Gateway_list, db, conn.Connection.Id);
-                        });
-                    }
-                }
+                db.CreateTable<Gateway>();
             }
             catch (Exception e)
             {
@@ -46,69 +32,170 @@ namespace CheckConnection.Methods
             }
         }
 
-        public void SaveDNSTable(List<DNS> DNS_list, SQLiteConnection db, int connId)
+        //Get all items in the database method
+        public IEnumerable<T> GetItems<T>() where T : IEntity, new()
         {
-            if (DNS_list != null)
+            lock (Locker)
             {
-                try
-                {
-                    foreach (DNS dns in DNS_list)
-                        dns.Connection_Id = connId;
-
-                    db.InsertAll(DNS_list);
+                try { 
+                    return (from i in db.Table<T>() select i).ToList();
                 }
                 catch (Exception e)
                 {
                     log.Error("Ошибка: '{0}'", e);
+                    return null;
                 }
             }
         }
 
-        public void SaveGatewayTable(List<Gateway> Gateway_list, SQLiteConnection db, int connId)
+        //Get all items in the database method with Name
+        public IEnumerable<T> GetItemsByName<T>(string Name) where T : INameEntity, new()
         {
-            if (Gateway_list != null)
+            lock (Locker)
             {
                 try
                 {
-                    foreach (Gateway gtw in Gateway_list)
-                        gtw.Connection_Id = connId;
-
-                    db.InsertAll(Gateway_list);
+                    return (from i in db.Table<T>() select i).Where(i => i.Name == Name).ToList();
                 }
                 catch (Exception e)
                 {
                     log.Error("Ошибка: '{0}'", e);
+                    return null;
+                }
+            }
+        }      
+
+        //Get specific item in the database method with Id
+        public T GetItem<T>(int id) where T : IEntity, new()
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return db.Table<T>().FirstOrDefault(x => x.Id == id);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return default(T);
                 }
             }
         }
 
-        public List<Connection> ReadConnectionHistory()
+        //Get specific item in the database method with Name
+        public T GetItemByName<T>(string Name) where T : INameEntity, new()
         {
-            List<Connection> Connection_list = new List<Connection>();
-            try { 
-                using (var db = new SQLiteConnection(conn_string, true))
+            lock (Locker)
+            {
+                try
                 {
-                        var connections = db.Query<Connection>("SELECT * FROM Connection order by Date desc");
-                        Connection_list.Capacity = connections.Count;
-                        Connection_list.AddRange(connections);
+                    return db.Table<T>().FirstOrDefault(x => x.Name == Name);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return default(T);
                 }
             }
-            catch (Exception e)
+        }
+        
+        public int SaveItem<T>(T item) where T : IEntity
+        {
+            lock (Locker)
             {
-                log.Error("Ошибка: '{0}'", e);
+                try
+                {
+                    //if (item.Id != 0)
+                    //{
+                    //    db.Update(item);
+                    //    return item.Id;
+                    //}
+                    return db.Insert(item);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
             }
-            return Connection_list;
         }
 
-        public List<Connection> ReadConnectionHistory(string name, int offset = 0, int pagesize = 0)
+        public int SaveItems<T>(IEnumerable<T> items) where T : IEntity
         {
-            List<Connection> Connection_list = new List<Connection>(pagesize);
-            try
+            lock (Locker)
             {
-                using (var db = new SQLiteConnection(conn_string, true))
+                try
                 {
-                        //var connections = db.Query<Connection>("SELECT * FROM Connection where Name=?", name);
-                        var connections = db.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
+                    return db.InsertAll(items);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
+        }        
+
+        public int DeleteItem<T>(int id) where T : IEntity, new()
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return db.Delete<T>(id);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
+        }
+
+        //------------Special--------------
+
+        //Get last insert rowid
+        public int GetLastInsertRowId()
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return db.ExecuteScalar<int>("SELECT last_insert_rowid()");
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
+        }
+
+        //Get amount of item in the database method with Name
+        public int GetConnectionAmountByName(string Name)
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return db.ExecuteScalar<int>("SELECT count(*) FROM Connection where Name=?", Name);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
+        }
+
+        //Get page of Connection items in the database method with Name
+        public IEnumerable<Connection> GetConnectionPageByName(string Name, int Offset = 0, int Pagesize = 0)
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return db.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
                         from (SELECT *,
                         (SELECT COUNT(*)
                         FROM Connection AS t2
@@ -118,93 +205,46 @@ namespace CheckConnection.Methods
                         FROM Connection AS t1
                         where Name = ?
                         ORDER BY Date desc) t3
-                        where row_Num between ? and ?", name, name, offset+1, offset+pagesize);
-
-                        Connection_list.Capacity = connections.Count;
-                        Connection_list.AddRange(connections);
+                        where row_Num between ? and ?", Name, Name, Offset + 1, Offset + Pagesize).ToList();
                 }
-            }
-            catch (Exception e)
-            {
-                log.Error("Ошибка: '{0}'", e);
-            }
-            return Connection_list;
-        }
-
-        public int ReadConnectionHistoryCount(string name)
-        {
-            int reccount = 0;
-            List<Connection> Connection_list = new List<Connection>();
-            try
-            {
-                using (var db = new SQLiteConnection(conn_string, true))
+                catch (Exception e)
                 {
-                    reccount = db.ExecuteScalar<int>("SELECT count(*) FROM Connection where Name=?", name);                                        
+                    log.Error("Ошибка: '{0}'", e);
+                    return null;
                 }
             }
-            catch (Exception e)
-            {
-                log.Error("Ошибка: '{0}'", e);
-            }
-            return reccount;
         }
 
-        public List<DNS> ReadDNSHistory(int Connection_Id)
+        public IEnumerable<DNS> GetDNSByConnectionId(int Connection_Id)
         {
-            List<DNS> DNS_list = new List<DNS>();
-            try
-            {
-                using (var db = new SQLiteConnection(conn_string, true))
-                {
-                    var dns_array = db.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", Connection_Id);
-                    DNS_list.Capacity = dns_array.Count;
-                    DNS_list.AddRange(dns_array);
-                }
-            }
-            catch (Exception e)
-            {
-                log.Error("Ошибка: '{0}'", e);
-            }
-            return DNS_list;
-        }
-
-        public List<Gateway> ReadGatewayHistory(int Connection_Id)
-        {
-            List<Gateway> Gateway_list = new List<Gateway>();
-            try
-            {
-                using (var db = new SQLiteConnection(conn_string, true))
-                {
-                    var gateway_array = db.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc",  Connection_Id);
-                    Gateway_list.Capacity = gateway_array.Count;
-                    Gateway_list.AddRange(gateway_array);
-                }
-            }
-            catch (Exception e)
-            {
-                log.Error("Ошибка: '{0}'", e);
-            }
-            return Gateway_list;
-        }
-
-        public bool isTableExists(String tableName, SQLiteConnection db)
-        {
-            if (db != null && !String.IsNullOrWhiteSpace(tableName))
+            lock (Locker)
             {
                 try
                 {
-                    int count = db.ExecuteScalar<int>("SELECT count(tbl_name) from sqlite_master where tbl_name = ?", tableName);
-                    if (count > 0)
-                    {
-                        return true;
-                    }
-            }
-                 catch (Exception e)
-            {
+                    return db.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", Connection_Id).ToList();
+                }
+                catch (Exception e)
+                {
                     log.Error("Ошибка: '{0}'", e);
+                    return null;
+                }
             }
         }
-            return false;
+
+        public IEnumerable<Gateway> GetGatewayByConnectionId(int Connection_Id)
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return db.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc", Connection_Id).ToList();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return null;
+                }
+            }
         }
     }
 }

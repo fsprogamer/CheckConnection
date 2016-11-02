@@ -40,7 +40,11 @@
             this.ViewComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonChangeConnection = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRestore = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRenewDHCP = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HistorybindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
@@ -53,10 +57,6 @@
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.toolStripDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButtonRenewDHCP = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -210,6 +210,17 @@
             this.toolStripButtonRestore.ToolTipText = "Восстановить параметры из истории";
             this.toolStripButtonRestore.Click += new System.EventHandler(this.toolStripButtonRestore_Click);
             // 
+            // toolStripButtonRenewDHCP
+            // 
+            this.toolStripButtonRenewDHCP.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRenewDHCP.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRenewDHCP.Image")));
+            this.toolStripButtonRenewDHCP.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRenewDHCP.Name = "toolStripButtonRenewDHCP";
+            this.toolStripButtonRenewDHCP.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRenewDHCP.Text = "toolStripButtonRenewDHCP";
+            this.toolStripButtonRenewDHCP.ToolTipText = "Обновить ip-адрес";
+            this.toolStripButtonRenewDHCP.Click += new System.EventHandler(this.toolStripButtonRenewDHCP_Click);
+            // 
             // toolStripButtonRefresh
             // 
             this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -220,6 +231,35 @@
             this.toolStripButtonRefresh.Text = "Refresh";
             this.toolStripButtonRefresh.ToolTipText = "Обновить отображаемые параметры";
             this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
+            // 
+            // toolStripDropDownButton
+            // 
+            this.toolStripDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.toolStripDropDownButton.Enabled = false;
+            this.toolStripDropDownButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton.Image")));
+            this.toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton.Name = "toolStripDropDownButton";
+            this.toolStripDropDownButton.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton.Text = "toolStripDropDownButton1";
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Enabled = false;
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Enabled = false;
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // HistorybindingNavigator
             // 
@@ -272,6 +312,7 @@
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
+            this.bindingNavigatorMovePreviousItem.Click += new System.EventHandler(this.bindingNavigatorMovePreviousItem_Click);
             // 
             // bindingNavigatorSeparator
             // 
@@ -327,46 +368,6 @@
             // HistorybindingSource
             // 
             this.HistorybindingSource.CurrentChanged += new System.EventHandler(this.HistorybindingSource_CurrentChanged);
-            // 
-            // toolStripDropDownButton
-            // 
-            this.toolStripDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem,
-            this.deleteToolStripMenuItem});
-            this.toolStripDropDownButton.Enabled = false;
-            this.toolStripDropDownButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton.Image")));
-            this.toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton.Name = "toolStripDropDownButton";
-            this.toolStripDropDownButton.Size = new System.Drawing.Size(29, 22);
-            this.toolStripDropDownButton.Text = "toolStripDropDownButton1";
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Enabled = false;
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Enabled = false;
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
-            // toolStripButtonRenewDHCP
-            // 
-            this.toolStripButtonRenewDHCP.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRenewDHCP.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRenewDHCP.Image")));
-            this.toolStripButtonRenewDHCP.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRenewDHCP.Name = "toolStripButtonRenewDHCP";
-            this.toolStripButtonRenewDHCP.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonRenewDHCP.Text = "toolStripButtonRenewDHCP";
-            this.toolStripButtonRenewDHCP.ToolTipText = "Обновить ip-адрес";
-            this.toolStripButtonRenewDHCP.Click += new System.EventHandler(this.toolStripButtonRenewDHCP_Click);
             // 
             // DisplayConnections
             // 
