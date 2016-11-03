@@ -16,8 +16,7 @@ namespace CheckConnection.Model
         public bool IpEnabled()
         {
             return (bool)_objMO["IPEnabled"];
-        }
-       
+        }       
 
         public int setStaticIP(string ip_address, string subnet_mask)
         {

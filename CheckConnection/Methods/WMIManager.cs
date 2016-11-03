@@ -2,9 +2,11 @@
 using System.Management;
 using log4net;
 
+using CheckConnection.Model;
+
 namespace CheckConnection.Methods
 {
-    public partial class WMIMethods: WMIInterface
+    public partial class WMIManager: WMIInterface
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ManagementObjectCollection moCollection;
@@ -12,7 +14,7 @@ namespace CheckConnection.Methods
         private const string IPEnabled_query = "SELECT * FROM Win32_NetworkAdapterConfiguration";
                                              //  + " WHERE IPEnabled = 'TRUE'";
 
-        public WMIMethods()
+        public WMIManager()
         {
             QueryWMI(IPEnabled_query);
         }

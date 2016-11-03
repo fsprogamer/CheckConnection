@@ -15,6 +15,9 @@ namespace CheckConnection.Model
         public string Name { get; set; }
         [NotNull]
         public string Ip_Address { get; set; }       
+        public string StatusCode { get; set; }
+        public string ErrMessage { get; set; }
+
     }
 
     public class Hop

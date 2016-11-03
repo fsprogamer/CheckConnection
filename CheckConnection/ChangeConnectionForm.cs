@@ -293,8 +293,7 @@ namespace CheckConnection
                 string mess = "Параметры подключения измененить не удалось"; ;
                 log.Info(mess);
                 MessageBox.Show(mess, "", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                
+                                MessageBoxIcon.Error);                
             }
         }
 

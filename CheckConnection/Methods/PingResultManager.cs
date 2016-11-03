@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using log4net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Management;
+using PingForm.Methods;
+using log4net;
 
 using CheckConnection.Model;
 
@@ -10,48 +12,90 @@ namespace CheckConnection.Methods
     class PingResultManager
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private ManagementObjectSearcher moSearch;
-        string _PingAddress;
-        public PingResultManager(string PingAddress)
+        //private ManagementObjectSearcher moSearch;
+        //string _PingAddress;
+        //public PingResultManager(string PingAddress)
+        //{
+        //    _PingAddress = PingAddress;
+        //    string query = "SELECT * FROM Win32_PingStatus WHERE Address = '{0}'";
+        //    query = String.Format(query, _PingAddress);
+
+        //    moSearch = new ManagementObjectSearcher(query);
+        //}
+
+        public PingResult GetPingResult(string strHostName)
         {
-            _PingAddress = PingAddress;
-            string query = "SELECT * FROM Win32_PingStatus WHERE Address = '{0}'";
-            query = String.Format(query, _PingAddress);
+            PingResult png = new PingResult(strHostName);
 
-            moSearch = new ManagementObjectSearcher(query);
-        }
-
-        public List<PingResult> GetItems()
-        {
-            List<PingResult> Ping_list = new List<PingResult>();
-
-            ManagementObjectCollection moCollection = moSearch.Get();
-
-            //enumerate the collection.
-            foreach (ManagementObject mo in moCollection)
+            if (String.IsNullOrEmpty(strHostName))
             {
-                PingResult item = new PingResult();
-
-                // access properties of the WMI object
-                log.ErrorFormat("StatusCode : {0}", mo["StatusCode"]);
-
-                log.ErrorFormat("strStatusCode : {0}", GetStatusCode(Convert.ToInt32(mo["StatusCode"])));
-
-                log.ErrorFormat("ResponseTime : {0} ms", mo["ResponseTime"]);
-                log.ErrorFormat("TimeToLive : {0} ms", mo["TimeToLive"]);
-                log.ErrorFormat("Timeout : {0} ms", mo["Timeout"]);
-
-                item.StatusCode = mo["StatusCode"].ToString();
-                item.Connection_Id = 1;
-                item.Date = DateTime.Now;
-                item.Ip_Address = _PingAddress;
-                item.Name = _PingAddress;
-                item.ResponseTime = mo["ResponseTime"].ToString();
-
-                Ping_list.Add(item);
+                strHostName = "localhost";
             }
-            return Ping_list;
+            try
+            {
+                PingMethods pm = new PingMethods();
+                PingReply reply = pm.GetPing(strHostName);
+
+                png.StatusCode = reply.Status.ToString();
+                log.InfoFormat("Status : {0}", png.StatusCode);
+
+                if (reply.Status == IPStatus.Success) { 
+                    png.Ip_Address = reply.Address.ToString();
+                    log.InfoFormat("Address : {0}", png.Ip_Address);
+
+                    png.ResponseTime = reply.RoundtripTime.ToString();
+                    log.InfoFormat("ResponseTime : {0}", png.ResponseTime);
+                }
+                else
+                {
+                    png.ResponseTime = "*";
+                    log.InfoFormat("ResponseTime : {0}", png.ResponseTime);
+                }
+            }
+            catch (SocketException ex)
+            {
+                png.ErrMessage = ex.Message;
+                log.InfoFormat("ErrMessage : {0}", png.ErrMessage);
+            }
+            catch (Exception ex)
+            {
+                png.ErrMessage = ex.Message;
+                log.InfoFormat("ErrMessage : {0}", png.ErrMessage);
+            }
+            return png;
         }
+
+        //public List<PingResult> GetItems()
+        //{
+        //    List<PingResult> Ping_list = new List<PingResult>();
+
+        //    ManagementObjectCollection moCollection = moSearch.Get();
+
+        //    //enumerate the collection.
+        //    foreach (ManagementObject mo in moCollection)
+        //    {
+        //        PingResult item = new PingResult();
+
+        //        // access properties of the WMI object
+        //        log.ErrorFormat("StatusCode : {0}", mo["StatusCode"]);
+
+        //        log.ErrorFormat("strStatusCode : {0}", GetStatusCode(Convert.ToInt32(mo["StatusCode"])));
+
+        //        log.ErrorFormat("ResponseTime : {0} ms", mo["ResponseTime"]);
+        //        log.ErrorFormat("TimeToLive : {0} ms", mo["TimeToLive"]);
+        //        log.ErrorFormat("Timeout : {0} ms", mo["Timeout"]);
+
+        //        item.StatusCode = mo["StatusCode"].ToString();
+        //        item.Connection_Id = 1;
+        //        item.Date = DateTime.Now;
+        //        item.Ip_Address = _PingAddress;
+        //        item.Name = _PingAddress;
+        //        item.ResponseTime = mo["ResponseTime"].ToString();
+
+        //        Ping_list.Add(item);
+        //    }
+        //    return Ping_list;
+        //}
 
         private string GetStatusCode(int intCode)
         {

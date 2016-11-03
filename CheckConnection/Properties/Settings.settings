@@ -17,5 +17,11 @@
     <Setting Name="HistoryPageSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="RouterDeafultIpAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.1</Value>
+    </Setting>
+    <Setting Name="ProviderDefaultAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">akado.ru</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -44,12 +44,19 @@ namespace CheckConnection.Methods
         {
             return _db.DeleteItem<Connection>(id);
         }
-
+        public IEnumerable<Connection> GetConnections( int Offset = 0, int Pagesize = 0)
+        {
+            return _db.GetConnectionPage( Offset, Pagesize);
+        }
         public IEnumerable<Connection> GetConnectionsByName(string Name, int Offset = 0, int Pagesize = 0)
         {
             return _db.GetConnectionPageByName(Name, Offset, Pagesize);
         }
 
+        public int GetConnectionsAmount()
+        {
+            return _db.GetConnectionAmount();
+        }
         public int GetConnectionsAmountByName(string Name)
         {
             return _db.GetConnectionAmountByName(Name);

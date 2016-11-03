@@ -19,7 +19,7 @@ namespace ConnectionWizard
             Application.SetCompatibleTextRenderingDefault(false);
 
             ConnectionWizard.Methods.DBInterface db = new ConnectionWizard.Methods.DBMethods();
-            WMIInterface wmi = new WMIMethods();
+            WMIInterface wmi = new WMIManager();
             PingInterface png = new PingMethods();
             Application.Run(new MainWizard(db, wmi, png));
         }

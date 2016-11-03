@@ -82,5 +82,29 @@ namespace CheckConnection.Properties {
                 this["HistoryPageSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.1")]
+        public string RouterDeafultIpAddress {
+            get {
+                return ((string)(this["RouterDeafultIpAddress"]));
+            }
+            set {
+                this["RouterDeafultIpAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("akado.ru")]
+        public string ProviderDefaultAddress {
+            get {
+                return ((string)(this["ProviderDefaultAddress"]));
+            }
+            set {
+                this["ProviderDefaultAddress"] = value;
+            }
+        }
     }
 }

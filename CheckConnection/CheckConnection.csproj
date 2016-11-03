@@ -86,6 +86,7 @@
     <Compile Include="DisplayConnections.Designer.cs">
       <DependentUpon>DisplayConnections.cs</DependentUpon>
     </Compile>
+    <Compile Include="Methods\AnalyzeManager.cs" />
     <Compile Include="Methods\ConnectionManager.cs" />
     <Compile Include="Methods\ConnectionParamManager.cs" />
     <Compile Include="Methods\ConnectionRepo.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Methods\WMIConnectionManager.cs" />
     <Compile Include="Methods\WMIInterface.cs" />
-    <Compile Include="Methods\WMIMethods.cs" />
+    <Compile Include="Methods\WMIManager.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\ConnectionParam.cs" />
     <Compile Include="Model\DNS.cs" />

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
 using SQLite;
+using System.Linq;
 using System;
 using CheckConnection.Methods;
 using CheckConnection.Model;
@@ -12,7 +13,7 @@ namespace CheckConnection
 {
     public partial class DisplayConnections : Form
     {
-        delegate void SetComboBoxCellType(int iRowIndex);        
+        //delegate void SetComboBoxCellType(int iRowIndex);        
         private WMIInterface wmi;
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private bool FormLoadComplete = false;
@@ -85,7 +86,7 @@ namespace CheckConnection
         {
             base.OnFormClosing(e);
             ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
-            List<ConnectionParam> connparam = cpmgr.GetItems();// wmi.GetNetworkDevices();
+            List<ConnectionParam> connparam = cpmgr.GetItems().Where(p => p.Connection.Ip_Address_v4 != null).ToList();
 
             if (connparam.Count > 0)
             {
@@ -400,14 +401,14 @@ namespace CheckConnection
 
         private void BindHistoryGrid(SQLiteConnection sqlconn)
         {
-            string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-            if (!String.IsNullOrEmpty(SelectedConnectionName))
-            {
+            //string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            //if (!String.IsNullOrEmpty(SelectedConnectionName))
+            //{
                 // The desired page has changed, so fetch the page of records using the "Current" offset 
                 if (HistorybindingSource.Current != null)
                 {
                     int offset = (int)HistorybindingSource.Current;
-                    IList<Connection> connlist = connmgr.GetConnectionsByName(SelectedConnectionName, offset, HistorypageSize);
+                    IList<Connection> connlist = connmgr.GetConnections(offset, HistorypageSize);
 
                     foreach (Connection conn in connlist)
                     {
@@ -438,35 +439,35 @@ namespace CheckConnection
                     WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
                     CorrectWindowSize();
                 }
-            }
+            //}
         }
 
         private void ConnectionsdataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            int rowcnt = 0;
-            if (FormLoadComplete)
-            {
-                string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-                if (!String.IsNullOrEmpty(name))
-                {
-                    //Get count
-                    rowcnt = connmgr.GetConnectionsAmountByName(name);
-                }
-                if (rowcnt > 0)
-                {
-                    HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
-                    HistorybindingSource.MoveFirst();
-                    BindHistoryGrid(sqlconn);
-                }
-                for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
-                {
-                    if (ConnectionsdataGridView.SelectedRows.Count > 0)
-                    {
-                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = ConnectionsdataGridView.DefaultCellStyle.SelectionBackColor;
-                        ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = ConnectionsdataGridView.DefaultCellStyle.SelectionForeColor;
-                    }
-                }
-            }
+            //int rowcnt = 0;
+            //if (FormLoadComplete)
+            //{
+            //    string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            //    if (!String.IsNullOrEmpty(name))
+            //    {
+            //        //Get count
+            //        rowcnt = connmgr.GetConnectionsAmountByName(name);
+            //    }
+            //    if (rowcnt > 0)
+            //    {
+            //        HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
+            //        HistorybindingSource.MoveFirst();
+            //        BindHistoryGrid(sqlconn);
+            //    }
+            //    for (int i = 1; i < ConnectionsdataGridView.ColumnCount; i++)
+            //    {
+            //        if (ConnectionsdataGridView.SelectedRows.Count > 0)
+            //        {
+            //            ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionBackColor = ConnectionsdataGridView.DefaultCellStyle.SelectionBackColor;
+            //            ConnectionsdataGridView.Rows[ConnectionsdataGridView.SelectedRows[0].Index].Cells[i].Style.SelectionForeColor = ConnectionsdataGridView.DefaultCellStyle.SelectionForeColor;
+            //        }
+            //    }
+            //}
         }
 
         private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
@@ -511,6 +512,18 @@ namespace CheckConnection
                 if (HistorybindingSource.Current != null)
                     BindHistoryGrid(sqlconn);
             }
+        }
+
+        private void toolStripButtonAnalyze_Click(object sender, EventArgs e)
+        {
+            //string RouterDeafultIpAddress = Properties.Settings.Default.RouterDeafultIpAddress;
+            //string ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
+            string IPGateway = GetSelectedConnectionParam(ConnectionsdataGridView, "IPGateway");
+
+            AnalyzeManager analyze = new AnalyzeManager();
+            analyze.SetGateway(IPGateway);
+            analyze.StartAnalyze();
+
         }
 
         //private void ChangeCellToComboBox(int iRowIndex)
