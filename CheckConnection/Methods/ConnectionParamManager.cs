@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Linq;
 using log4net;
 using System.Management;
 
 using CheckConnection.Model;
+using CheckConnection.Methods;
 
 namespace CheckConnection.Methods
 {
@@ -17,6 +19,11 @@ namespace CheckConnection.Methods
         {
             _wmi = pwmi;
         }
+
+        public ConnectionParamManager()
+        {
+        }
+
         public ConnectionParam GetItem(string pconnname)
         {
             return GetItems().Where(p => p.Connection.Name == pconnname).First<ConnectionParam>();
@@ -210,6 +217,42 @@ namespace CheckConnection.Methods
             }
             return ret;
         }
-       
+
+        public ConnectionParam GetItem(DataGridView dgv)
+        {
+            log.Info("before GetItem");
+            int selectedRow = WinObjMethods.GetSelectedRow(dgv);
+            if (dgv.RowCount > 0)
+            {
+                string Name = dgv.Rows[selectedRow].Cells["Name"].Value.ToString();                
+
+                ConnectionParam connparam = new ConnectionParam();
+                connparam.Connection = new Connection();
+
+                connparam.Connection.Name = Name;
+
+                if (dgv.Rows[selectedRow].Cells["Ip_Address_v4"].Value != null)
+                    connparam.Connection.Ip_Address_v4 = dgv.Rows[selectedRow].Cells["Ip_Address_v4"].Value.ToString();
+
+                if (dgv.Rows[selectedRow].Cells["IpSubnetMask"].Value != null)
+                    connparam.Connection.IPSubnetMask = dgv.Rows[selectedRow].Cells["IpSubnetMask"].Value.ToString();
+
+                if (dgv.Rows[selectedRow].Cells["DNSDomain"].Value != null)
+                    connparam.Connection.DNSDomain = dgv.Rows[selectedRow].Cells["DNSDomain"].Value.ToString();
+
+                if (dgv.Rows[selectedRow].Cells["DHCP_Enabled"].Value != null)
+                    connparam.Connection.DHCP_Enabled = dgv.Rows[selectedRow].Cells["DHCP_Enabled"].Value.ToString();
+
+                if (dgv.Rows[selectedRow].Cells["DNSServer"].Value != null)
+                    connparam.setDNSServerSearchOrder(dgv.Rows[selectedRow].Cells["DNSServer"].Value.ToString());
+
+                if (dgv.Rows[selectedRow].Cells["IPGateway"].Value != null)
+                    connparam.setGateway(dgv.Rows[selectedRow].Cells["IPGateway"].Value.ToString());
+
+                return connparam;
+            }
+            log.Info("after GetItem");
+            return null;
+        }
     }
 }

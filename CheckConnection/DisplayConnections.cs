@@ -275,7 +275,7 @@ namespace CheckConnection
 
         private void toolStripButtonChangeConnection_Click(object sender, System.EventArgs e)
         {
-            int selectedrow = GetSelectedRow(ConnectionsdataGridView);           
+            int selectedrow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);           
 
             if ( ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value != null) {
                 string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();            
@@ -299,17 +299,9 @@ namespace CheckConnection
             BindConnectionGrid();
         }
 
-        int GetSelectedRow(DataGridView dgv)
-        {
-            int selectedrow = 0;
-            if (dgv.SelectedRows.Count > 0)
-                selectedrow = dgv.SelectedRows[0].Index;            
-            return selectedrow;
-        }
-
         string GetSelectedConnectionParam(DataGridView dgv, string paramname)
         {
-            int selectedrow = GetSelectedRow(dgv);
+            int selectedrow = WinObjMethods.GetSelectedRow(dgv);
             string Name = string.Empty;
             if (ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value != null)
                 Name = ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value.ToString();
@@ -344,50 +336,44 @@ namespace CheckConnection
 
         private void toolStripButtonRestore_Click(object sender, EventArgs e)
         {
-            int selectedRow = GetSelectedRow(ConnectionsdataGridView);
+            int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
+            string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
 
-            if (HistorydataGridView.RowCount>0)//(ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value != null)
-            {
-                string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
-                int selectedHistoryRow = GetSelectedRow(HistorydataGridView);
+            ConnectionParamManager connparammgr = new ConnectionParamManager();
+            ConnectionParam connparam = connparammgr.GetItem(HistorydataGridView);
 
-                ConnectionParam connparam = new ConnectionParam();
-                connparam.Connection = new Connection();
+            //Прописываем название подключения, для которого изменяются параметы
+            connparam.Connection.Name = Name;
 
-                //Прописываем название подключения, для которого изменяются параметы
-                connparam.Connection.Name = Name;
+            //if (HistorydataGridView.RowCount>0)
+            //{                
+            //    int selectedHistoryRow = WinObjMethods.GetSelectedRow(HistorydataGridView);
 
-                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value != null)
-                    connparam.Connection.Ip_Address_v4 = HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value.ToString();
+            //    ConnectionParam connparam = new ConnectionParam();
+            //    connparam.Connection = new Connection();
 
-                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value != null)
-                    connparam.Connection.IPSubnetMask = HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value.ToString();
+            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value != null)
+            //        connparam.Connection.Ip_Address_v4 = HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value.ToString();
 
-                if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value!=null)
-                    connparam.Connection.DNSDomain = HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value.ToString();
+            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value != null)
+            //        connparam.Connection.IPSubnetMask = HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value.ToString();
 
-                if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value!=null)
-                    connparam.Connection.DHCP_Enabled = HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value.ToString();
+            //    if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value!=null)
+            //        connparam.Connection.DNSDomain = HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value.ToString();
 
-                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value != null)
-                    connparam.setDNSServerSearchOrder(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value.ToString());
+            //    if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value!=null)
+            //        connparam.Connection.DHCP_Enabled = HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value.ToString();
 
-                if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value != null)
-                    connparam.setGateway(HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value.ToString());
+            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value != null)
+            //        connparam.setDNSServerSearchOrder(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value.ToString());
 
-                var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam );
+            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value != null)
+            //        connparam.setGateway(HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value.ToString());
 
-                ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-                ChangeConnectionForm.Show();
-            }
-            else
-            {
-                log.Info("Соединение с таким наименованием отсутствует в истории");
-                MessageBox.Show("Соединение с таким наименованием отсутствует в истории", "Ошибка",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
+            var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam );
 
+            ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+            ChangeConnectionForm.Show();
         }
 
         private void HistorybindingSource_CurrentChanged(object sender, EventArgs e)
@@ -518,12 +504,22 @@ namespace CheckConnection
         {
             //string RouterDeafultIpAddress = Properties.Settings.Default.RouterDeafultIpAddress;
             //string ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
-            string IPGateway = GetSelectedConnectionParam(ConnectionsdataGridView, "IPGateway");
+            //string IPGateway = GetSelectedConnectionParam(ConnectionsdataGridView, "IPGateway");
 
-            AnalyzeManager analyze = new AnalyzeManager();
-            analyze.SetGateway(IPGateway);
-            analyze.StartAnalyze();
-
+            ConnectionParamManager connparammgr = new ConnectionParamManager();
+            ConnectionParam connparam = connparammgr.GetItem(ConnectionsdataGridView);
+            if (connparam.Connection.Ip_Address_v4 != null)
+            {
+                AnalyzeForm analyze = new AnalyzeForm(connparam);
+                analyze.StartPosition = FormStartPosition.CenterScreen;
+                analyze.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Допускается анализ только подключений с ip-адресом", "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
 
         //private void ChangeCellToComboBox(int iRowIndex)

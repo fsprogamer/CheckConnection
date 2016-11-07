@@ -18,7 +18,9 @@ namespace CheckConnection
             log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(@"CheckConnection.exe.log4net"));//Если файл с настройками в папке с exe файлом        
             
             WMIInterface wmi = new WMIManager();
-            Application.Run(new DisplayConnections(wmi));            
+            var DisplayConn = new DisplayConnections(wmi);
+            DisplayConn.StartPosition = FormStartPosition.CenterScreen;
+            Application.Run(DisplayConn);            
         }
     }
 }

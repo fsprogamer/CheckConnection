@@ -42,6 +42,7 @@
             this.toolStripButtonRestore = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRenewDHCP = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAnalyze = new System.Windows.Forms.ToolStripButton();
             this.HistorybindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
@@ -54,7 +55,6 @@
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.toolStripButtonAnalyze = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -230,6 +230,17 @@
             this.toolStripButtonRefresh.ToolTipText = "Обновить отображаемые параметры";
             this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
+            // toolStripButtonAnalyze
+            // 
+            this.toolStripButtonAnalyze.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAnalyze.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAnalyze.Image")));
+            this.toolStripButtonAnalyze.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAnalyze.Name = "toolStripButtonAnalyze";
+            this.toolStripButtonAnalyze.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonAnalyze.Text = "toolStripButtonAnalyze";
+            this.toolStripButtonAnalyze.ToolTipText = "Анализ подключения";
+            this.toolStripButtonAnalyze.Click += new System.EventHandler(this.toolStripButtonAnalyze_Click);
+            // 
             // HistorybindingNavigator
             // 
             this.HistorybindingNavigator.AddNewItem = null;
@@ -338,17 +349,6 @@
             // 
             this.HistorybindingSource.CurrentChanged += new System.EventHandler(this.HistorybindingSource_CurrentChanged);
             // 
-            // toolStripButtonAnalyze
-            // 
-            this.toolStripButtonAnalyze.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAnalyze.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAnalyze.Image")));
-            this.toolStripButtonAnalyze.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAnalyze.Name = "toolStripButtonAnalyze";
-            this.toolStripButtonAnalyze.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonAnalyze.Text = "toolStripButtonAnalyze";
-            this.toolStripButtonAnalyze.ToolTipText = "Анализ подключения";
-            this.toolStripButtonAnalyze.Click += new System.EventHandler(this.toolStripButtonAnalyze_Click);
-            // 
             // DisplayConnections
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -357,7 +357,6 @@
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DisplayConnections";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Сетевые подключения";
             this.Load += new System.EventHandler(this.DisplayConnections_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).EndInit();

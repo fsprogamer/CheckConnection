@@ -28,6 +28,14 @@ namespace CheckConnection.Methods
             }
         }
 
+        public static int GetSelectedRow(DataGridView dgv)
+        {
+            int selectedrow = 0;
+            if (dgv.SelectedRows.Count > 0)
+                selectedrow = dgv.SelectedRows[0].Index;
+            return selectedrow;
+        }
+
         public static void AddColumn(ref DataGridView dgv)
         {
             dgv.AutoGenerateColumns = false;
