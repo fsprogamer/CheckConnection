@@ -31,15 +31,15 @@
             this.buttonClose = new System.Windows.Forms.Button();
             this.listViewResults = new System.Windows.Forms.ListView();
             this.hostIPHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.statusHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hostNameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.statusHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.roundTripTimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listBoxConclusion = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(170, 295);
+            this.buttonClose.Location = new System.Drawing.Point(170, 310);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(75, 23);
             this.buttonClose.TabIndex = 1;
@@ -69,16 +69,16 @@
             this.hostIPHeader.Text = "Узел";
             this.hostIPHeader.Width = 120;
             // 
+            // hostNameHeader
+            // 
+            this.hostNameHeader.Text = "Имя узла";
+            this.hostNameHeader.Width = 122;
+            // 
             // statusHeader
             // 
             this.statusHeader.Text = "Статус";
             this.statusHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.statusHeader.Width = 111;
-            // 
-            // hostNameHeader
-            // 
-            this.hostNameHeader.Text = "Имя узла";
-            this.hostNameHeader.Width = 122;
             // 
             // roundTripTimeHeader
             // 
@@ -90,9 +90,11 @@
             // 
             this.listBoxConclusion.Dock = System.Windows.Forms.DockStyle.Top;
             this.listBoxConclusion.FormattingEnabled = true;
+            this.listBoxConclusion.HorizontalScrollbar = true;
             this.listBoxConclusion.Location = new System.Drawing.Point(0, 195);
             this.listBoxConclusion.Name = "listBoxConclusion";
-            this.listBoxConclusion.Size = new System.Drawing.Size(436, 69);
+            this.listBoxConclusion.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.listBoxConclusion.Size = new System.Drawing.Size(436, 95);
             this.listBoxConclusion.TabIndex = 17;
             // 
             // AnalyzeForm

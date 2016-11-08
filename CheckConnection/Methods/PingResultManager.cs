@@ -47,14 +47,14 @@ namespace CheckConnection.Methods
                 png.ResponseTime = "*";
                 png.ErrMessage = ex.Message;
                 png.StatusCode = ex.Message;
-                log.InfoFormat("ErrMessage : {0}", png.ErrMessage);
+                log.InfoFormat("SocketException ErrMessage : {0}", png.ErrMessage);
             }
             catch (Exception ex)
             {
                 png.ResponseTime = "*";
                 png.ErrMessage = (ex.InnerException!=null)? ex.InnerException.Message : ex.Message;
                 png.StatusCode = (ex.InnerException!=null)? ex.InnerException.Message : ex.Message;
-                log.InfoFormat("ErrMessage : {0}", png.ErrMessage);
+                log.InfoFormat("Exception ErrMessage : {0}", png.ErrMessage);
             }
             return png;
         }

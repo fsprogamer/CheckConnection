@@ -19,7 +19,7 @@ namespace CheckConnection
             
             WMIInterface wmi = new WMIManager();
             var DisplayConn = new DisplayConnections(wmi);
-            DisplayConn.StartPosition = FormStartPosition.CenterScreen;
+            DisplayConn.StartPosition = FormStartPosition.WindowsDefaultLocation;
             Application.Run(DisplayConn);            
         }
     }

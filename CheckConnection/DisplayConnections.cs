@@ -64,7 +64,6 @@ namespace CheckConnection
                 BindHistoryGrid(sqlconn);
             }
 
-            SetWindowPosition();
             FormLoadComplete = true;
         }       
    
@@ -123,15 +122,7 @@ namespace CheckConnection
             int width = WinObjMethods.CountGridWidth(ConnectionsdataGridView);
             ClientSize = new Size(width, ClientSize.Height);
         }
-        public void SetWindowPosition()
-        {
-            int widthScreen = Screen.PrimaryScreen.WorkingArea.Width;
-            int x = widthScreen/2 - this.ClientSize.Width;
-            int heightScreen = Screen.PrimaryScreen.WorkingArea.Height;
-            int y = heightScreen/2 - this.ClientSize.Height;
-            this.Location = new Point((x / 2), (y / 2));
-        }
-
+      
         private void PingtoolStripButton_Click(object sender, System.EventArgs e)
         {
             var PingForm = new PingForm.MainPingForm();
@@ -477,10 +468,6 @@ namespace CheckConnection
             log.Info("After copyToolStripMenuItem_Click");
         }
 
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void toolStripButtonRenewDHCP_Click(object sender, EventArgs e)
         {
@@ -521,38 +508,6 @@ namespace CheckConnection
                                 MessageBoxIcon.Error);
             }
         }
-
-        //private void ChangeCellToComboBox(int iRowIndex)
-        //{
-        //    if (bIsComboBox == false)
-        //    {
-        //        DataGridViewComboBoxCell dgComboCell = new DataGridViewComboBoxCell();
-        //        dgComboCell.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-
-        //        List<DNS> dt = new List<DNS>();
-
-        //        for (int i = 0; i < 5; i++)
-        //        {
-        //            DNS dr = new DNS();
-        //            dr.DNSServer = "Name - " + i.ToString();
-        //            dr.Id = i;
-        //            dt.Add(dr);
-        //        }
-        //        if (dt.Count > 0)
-        //        {
-        //            var bindsList = new BindingList<DNS>(dt);
-        //            var source = new BindingSource(bindsList, null);
-        //            dgComboCell.DataSource = source;
-        //        }
-
-        //        //dgComboCell.DataSource = dt;
-        //        dgComboCell.ValueMember = "DNSServer";
-        //        dgComboCell.DisplayMember = "DNSServer";
-
-        //        ConnectionsdataGridView.Rows[iRowIndex].Cells[ConnectionsdataGridView.CurrentCell.ColumnIndex] = dgComboCell;
-        //        bIsComboBox = true;
-        //    }
-        //}
 
     }
 }

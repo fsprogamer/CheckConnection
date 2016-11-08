@@ -21,6 +21,7 @@ namespace CheckConnection
 
         private void AnalyzeForm_Load(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             log.InfoFormat("_connparam.Connection.Ip_Address_v4 = {0}", _connparam.Connection.Ip_Address_v4);
             AnalyzeManager analyze = new AnalyzeManager(_connparam.Connection.Ip_Address_v4, _connparam.Connection.DHCP_Enabled);
             log.Info("SetGateway");
@@ -29,8 +30,7 @@ namespace CheckConnection
             analyze.SetDNS(_connparam.DNS_list);
             log.Info("StartAnalyze");
             analyze.StartAnalyze();
-
-            this.Cursor = Cursors.WaitCursor;
+            
             log.Info("before GetPingResult");
             List<string[]> rows = analyze.GetPingResult();
             foreach (string[] row in rows)
@@ -48,7 +48,7 @@ namespace CheckConnection
               listViewResults.Items.Add(listViewItem);
             }
             log.Info("before MakeConclusion");
-            listBoxConclusion.Items.Add(analyze.MakeConclusion());
+            listBoxConclusion.DataSource = analyze.MakeConclusion();
             this.Cursor = Cursors.Default;
         }
 

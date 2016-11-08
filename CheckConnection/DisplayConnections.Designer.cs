@@ -356,6 +356,7 @@
             this.ClientSize = new System.Drawing.Size(786, 413);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Location = new System.Drawing.Point(40, 40);
             this.Name = "DisplayConnections";
             this.Text = "Сетевые подключения";
             this.Load += new System.EventHandler(this.DisplayConnections_Load);

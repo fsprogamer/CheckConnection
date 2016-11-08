@@ -23,5 +23,30 @@
     <Setting Name="ProviderDefaultAddress" Type="System.String" Scope="User">
       <Value Profile="(Default)">akado.ru</Value>
     </Setting>
+    <Setting Name="AkadoDNS" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;217.10.32.5&lt;/string&gt;
+  &lt;string&gt;217.10.35.5&lt;/string&gt;
+  &lt;string&gt;217.10.44.35&lt;/string&gt;
+  &lt;string&gt;217.10.36.5&lt;/string&gt;
+  &lt;string&gt;217.10.32.4&lt;/string&gt;
+  &lt;string&gt;217.10.39.4&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="WorkingNetwork" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;10.1&lt;/string&gt;
+  &lt;string&gt;10.127&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="TestNetwork" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;10.128&lt;/string&gt;
+  &lt;string&gt;10.255&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

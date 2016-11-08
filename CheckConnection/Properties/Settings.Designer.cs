@@ -106,5 +106,53 @@ namespace CheckConnection.Properties {
                 this["ProviderDefaultAddress"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <string>217.10.32.5</string>
+  <string>217.10.35.5</string>
+  <string>217.10.44.35</string>
+  <string>217.10.36.5</string>
+  <string>217.10.32.4</string>
+  <string>217.10.39.4</string>
+</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection AkadoDNS {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["AkadoDNS"]));
+            }
+            set {
+                this["AkadoDNS"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>10.1</string>\r\n  <string>10.127</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection WorkingNetwork {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["WorkingNetwork"]));
+            }
+            set {
+                this["WorkingNetwork"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>10.128</string>\r\n  <string>10.255</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection TestNetwork {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["TestNetwork"]));
+            }
+            set {
+                this["TestNetwork"] = value;
+            }
+        }
     }
 }
