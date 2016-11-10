@@ -56,6 +56,7 @@
             this.statusHeader,
             this.roundTripTimeHeader});
             this.listViewResults.Dock = System.Windows.Forms.DockStyle.Top;
+            this.listViewResults.FullRowSelect = true;
             this.listViewResults.GridLines = true;
             this.listViewResults.Location = new System.Drawing.Point(0, 0);
             this.listViewResults.Name = "listViewResults";

@@ -143,7 +143,7 @@ namespace CheckConnection
         {
             if (HistorydataGridView.DataSource == null)
             {
-                var message = MessageBox.Show("Нет данных для сравнения", "Ошибка подключения", MessageBoxButtons.OK,
+                var message = MessageBox.Show("Нет данных для сравнения", "Ошибка", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
             }
             else
@@ -199,7 +199,7 @@ namespace CheckConnection
         {
             if (HistorydataGridView.DataSource == null)
             {
-                var message = MessageBox.Show("Нет данных для сравнения", "Ошибка подключения", MessageBoxButtons.OK,
+                var message = MessageBox.Show("Нет данных для сравнения", "Ошибка", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
             else
@@ -239,7 +239,7 @@ namespace CheckConnection
                 }
                 else
                 {
-                    var message = MessageBox.Show("Выберите одну строку для сравнения", "Ошибка подключения",
+                    var message = MessageBox.Show("Выберите одну строку для сравнения", "Ошибка",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                     return false;
@@ -332,39 +332,21 @@ namespace CheckConnection
 
             ConnectionParamManager connparammgr = new ConnectionParamManager();
             ConnectionParam connparam = connparammgr.GetItem(HistorydataGridView);
+            if (connparam != null)
+            {
+                //Прописываем название подключения, для которого изменяются параметы
+                connparam.Connection.Name = Name;              
+                var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam);
 
-            //Прописываем название подключения, для которого изменяются параметы
-            connparam.Connection.Name = Name;
-
-            //if (HistorydataGridView.RowCount>0)
-            //{                
-            //    int selectedHistoryRow = WinObjMethods.GetSelectedRow(HistorydataGridView);
-
-            //    ConnectionParam connparam = new ConnectionParam();
-            //    connparam.Connection = new Connection();
-
-            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value != null)
-            //        connparam.Connection.Ip_Address_v4 = HistorydataGridView.Rows[selectedHistoryRow].Cells["Ip_Address_v4"].Value.ToString();
-
-            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value != null)
-            //        connparam.Connection.IPSubnetMask = HistorydataGridView.Rows[selectedHistoryRow].Cells["IpSubnetMask"].Value.ToString();
-
-            //    if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value!=null)
-            //        connparam.Connection.DNSDomain = HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSDomain"].Value.ToString();
-
-            //    if(HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value!=null)
-            //        connparam.Connection.DHCP_Enabled = HistorydataGridView.Rows[selectedHistoryRow].Cells["DHCP_Enabled"].Value.ToString();
-
-            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value != null)
-            //        connparam.setDNSServerSearchOrder(HistorydataGridView.Rows[selectedHistoryRow].Cells["DNSServer"].Value.ToString());
-
-            //    if (HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value != null)
-            //        connparam.setGateway(HistorydataGridView.Rows[selectedHistoryRow].Cells["IPGateway"].Value.ToString());
-
-            var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam );
-
-            ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-            ChangeConnectionForm.Show();
+                ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+                ChangeConnectionForm.Show();
+            }
+            else
+            {
+                MessageBox.Show("Отсутствует информация для восстановления параметров соединения", "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
 
         private void HistorybindingSource_CurrentChanged(object sender, EventArgs e)

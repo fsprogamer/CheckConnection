@@ -8,7 +8,7 @@ namespace CheckConnection.Methods
     class DNSRepo
     {
         readonly DBMethods _db = null;
-        protected static string DbLocation;
+        //protected static string DbLocation;
 
         public DNSRepo(SQLiteConnection conn, string dbLocation)
         {

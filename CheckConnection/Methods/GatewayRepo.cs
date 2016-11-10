@@ -8,7 +8,7 @@ namespace CheckConnection.Methods
     class GatewayRepo
     {
         readonly DBMethods _db = null;
-        protected static string DbLocation;
+        //protected static string DbLocation;
 
         public GatewayRepo(SQLiteConnection conn, string dbLocation)
         {
