@@ -91,6 +91,8 @@
             this.listBoxConclusion.Dock = System.Windows.Forms.DockStyle.Top;
             this.listBoxConclusion.FormattingEnabled = true;
             this.listBoxConclusion.HorizontalScrollbar = true;
+            this.listBoxConclusion.Items.AddRange(new object[] {
+            "Идет анализ подключения "});
             this.listBoxConclusion.Location = new System.Drawing.Point(0, 195);
             this.listBoxConclusion.Name = "listBoxConclusion";
             this.listBoxConclusion.SelectionMode = System.Windows.Forms.SelectionMode.None;
@@ -110,6 +112,7 @@
             this.Name = "AnalyzeForm";
             this.Text = "Анализ подключения";
             this.Load += new System.EventHandler(this.AnalyzeForm_Load);
+            this.Shown += new System.EventHandler(this.AnalyzeForm_Shown);
             this.ResumeLayout(false);
 
         }

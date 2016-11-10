@@ -9,7 +9,7 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    class PingResultManager
+    public class PingResultManager
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

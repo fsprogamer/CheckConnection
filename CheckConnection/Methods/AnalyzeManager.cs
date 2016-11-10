@@ -10,7 +10,7 @@ namespace CheckConnection.Methods
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         //private string _RouterDeafultIpAddress = Properties.Settings.Default.RouterDeafultIpAddress;
-        private string _ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
+        public string _ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
         private string _IpAddress;
         private string _DHCPEnabled;
         private int _ValidatedDNS = -1;
@@ -18,7 +18,7 @@ namespace CheckConnection.Methods
         private List<Gateway> _IPGateway;
         private List<DNS> _DNS;
         private PingResultManager _pingmgr;
-        private List<PingResult> _pngresult;
+        private List<PingResult> _pngresult = new List<PingResult>(6);
 
         public AnalyzeManager(string IpAddress, string DHCPEnabled)
         {
@@ -38,7 +38,6 @@ namespace CheckConnection.Methods
 
         public void StartAnalyze()
         {
-            _pngresult = new List<PingResult>(6);
 
             if (_IpAddress != null)
             {
@@ -65,7 +64,8 @@ namespace CheckConnection.Methods
             _ValidatedDNS = CheckDNS();
             _subnet = CheckIP();
         }
-        public List<string[]> GetPingResult()
+
+        public List<string[]> GetPingResults()
         {
             List<string[]> strlist= new List<string[]>(3);
             foreach (PingResult png in _pngresult)
@@ -74,6 +74,18 @@ namespace CheckConnection.Methods
                 strlist.Add(row);
             }
             return strlist;
+        }
+
+        public string[] GetPingResult(string ipaddress)
+        {
+            string[] row = null;
+            PingResult png = _pingmgr.GetPingResult(ipaddress);
+            if ( png != null)
+            {
+                _pngresult.Add(png);
+                row = new string[] { png.Ip_Address, png.Name, png.StatusCode, png.ResponseTime };                
+            }
+            return row;
         }
 
         public int CheckDNS() {
