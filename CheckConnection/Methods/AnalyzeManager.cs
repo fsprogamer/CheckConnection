@@ -36,31 +36,8 @@ namespace CheckConnection.Methods
             _DNS = DNS;
         }
 
-        public void StartAnalyze()
+        public void CompareWithStandartParam()
         {
-
-            if (_IpAddress != null)
-            {
-                log.Info("_IpAddress != null");
-                _pngresult.Add(_pingmgr.GetPingResult(_IpAddress));
-            }
-            if (_IPGateway != null) {
-                log.Info("_IPGateway != null");
-                foreach (Gateway gateway in _IPGateway)
-                {
-                    _pngresult.Add(_pingmgr.GetPingResult(gateway.IPGateway));
-                }
-            }
-            if (_DNS != null)
-            {
-                log.Info("_DNS != null");
-                foreach (DNS dns in _DNS)
-                {
-                    _pngresult.Add(_pingmgr.GetPingResult(dns.DNSServer));
-                }
-            }
-            log.InfoFormat("_ProviderDefaultAddress = {0}", _ProviderDefaultAddress);
-            _pngresult.Add(_pingmgr.GetPingResult(_ProviderDefaultAddress));
             _ValidatedDNS = CheckDNS();
             _subnet = CheckIP();
         }
@@ -89,7 +66,7 @@ namespace CheckConnection.Methods
         }
 
         public int CheckDNS() {
-            int ValidatedDNS = -1;            
+            int ValidatedDNS = 0;            
             System.Collections.Specialized.StringCollection AkadoDNS = Properties.Settings.Default.AkadoDNS;
 
             log.InfoFormat("before CheckDNS, AkadoDNS.Count = {0}", AkadoDNS.Count);
@@ -99,23 +76,22 @@ namespace CheckConnection.Methods
             log.Info("before foreach");
 
             if (_DNS != null)
-            {
-                ValidatedDNS = 1;
+            {                
                 foreach (DNS dns in _DNS)
                 {
                     foreach (string akadodns in AkadoDNS)
                     {
-                        if (dns.DNSServer != akadodns)
+                        if (dns.DNSServer == akadodns)
                         {
-                            log.InfoFormat("break in CheckDNS, {0} != {1}", dns.DNSServer, akadodns);
-                            ValidatedDNS = 0;
+                            log.InfoFormat("break in CheckDNS, {0} == {1}", dns.DNSServer, akadodns);
+                            ValidatedDNS = 1;
                             break;
                         }
                     }
                 }
             }
             else
-                ValidatedDNS = -1;
+                ValidatedDNS = 0;
 
             log.Info("after CheckDNS");
             return ValidatedDNS;
@@ -133,12 +109,15 @@ namespace CheckConnection.Methods
                 string substr = _IpAddress.Substring(0, _IpAddress.LastIndexOf('.') );
                 substr = substr.Substring(0, substr.LastIndexOf('.') );
 
+                log.InfoFormat("substr = {0}",substr);
                 if (substr.Substring(0, substr.LastIndexOf('.')) == WorkingNetwork[0].Substring(0, WorkingNetwork[0].LastIndexOf('.')))
                 {
                     string strpart = substr.Substring(substr.IndexOf('.') + 1 , substr.Length - (substr.IndexOf('.') + 1));
                     int part = Convert.ToInt32(strpart);
                     int lowerbound = Convert.ToInt32(WorkingNetwork[0].Substring(WorkingNetwork[0].IndexOf('.') + 1, WorkingNetwork[0].Length - (WorkingNetwork[0].IndexOf('.') + 1)), 10);
                     int upperbound = Convert.ToInt32(WorkingNetwork[1].Substring(WorkingNetwork[1].IndexOf('.') + 1, WorkingNetwork[1].Length - (WorkingNetwork[1].IndexOf('.') + 1)), 10);
+
+                    log.InfoFormat("part = {0}, lowerbound = {1}, upperbound = {2}", part, lowerbound, upperbound);
                     if ((part >= lowerbound) && (part <= upperbound))
                     {
                         subnet = 1;
@@ -151,6 +130,8 @@ namespace CheckConnection.Methods
                     int part = Convert.ToInt32(strpart);
                     int lowerbound = Convert.ToInt32(TestNetwork[0].Substring(TestNetwork[0].IndexOf('.') + 1, TestNetwork[0].Length - (TestNetwork[0].IndexOf('.') + 1)), 10);
                     int upperbound = Convert.ToInt32(TestNetwork[1].Substring(TestNetwork[1].IndexOf('.') + 1, TestNetwork[1].Length - (TestNetwork[0].IndexOf('.') + 1)), 10);
+
+                    log.InfoFormat("part = {0}, lowerbound = {1}, upperbound = {2}", part, lowerbound, upperbound);
                     if ((part >= lowerbound) && (part <= upperbound))
                     {
                         subnet = 0;
@@ -173,7 +154,8 @@ namespace CheckConnection.Methods
             {
                 if(png.StatusCode != "Успешно")
                 {
-                    lst.Add("При анализе сетевого подключения обнаружены ошибки. Они могут влиять на работу компьютера в сети.");
+                    lst.Add("При анализе сетевого подключения обнаружены ошибки.");
+                    lst.Add("Они могут влиять на работу компьютера в сети.");
                     //"Обнаружены ошибки при анализе сетевого подключения";
                     if ((_IpAddress == "0.0.0.0")&&(_DHCPEnabled == "True"))
                         lst.Add("Проверьте питание и работоспособность модема.");
@@ -182,15 +164,6 @@ namespace CheckConnection.Methods
                     break;
                 }
             }
-            if(_ValidatedDNS==-1)
-            {
-                lst.Add("Вы не используете стандартные DNS-сервера АКАДО.");
-            }
-            else
-                if (_ValidatedDNS == 0)
-                {
-                    lst.Add("У вас нет доступа к нескольким серверам DNS.");
-                }
 
             if (_subnet == -1)
             {
@@ -200,8 +173,15 @@ namespace CheckConnection.Methods
             {
                 lst.Add("Ip-адрес заблокирован в сети АКАДО.");
             }
-            if (lst.Count==0)
-                lst.Add("При анализе сетевого подключения ошибки не обнаружены.");
+            if (_ValidatedDNS==0)
+            {
+                lst.Add("Вы не используете стандартные DNS-сервера АКАДО.");
+            }
+
+            //if (_ValidatedDNS == 0)
+            //{
+            //    lst.Add("У вас нет доступа к нескольким серверам DNS.");
+            //}
 
             return lst;
         }

@@ -135,6 +135,8 @@ namespace CheckConnection
             Thread t = new Thread(new ThreadStart(FillLisView));            
             t.Start();
 
+            analyze.CompareWithStandartParam();
+
             this.Refresh();
             this.Cursor = Cursors.Default;
         }
