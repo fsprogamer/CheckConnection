@@ -11,7 +11,6 @@ namespace CheckConnection.Methods
     public partial class DBMethods : DBConnection
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        static object locker = new object();
 
         SQLiteConnection db;
         static readonly object Locker = new object();
