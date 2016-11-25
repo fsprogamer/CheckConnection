@@ -31,9 +31,14 @@ namespace CheckConnection
             InitializeComponent();
 
             HistorybindingNavigator.BindingSource = HistorybindingSource;
+            SetToolStripTitles();
 
             string conn_string = Properties.Settings.Default.DBConnectionString;
             sqlconn = new SQLiteConnection(conn_string, true);
+
+            wmi.GetCurrentAccounts();
+            WMIAccountManager wmiacc = new WMIAccountManager(wmi);
+            List<Account> accs = wmiacc.GetItems();
 
             connmgr = new ConnectionManager(sqlconn);
             dnsmgr = new DNSManager(sqlconn);
@@ -450,7 +455,6 @@ namespace CheckConnection
             log.Info("After copyToolStripMenuItem_Click");
         }
 
-
         private void toolStripButtonRenewDHCP_Click(object sender, EventArgs e)
         {
             log.Info("Before toolStripButtonRenewDHCP_Click");
@@ -491,5 +495,17 @@ namespace CheckConnection
             }
         }
 
+        private void SetToolStripTitles()
+        {
+            PingtoolStripButton.Text = "Ping";
+            TracerttoolStripButton.Text = "Tracert";
+            ComparetoolStripButton.Text = "Сравнить" + Environment.NewLine + "параметры" + Environment.NewLine + "подключения";
+            ViewComparetoolStripButton.Text = "Табличное" + Environment.NewLine + "сравнение";
+            toolStripButtonChangeConnection.Text = "Изменить"+ Environment.NewLine + "параметры"+ Environment.NewLine + "подключения";
+            toolStripButtonRestore.Text = "Восстановить" + Environment.NewLine + "параметры" + Environment.NewLine + "подключения"; ;
+            toolStripButtonRenewDHCP.Text = "Обновить" + Environment.NewLine + "ip-адрес";
+            toolStripButtonRefresh.Text = "Обновить";
+            toolStripButtonAnalyze.Text = "Анализ" + Environment.NewLine + "подключения";
+        }
     }
 }

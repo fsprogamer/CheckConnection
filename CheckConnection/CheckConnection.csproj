@@ -104,9 +104,11 @@
     <Compile Include="Methods\GatewayRepo.cs" />
     <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="Methods\WMIAccountManager.cs" />
     <Compile Include="Methods\WMIConnectionManager.cs" />
     <Compile Include="Methods\WMIInterface.cs" />
     <Compile Include="Methods\WMIManager.cs" />
+    <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\ConnectionParam.cs" />
     <Compile Include="Model\DNS.cs" />

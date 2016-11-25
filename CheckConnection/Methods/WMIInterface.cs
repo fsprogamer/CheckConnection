@@ -8,6 +8,7 @@ namespace CheckConnection.Methods
     {
         ManagementObject GetManagementObject(string connname);
         int GetNetworkDevicesConfig();
+        int GetCurrentAccounts();
         ManagementObjectCollection GetManagementObjectCollection();
     }
 }

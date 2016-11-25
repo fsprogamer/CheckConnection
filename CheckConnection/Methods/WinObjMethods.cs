@@ -9,13 +9,13 @@ namespace CheckConnection.Methods
     {
         public const string ConnGridName = "ConnectionsdataGridView";
         public static int CountGridWidth(DataGridView dgv)
-            {
-                int width = 0;
-                foreach (DataGridViewColumn column in dgv.Columns)
-                    if (column.Visible == true)
-                        width += column.Width;
-                //width += 100;
-                return width/* += 20*/;
+        {
+            int width = 0;
+            foreach (DataGridViewColumn column in dgv.Columns)
+                if (column.Visible == true)
+                    width += column.Width;
+            //width += 100;
+            return width/* += 20*/;
         }
 
         public static void ResizeGrid(ref DataGridView dgv)
@@ -86,5 +86,6 @@ namespace CheckConnection.Methods
             AddColumnForWizard(ref dgv);
             return dgv;
         }
+
     }
 }

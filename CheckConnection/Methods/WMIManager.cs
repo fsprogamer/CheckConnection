@@ -12,8 +12,9 @@ namespace CheckConnection.Methods
         private ManagementObjectCollection moCollection;
 
         private const string IPEnabled_query = "SELECT * FROM Win32_NetworkAdapterConfiguration";
-                                             //  + " WHERE IPEnabled = 'TRUE'";
+        //  + " WHERE IPEnabled = 'TRUE'";
 
+        private const string CurrentAccount_query = "SELECT * FROM Win32_Account where Name='svfrolov'";
         public WMIManager()
         {
             QueryWMI(IPEnabled_query);
@@ -32,6 +33,11 @@ namespace CheckConnection.Methods
         public int GetNetworkDevicesConfig()
         {
            return QueryWMI(IPEnabled_query);
+        }
+
+        public int GetCurrentAccounts()
+        {
+            return QueryWMI(CurrentAccount_query);
         }
 
         public ManagementObjectCollection GetManagementObjectCollection()
