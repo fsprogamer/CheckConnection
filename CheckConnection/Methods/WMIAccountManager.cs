@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using System.Management;
+using System.Security.Principal;
 
 using CheckConnection.Model;
 
@@ -18,6 +19,23 @@ namespace CheckConnection.Methods
             _wmi = pwmi;
         }
 
+        public int GetCurrentAccounts()
+        {
+            const string CurrentAccount_query = "SELECT * FROM Win32_Account"; //where Name='svfrolov'
+            //const string LogonSession_query = "Select* from Win32_LogonSession Where LogonType = 2 OR LogonType = 10"
+            //const string LogonUser_query = "Select * from Win32_LoggedOnUser";
+            //const string ComputerSystem_query = "Select * from Win32_ComputerSystem";
+            return _wmi.QueryWMI(CurrentAccount_query);
+        }
+
+        public bool IsAdminAccount()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+
+            return isAdmin;
+        }
         public List<Account> GetItems()
         {
             int Account_id = 0;

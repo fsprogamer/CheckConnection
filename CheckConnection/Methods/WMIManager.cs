@@ -9,18 +9,13 @@ namespace CheckConnection.Methods
     public partial class WMIManager: WMIInterface
     {
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private ManagementObjectCollection moCollection;
+        private ManagementObjectCollection moCollection;        
 
-        private const string IPEnabled_query = "SELECT * FROM Win32_NetworkAdapterConfiguration";
-        //  + " WHERE IPEnabled = 'TRUE'";
-
-        private const string CurrentAccount_query = "SELECT * FROM Win32_Account where Name='svfrolov'";
         public WMIManager()
-        {
-            QueryWMI(IPEnabled_query);
+        {            
         }
 
-        private int QueryWMI(string query)
+        public int QueryWMI(string query)
         {
             int ret = 0; 
             ManagementObjectSearcher moSearch = new ManagementObjectSearcher(query);
@@ -28,16 +23,6 @@ namespace CheckConnection.Methods
             if(moCollection!=null)
              ret = moCollection.Count;
             return ret;
-        }
-
-        public int GetNetworkDevicesConfig()
-        {
-           return QueryWMI(IPEnabled_query);
-        }
-
-        public int GetCurrentAccounts()
-        {
-            return QueryWMI(CurrentAccount_query);
         }
 
         public ManagementObjectCollection GetManagementObjectCollection()

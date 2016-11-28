@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
+using System.IO;
 using SQLite;
 using System.Linq;
 using System;
@@ -17,7 +19,9 @@ namespace CheckConnection
         private WMIInterface wmi;
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private bool FormLoadComplete = false;
-
+        private bool IsAdminAccount = false;
+        const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";
+        
         private int HistorypageSize = Properties.Settings.Default.HistoryPageSize;//10;
 
         private SQLiteConnection sqlconn;
@@ -25,21 +29,64 @@ namespace CheckConnection
         private DNSManager dnsmgr;
         private GatewayManager gatewaymgr;
 
-        public DisplayConnections( WMIInterface wmiparam)
+        public DisplayConnections( )
         {
-            wmi = wmiparam;
             InitializeComponent();
-
+            wmi = new WMIManager();
+            
             HistorybindingNavigator.BindingSource = HistorybindingSource;
+            WMIAccountManager wmiacc = new WMIAccountManager(wmi);
+            if ((IsAdminAccount = wmiacc.IsAdminAccount()) == true)
+                this.Text += " (Администратор)";
+
             SetToolStripTitles();
 
-            string conn_string = Properties.Settings.Default.DBConnectionString;
-            sqlconn = new SQLiteConnection(conn_string, true);
+            string conn_string;
+            if (Properties.Settings.Default.DBConnectionString == "Connections.db")
+            {
+                StringBuilder sb = new StringBuilder(System.IO.Path.GetTempPath());
+                sb.Append( System.IO.Path.GetFileNameWithoutExtension(System.Diagnostics.Process.GetCurrentProcess().ProcessName) );
+                conn_string = sb.ToString();
 
-            wmi.GetCurrentAccounts();
-            WMIAccountManager wmiacc = new WMIAccountManager(wmi);
-            List<Account> accs = wmiacc.GetItems();
+                // Determine whether the directory exists.
+                if (!Directory.Exists(conn_string))
+                {
+                    try
+                    {
+                        DirectoryInfo di = Directory.CreateDirectory(conn_string);
+                    }
+                    catch (Exception e)
+                    {
+                        string CantMakeDir = e.Message + Environment.NewLine + conn_string;
+                        log.Info(CantMakeDir);
+                        MessageBox.Show(CantMakeDir, "Ошибка",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                    }
+                }
+                sb.Append("\\");
+                sb.Append(Properties.Settings.Default.DBConnectionString);
 
+                conn_string = sb.ToString();
+            }
+            else
+            {
+                conn_string = Properties.Settings.Default.DBConnectionString;
+            }
+
+            try
+            {
+                sqlconn = new SQLiteConnection(conn_string, true);
+            }
+            catch(Exception e)
+            {
+                string CantMakeDir = "Невозможно открыть файл " + Environment.NewLine + conn_string;
+                log.Info(CantMakeDir);
+                MessageBox.Show(CantMakeDir, "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            
             connmgr = new ConnectionManager(sqlconn);
             dnsmgr = new DNSManager(sqlconn);
             gatewaymgr = new GatewayManager(sqlconn);
@@ -75,6 +122,7 @@ namespace CheckConnection
         private void BindConnectionGrid()
         {
             WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
+            wconnmgr.GetNetworkDevicesConfig();
             List<Connection> connlist = wconnmgr.GetItems();
 
             if (connlist.Count > 0)
@@ -89,35 +137,49 @@ namespace CheckConnection
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
-            List<ConnectionParam> connparam = cpmgr.GetItems().Where(p => p.Connection.Ip_Address_v4 != null).ToList();
 
-            if (connparam.Count > 0)
-            {
-                foreach (ConnectionParam conn in connparam)
+
+            if ( (sqlconn!= null)&&
+                 (File.Exists(sqlconn.DatabasePath))&&
+                 (WinObjMethods.HasWritePermission( sqlconn.DatabasePath.Substring(0, sqlconn.DatabasePath.LastIndexOf("\\")) )) 
+               )
+            {               
+                ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
+                List<ConnectionParam> connparam = cpmgr.GetItems().Where(p => p.Connection.Ip_Address_v4 != null).ToList();
+
+                if (connparam.Count > 0)
                 {
-                    sqlconn.RunInTransaction(() =>
+                    foreach (ConnectionParam conn in connparam)
                     {
-
-                        int ret = connmgr.SaveConnection(conn.Connection);
-                        conn.Connection.Id = connmgr.GetLastInsertRowId();
-
-                        if (conn.DNS_list != null)
+                        sqlconn.RunInTransaction(() =>
                         {
-                            foreach (DNS dns in conn.DNS_list)
-                                dns.Connection_Id = conn.Connection.Id;
-                            dnsmgr.SaveDNSs(conn.DNS_list);
-                        }
+                            int ret = connmgr.SaveConnection(conn.Connection);
+                            if (ret > 0)
+                            {
+                                conn.Connection.Id = connmgr.GetLastInsertRowId();
 
-                        if (conn.Gateway_list != null)
-                        {
-                            foreach (Gateway gtw in conn.Gateway_list)
-                                gtw.Connection_Id = conn.Connection.Id;
-                            gatewaymgr.SaveGateways(conn.Gateway_list);
-                        }
-                    });
+                                if (conn.DNS_list != null)
+                                {
+                                    foreach (DNS dns in conn.DNS_list)
+                                        dns.Connection_Id = conn.Connection.Id;
+                                    dnsmgr.SaveDNSs(conn.DNS_list);
+                                }
+
+                                if (conn.Gateway_list != null)
+                                {
+                                    foreach (Gateway gtw in conn.Gateway_list)
+                                        gtw.Connection_Id = conn.Connection.Id;
+                                    gatewaymgr.SaveGateways(conn.Gateway_list);
+                                }
+                            }
+                            else
+                            {
+                                log.Info("Ошибка сохранения");
+                            }
+                        });
+                    }
+
                 }
-
             }
 
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
@@ -270,28 +332,42 @@ namespace CheckConnection
         }
 
         private void toolStripButtonChangeConnection_Click(object sender, System.EventArgs e)
-        {
-            int selectedrow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);           
+        {            
+            const string NoConn = @"Соединение с таким наименованием отсутствует.";
 
-            if ( ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value != null) {
-                string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();            
-                var ChangeConnectionForm = new ChangeConnectionForm(wmi, Name);
-
-                ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-                ChangeConnectionForm.ShowDialog();
+            if (!IsAdminAccount)
+            {
+                log.Info(NotAdmin);
+                MessageBox.Show(NotAdmin, "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
             else
             {
-                log.Info("Соединение с таким наименованием отсутствуют");
-                MessageBox.Show("Соединение с таким наименованием отсутствуют", "Ошибка",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                int selectedrow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
+
+                if (ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value != null)
+                {
+                    string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();
+                    var ChangeConnectionForm = new ChangeConnectionForm(wmi, Name);
+
+                    ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+                    ChangeConnectionForm.ShowDialog();
+                }
+                else
+                {
+                    log.Info(NoConn);
+                    MessageBox.Show(NoConn, "Ошибка",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                }
             }
         }
 
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
-            wmi.GetNetworkDevicesConfig();
+            WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
+            wconnmgr.GetNetworkDevicesConfig();
             BindConnectionGrid();
         }
 
@@ -332,25 +408,38 @@ namespace CheckConnection
 
         private void toolStripButtonRestore_Click(object sender, EventArgs e)
         {
-            int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
-            string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
-
-            ConnectionParamManager connparammgr = new ConnectionParamManager();
-            ConnectionParam connparam = connparammgr.GetItem(HistorydataGridView);
-            if (connparam != null)
+            const string NoInfo = @"Отсутствует информация для восстановления параметров соединения.";
+            if (!IsAdminAccount)
             {
-                //Прописываем название подключения, для которого изменяются параметы
-                connparam.Connection.Name = Name;              
-                var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam);
-
-                ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-                ChangeConnectionForm.Show();
+                log.Info(NotAdmin);
+                MessageBox.Show(NotAdmin, "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Отсутствует информация для восстановления параметров соединения", "Ошибка",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+
+                int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
+                string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
+
+                ConnectionParamManager connparammgr = new ConnectionParamManager();
+                ConnectionParam connparam = connparammgr.GetItem(HistorydataGridView);
+                if (connparam != null)
+                {
+                    //Прописываем название подключения, для которого изменяются параметы
+                    connparam.Connection.Name = Name;
+                    var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam);
+
+                    ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
+                    ChangeConnectionForm.Show();
+                }
+                else
+                {
+                    log.Info(NotAdmin);
+                    MessageBox.Show(NoInfo, "Ошибка",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -443,25 +532,23 @@ namespace CheckConnection
             }
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            log.Info("Before copyToolStripMenuItem_Click");
-            string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-            MObject objMO = new MObject(wmi.GetManagementObject(name));
-            objMO.Clone();
-            objMO["Description"] = "Clone 1";
-            objMO.Put();
-
-            log.Info("After copyToolStripMenuItem_Click");
-        }
-
         private void toolStripButtonRenewDHCP_Click(object sender, EventArgs e)
         {
-            log.Info("Before toolStripButtonRenewDHCP_Click");
-            string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-            MObject objMO = new MObject(wmi.GetManagementObject(name));
-            objMO.RenewDHCPLease();
-            log.Info("Before toolStripButtonRenewDHCP_Click");
+            if (!IsAdminAccount)
+            {
+                log.Info(NotAdmin);
+                MessageBox.Show(NotAdmin, "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            else
+            {
+                log.Info("Before toolStripButtonRenewDHCP_Click");
+                string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+                MObject objMO = new MObject(wmi.GetManagementObject(name));
+                objMO.RenewDHCPLease();
+                log.Info("Before toolStripButtonRenewDHCP_Click");
+            }
         }
 
         private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
@@ -506,6 +593,12 @@ namespace CheckConnection
             toolStripButtonRenewDHCP.Text = "Обновить" + Environment.NewLine + "ip-адрес";
             toolStripButtonRefresh.Text = "Обновить";
             toolStripButtonAnalyze.Text = "Анализ" + Environment.NewLine + "подключения";
+            if(!IsAdminAccount)
+            {
+                toolStripButtonChangeConnection.Enabled = false;
+                toolStripButtonRestore.Enabled = false;
+                toolStripButtonRenewDHCP.Enabled = false;
+            }
         }
     }
 }

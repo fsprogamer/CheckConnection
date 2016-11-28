@@ -24,14 +24,13 @@ namespace ConnectionWizard
         private PingInterface png;
         private int forms_visit_id = 0;
 
-        public MainWizard(ConnectionWizard.Methods.DBInterface dbparam, 
-                                                  WMIInterface wmiparam,
-                                                  PingInterface pngparam)
+        public MainWizard()
         {
-            db = dbparam;
-            wmi = wmiparam;
-            png = pngparam;
             InitializeComponent();
+
+            db = new ConnectionWizard.Methods.DBMethods();
+            wmi = new WMIManager();
+            png = new PingMethods();
         }
 
         private void MainWizard_Load(object sender, EventArgs e)

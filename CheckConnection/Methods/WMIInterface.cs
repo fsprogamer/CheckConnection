@@ -7,8 +7,9 @@ namespace CheckConnection.Methods
     public interface WMIInterface
     {
         ManagementObject GetManagementObject(string connname);
-        int GetNetworkDevicesConfig();
-        int GetCurrentAccounts();
+        int QueryWMI(string wmiquery);
+        //int GetNetworkDevicesConfig();
+        //int GetCurrentAccounts();
         ManagementObjectCollection GetManagementObjectCollection();
     }
 }
