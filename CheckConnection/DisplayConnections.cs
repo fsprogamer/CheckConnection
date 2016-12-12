@@ -140,8 +140,8 @@ namespace CheckConnection
 
 
             if ( (sqlconn!= null)&&
-                 (File.Exists(sqlconn.DatabasePath))&&
-                 (WinObjMethods.HasWritePermission( sqlconn.DatabasePath.Substring(0, sqlconn.DatabasePath.LastIndexOf("\\")) )) 
+                 (File.Exists(sqlconn.DatabasePath))//&&
+                 //(WinObjMethods.HasWritePermission( sqlconn.DatabasePath.Substring(0, sqlconn.DatabasePath.LastIndexOf("\\")) )) 
                )
             {               
                 ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);

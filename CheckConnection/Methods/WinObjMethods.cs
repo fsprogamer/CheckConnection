@@ -90,35 +90,35 @@ namespace CheckConnection.Methods
             return dgv;
         }
 
-        public static bool HasWritePermission(string dir)
-        {
-            bool Allow = false;
-            bool Deny = false;
-            ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-            DirectorySecurity acl = null;
-            try
-            {
-                acl = Directory.GetAccessControl(dir);
-            }
-            catch (System.IO.DirectoryNotFoundException)
-            {                               
-            }
-            if (acl == null)
-                return false;
-            AuthorizationRuleCollection arc = acl.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
-            if (arc == null)
-                return false;
-            foreach (FileSystemAccessRule rule in arc)
-            {
-                log.Info(rule.FileSystemRights.ToString());
-                if ((FileSystemRights.Write & rule.FileSystemRights) != FileSystemRights.Write)
-                    continue;
-                if (rule.AccessControlType == AccessControlType.Allow)
-                    Allow = true;
-                else if (rule.AccessControlType == AccessControlType.Deny)
-                    Deny = true;
-            }
-            return Allow && !Deny;
-        }
+        //public static bool HasWritePermission(string dir)
+        //{
+        //    bool Allow = false;
+        //    bool Deny = false;
+        //    ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //    DirectorySecurity acl = null;
+        //    try
+        //    {
+        //        acl = Directory.GetAccessControl(dir);
+        //    }
+        //    catch (System.IO.DirectoryNotFoundException)
+        //    {                               
+        //    }
+        //    if (acl == null)
+        //        return false;
+        //    AuthorizationRuleCollection arc = acl.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+        //    if (arc == null)
+        //        return false;
+        //    foreach (FileSystemAccessRule rule in arc)
+        //    {
+        //        log.Info(rule.FileSystemRights.ToString());
+        //        if ((FileSystemRights.Write & rule.FileSystemRights) != FileSystemRights.Write)
+        //            continue;
+        //        if (rule.AccessControlType == AccessControlType.Allow)
+        //            Allow = true;
+        //        else if (rule.AccessControlType == AccessControlType.Deny)
+        //            Deny = true;
+        //    }
+        //    return Allow && !Deny;
+        //}
     }
 }
