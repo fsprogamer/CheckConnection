@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Management;
-using log4net;
 
-using CheckConnection.Model;
+using Common;
 
 namespace CheckConnection.Methods
 {
-    public partial class WMIManager: WMIInterface
-    {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    public partial class WMIManager: ClassWithLog,WMIInterface
+    {        
         private ManagementObjectCollection moCollection;        
 
         public WMIManager()
-        {            
+        {     
         }
 
         public int QueryWMI(string query)

@@ -4,10 +4,12 @@ using System.Windows.Forms;
 using ConnectionWizard.Methods;
 using CheckConnection.Methods;
 using PingForm.Methods;
+using Common;
+using Ninject;
 
 namespace ConnectionWizard
 {
-    static class Program
+    class Program : NinjectProgram
     {
         /// <summary>
         /// The main entry point for the application.
@@ -17,6 +19,10 @@ namespace ConnectionWizard
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Ninject Initialization
+            Kernel = new StandardKernel(new Bindings());
+
             Application.Run(new MainWizard(/*db, wmi, png*/));
         }
     }

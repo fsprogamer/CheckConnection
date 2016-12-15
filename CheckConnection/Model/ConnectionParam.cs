@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
-using log4net;
+
+using Common;
 
 namespace CheckConnection.Model
 {
-    public class ConnectionParam
+    public class ConnectionParam:ClassWithLog
     {
         public Connection Connection { get; set; }
         public List<DNS> DNS_list { get; set; }
-        public List<Gateway> Gateway_list { get; set; }
-
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public List<Gateway> Gateway_list { get; set; }        
 
         public ConnectionParam()
-        {
+        {            
         }      
         public void setDNSServerSearchOrder(string strdns)
         {

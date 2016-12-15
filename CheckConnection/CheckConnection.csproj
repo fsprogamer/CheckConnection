@@ -58,6 +58,10 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -93,15 +97,24 @@
       <DependentUpon>DisplayConnections.cs</DependentUpon>
     </Compile>
     <Compile Include="Methods\AnalyzeManager.cs" />
+    <Compile Include="Methods\Bindings.cs" />
     <Compile Include="Methods\ConnectionManager.cs" />
     <Compile Include="Methods\ConnectionParamManager.cs" />
     <Compile Include="Methods\ConnectionRepo.cs" />
-    <Compile Include="Methods\DBInterface.cs" />
-    <Compile Include="Methods\DBMethods.cs" />
     <Compile Include="Methods\DNSManager.cs" />
     <Compile Include="Methods\DNSRepo.cs" />
     <Compile Include="Methods\GatewayManager.cs" />
     <Compile Include="Methods\GatewayRepo.cs" />
+    <Compile Include="Methods\GenericNameRepo.cs" />
+    <Compile Include="Methods\IConnectionManager.cs" />
+    <Compile Include="Methods\IConnectionRepo.cs" />
+    <Compile Include="Methods\IDNSManager.cs" />
+    <Compile Include="Methods\IDNSRepo.cs" />
+    <Compile Include="Methods\IGatewayManager.cs" />
+    <Compile Include="Methods\IGatewayRepo.cs" />
+    <Compile Include="Methods\IGenericNameRepo.cs" />
+    <Compile Include="Methods\IGenericRepo.cs" />
+    <Compile Include="Methods\GenericRepo.cs" />
     <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Methods\WMIAccountManager.cs" />
@@ -146,6 +159,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="CheckConnection.exe.log4net" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Management;
 using log4net;
+using Ninject;
 
 namespace CheckConnection.Model
 {
     class MObject: ManagementObject
     {
         private ManagementObject _objMO;
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog log;// = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public MObject(ManagementObject pobjMO)
         {
             _objMO = pobjMO;
+            log = Common.NinjectProgram.Kernel.Get<ILog>();
         }
 
         public bool IpEnabled()

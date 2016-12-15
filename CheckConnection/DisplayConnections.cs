@@ -7,17 +7,18 @@ using System.IO;
 using SQLite;
 using System.Linq;
 using System;
+using Common;
 using CheckConnection.Methods;
 using CheckConnection.Model;
-using log4net;
+
+using Ninject;
+using Ninject.Parameters;
 
 namespace CheckConnection
 {
-    public partial class DisplayConnections : Form
+    public partial class DisplayConnections : FormWithLog
     {
-        //delegate void SetComboBoxCellType(int iRowIndex);        
-        private WMIInterface wmi;
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        //delegate void SetComboBoxCellType(int iRowIndex);                     
         private bool FormLoadComplete = false;
         private bool IsAdminAccount = false;
         const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";
@@ -25,14 +26,16 @@ namespace CheckConnection
         private int HistorypageSize = Properties.Settings.Default.HistoryPageSize;//10;
 
         private SQLiteConnection sqlconn;
-        private ConnectionManager connmgr;
-        private DNSManager dnsmgr;
-        private GatewayManager gatewaymgr;
+        private WMIInterface wmi;
+        private IConnectionManager connmgr;
+        private IDNSManager dnsmgr;
+        private IGatewayManager gatewaymgr;
 
         public DisplayConnections( )
         {
             InitializeComponent();
-            wmi = new WMIManager();
+
+            wmi = Common.NinjectProgram.Kernel.Get<WMIInterface>();// new WMIManager();
             
             HistorybindingNavigator.BindingSource = HistorybindingSource;
             WMIAccountManager wmiacc = new WMIAccountManager(wmi);
@@ -86,10 +89,13 @@ namespace CheckConnection
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
-            
-            connmgr = new ConnectionManager(sqlconn);
-            dnsmgr = new DNSManager(sqlconn);
-            gatewaymgr = new GatewayManager(sqlconn);
+
+            //Set the parameter
+            IParameter parameter = new ConstructorArgument("conn", sqlconn);
+
+            connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
+            dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);           
+            gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)

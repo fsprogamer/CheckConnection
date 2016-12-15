@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
+using Common;
 
-using log4net;
 
 namespace CheckConnection
 {
-    public partial class AnalyzeForm : Form
+    public partial class AnalyzeForm : FormWithLog
     {
-        private ConnectionParam _connparam;
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ConnectionParam _connparam;        
         private AnalyzeManager analyze;
         
 
@@ -49,7 +48,7 @@ namespace CheckConnection
         public AnalyzeForm(ConnectionParam connparam)
         {
             InitializeComponent();
-            _connparam = connparam;
+            _connparam = connparam;            
         }
 
         private void AnalyzeForm_Load(object sender, EventArgs e)

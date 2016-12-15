@@ -215,6 +215,10 @@ namespace ConnectionWizard
             if (ctrl.Length == 0)
             {
                 DataGridView dgv = WinObjMethods.GetConnectionGrid();
+
+                WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
+                wconnmgr.GetNetworkDevicesConfig();
+
                 ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
                    
                 List<ConnectionParam> connlist = cpmgr.GetItems();

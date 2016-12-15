@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Linq;
-using log4net;
+
 using System.Collections.Generic;
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
+using Common;
 
 namespace CheckConnection
 {
-    public partial class ChangeConnectionForm : Form
+    public partial class ChangeConnectionForm : FormWithLog
     {
         private WMIInterface wmi;
-        private ConnectionParam connparam;
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ConnectionParam connparam;        
 
         public ChangeConnectionForm(WMIInterface wmiparam)
         {
-            wmi = wmiparam;
+            wmi = wmiparam;          
             InitializeComponent();
+            
 
             ipAddressControl.Text = Properties.Settings.Default.IPAddress; 
             NetMaskControl.Text = Properties.Settings.Default.SubnetMask;
@@ -27,7 +27,7 @@ namespace CheckConnection
 
         public ChangeConnectionForm(WMIInterface wmiparam, string pconnname)
         {            
-            wmi = wmiparam;
+            wmi = wmiparam;            
             ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
             connparam = cpmgr.GetItem(pconnname);
 

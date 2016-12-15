@@ -2,14 +2,12 @@
 using CheckConnection.Model;
 using System;
 
-using log4net;
+using Common;
 
 namespace CheckConnection.Methods
 {
-    class AnalyzeManager
+    class AnalyzeManager:ClassWithLog
     {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        //private string _RouterDeafultIpAddress = Properties.Settings.Default.RouterDeafultIpAddress;
         public string _ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
         private string _IpAddress;
         private string _DHCPEnabled;

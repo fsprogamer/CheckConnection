@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using System.Management;
 
 using CheckConnection.Model;
+using Common;
 
 namespace CheckConnection.Methods
 {
-    class WMIConnectionManager
-    {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    public class WMIConnectionManager:ClassWithLog
+    {        
         private WMIInterface _wmi;
 
         public WMIConnectionManager(WMIInterface pwmi)
         {
-            _wmi = pwmi;
+            _wmi = pwmi;     
         }
 
         public int GetNetworkDevicesConfig()

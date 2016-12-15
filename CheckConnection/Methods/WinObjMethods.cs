@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using System.Security.AccessControl;
 using System.ComponentModel.DataAnnotations;
-using log4net;
 
 namespace CheckConnection.Methods
 {

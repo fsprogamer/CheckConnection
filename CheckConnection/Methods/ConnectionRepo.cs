@@ -1,70 +1,111 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SQLite;
+using System;
 
 using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    public class ConnectionRepo
+    public class ConnectionRepo : GenericNameRepo<SQLiteConnection, Connection >, IConnectionRepo
     {
-        readonly DBMethods _db = null;
-        //protected static string DbLocation;
+        static readonly object Locker = new object();
 
-        public ConnectionRepo(SQLiteConnection conn, string dbLocation)
+        public ConnectionRepo(SQLiteConnection conn) : base(conn)
         {
-            _db = new DBMethods(conn, dbLocation);
         }
-
-        public Connection GetConnection(int id)
+        public IEnumerable<Connection> GetItemsPage(int Offset = 0, int Pagesize = 0)
         {
-            return _db.GetItem<Connection>(id);
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
+                        from (SELECT *,
+                        (SELECT COUNT(*)
+                        FROM Connection AS t2
+                        WHERE t2.Date >= t1.Date                        
+		                ) AS row_Num
+                        FROM Connection AS t1                        
+                        ORDER BY Date desc) t3
+                        where row_Num between ? and ?", Offset + 1, Offset + Pagesize).ToList();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return null;
+                }
+            }
         }
-
-        public Connection GetConnectionByName(string Name)
+        public IEnumerable<Connection> GetItemsPageByName(string Name, int Offset = 0, int Pagesize = 0)
         {
-            return _db.GetItemByName<Connection>(Name);
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
+                        from (SELECT *,
+                        (SELECT COUNT(*)
+                        FROM Connection AS t2
+                        WHERE t2.Date >= t1.Date
+                        and Name = ?
+		                ) AS row_Num
+                        FROM Connection AS t1
+                        where Name = ?
+                        ORDER BY Date desc) t3
+                        where row_Num between ? and ?", Name, Name, Offset + 1, Offset + Pagesize).ToList();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return null;
+                }
+            }
         }
-
-        public IEnumerable<Connection> GetConnections()
+        public int GetItemsAmount()
         {
-            return _db.GetItems<Connection>();
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.ExecuteScalar<int>("SELECT count(*) FROM Connection");
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
         }
-
-        public IEnumerable<Connection> GetConnectionsByName(string Name)
+        public int GetItemsAmountByName(string Name)
         {
-            return _db.GetItemsByName<Connection>(Name);
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.ExecuteScalar<int>("SELECT count(*) FROM Connection where Name=?", Name);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
         }
-
-        public int SaveConnection(Connection connection)
-        {
-            return _db.SaveItem<Connection>(connection);
-        }
-
-        public int DeleteConnection(int id)
-        {
-            return _db.DeleteItem<Connection>(id);
-        }
-        public IEnumerable<Connection> GetConnections( int Offset = 0, int Pagesize = 0)
-        {
-            return _db.GetConnectionPage( Offset, Pagesize);
-        }
-        public IEnumerable<Connection> GetConnectionsByName(string Name, int Offset = 0, int Pagesize = 0)
-        {
-            return _db.GetConnectionPageByName(Name, Offset, Pagesize);
-        }
-
-        public int GetConnectionsAmount()
-        {
-            return _db.GetConnectionAmount();
-        }
-        public int GetConnectionsAmountByName(string Name)
-        {
-            return _db.GetConnectionAmountByName(Name);
-        }
-
         public int GetLastInsertRowId()
         {
-            return _db.GetLastInsertRowId();
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.ExecuteScalar<int>("SELECT last_insert_rowid()");
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
         }
-    }
+    }   
 }

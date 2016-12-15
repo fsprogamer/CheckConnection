@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Management;
+
 using PingForm.Methods;
-using log4net;
 
 using CheckConnection.Model;
+using Common;
 
 namespace CheckConnection.Methods
 {
-    public class PingResultManager
+    public class PingResultManager: ClassWithLog
     {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public PingResultManager()
+        {
+        }
 
         public PingResult GetPingResult(string strHostName)
         {

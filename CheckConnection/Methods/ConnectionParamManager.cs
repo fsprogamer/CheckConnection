@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using log4net;
+
 using System.Management;
 
 using CheckConnection.Model;
-using CheckConnection.Methods;
+using Common;
+
 
 namespace CheckConnection.Methods
 {
-    public class ConnectionParamManager
+    public class ConnectionParamManager:ClassWithLog
     {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private WMIInterface _wmi;
 
         public ConnectionParamManager(WMIInterface pwmi)
         {
-            _wmi = pwmi;
+            _wmi = pwmi;     
         }
 
         public ConnectionParamManager()

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using System.Management;
 using System.Security.Principal;
 
 using CheckConnection.Model;
+using Common;
 
 namespace CheckConnection.Methods
 {
-    class WMIAccountManager
-    {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    class WMIAccountManager:ClassWithLog
+    {        
         private WMIInterface _wmi;
 
         public WMIAccountManager(WMIInterface pwmi)

@@ -1,10 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using SQLite;
 
 using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
+    class GatewayRepo : GenericRepo<SQLiteConnection, Gateway>, IGatewayRepo
+    {
+        static readonly object Locker = new object();
+
+        public GatewayRepo(SQLiteConnection conn) : base(conn)
+        {
+        }
+
+        public IEnumerable<Gateway> GetGatewaysByConnectionId(int ConnectionId)
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc", ConnectionId).ToList();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return null;
+                }
+            }
+        }
+
+    }
+
+    /*
     class GatewayRepo
     {
         readonly DBMethods _db = null;
@@ -45,4 +74,5 @@ namespace CheckConnection.Methods
             return _db.DeleteItem<Gateway>(id);
         }
     }
+    */
 }

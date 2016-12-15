@@ -4,15 +4,15 @@ using ConnectionWizard.Model;
 using System.Collections.Generic;
 using Common;
 using log4net;
+using Ninject;
 
 namespace ConnectionWizard.Methods
 {
     public partial class DBMethods : DBConnection, DBInterface
-    {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    {        
         public DBMethods()
         {
-            conn_string = Properties.Settings.Default.DBConnectionString;
+            conn_string = Properties.Settings.Default.DBConnectionString;            
         }
        
         public Forms GetFormsById(int idform)
