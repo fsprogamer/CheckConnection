@@ -9,7 +9,7 @@ namespace CheckConnection.Methods
 {
     public class ConnectionRepo : GenericNameRepo<SQLiteConnection, Connection >, IConnectionRepo
     {
-        static readonly object Locker = new object();
+        //static readonly object Locker = new object();
 
         public ConnectionRepo(SQLiteConnection conn) : base(conn)
         {

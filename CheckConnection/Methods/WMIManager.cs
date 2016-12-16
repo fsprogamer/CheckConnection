@@ -5,6 +5,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
+  
     public partial class WMIManager: ClassWithLog,WMIInterface
     {        
         private ManagementObjectCollection moCollection;        
@@ -39,6 +40,6 @@ namespace CheckConnection.Methods
                 }
             }
             return null;
-        }
+        }     
     }
 }

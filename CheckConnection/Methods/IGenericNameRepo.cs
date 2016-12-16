@@ -4,7 +4,7 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    interface IGenericNameRepo<T> : IGenericRepo<T> where T : class, INameEntity, new()
+    interface IGenericNameRepo<T> : IGenericRepo<T> where T : class, INameEntity, IEntity, new()
     {
         //Get specific item in the database method with Name
         T GetItemByName(string Name);

@@ -4,7 +4,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-    public class Connection : INameEntity
+    public class Connection : INameEntity,IEntity
     {
 
         [PrimaryKey, AutoIncrement, Unique]

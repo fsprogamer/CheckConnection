@@ -38,6 +38,11 @@ namespace CheckConnection
             wmi = Common.NinjectProgram.Kernel.Get<WMIInterface>();// new WMIManager();
             
             HistorybindingNavigator.BindingSource = HistorybindingSource;
+            //--------------------------
+            WMIMediumTypeRepo mt_repo = new WMIMediumTypeRepo();
+
+            WMIConnectionRepo wmi_repo = new WMIConnectionRepo();
+            //--------------------------
             WMIAccountManager wmiacc = new WMIAccountManager(wmi);
             if ((IsAdminAccount = wmiacc.IsAdminAccount()) == true)
                 this.Text += " (Администратор)";

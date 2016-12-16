@@ -6,11 +6,9 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    public abstract class GenericNameRepo<C, T> : GenericRepo<C,T>, IGenericNameRepo<T> where T : class, INameEntity, new()
+    public abstract class GenericNameRepo<C, T> : GenericRepo<C,T>, IGenericNameRepo<T> where T : class, INameEntity, IEntity, new()
                                                                                where C : SQLiteConnection
     {
-        static readonly object Locker = new object();
-
         public GenericNameRepo(C conn): base(conn)
         {            
         }

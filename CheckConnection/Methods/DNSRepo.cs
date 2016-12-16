@@ -10,7 +10,7 @@ namespace CheckConnection.Methods
 {
     class DNSRepo : GenericRepo<SQLiteConnection, DNS>, IDNSRepo
     {
-        static readonly object Locker = new object();
+        //static readonly object Locker = new object();
 
         public DNSRepo(SQLiteConnection conn) : base(conn)
         {

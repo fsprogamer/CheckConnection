@@ -4,7 +4,7 @@ using SQLite;
 
 namespace CheckConnection.Model
 {
-    public class Account : INameEntity
+    public class Account : INameEntity, IEntity
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }

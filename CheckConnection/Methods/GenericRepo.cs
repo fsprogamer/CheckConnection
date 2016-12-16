@@ -8,17 +8,16 @@ using Common;
 namespace CheckConnection.Methods
 {     
     public abstract class GenericRepo<C,T> : ClassWithLog, IGenericRepo<T> where T : class, IEntity, new()
-                                                                  where C : SQLiteConnection
+                                                                           where C : SQLiteConnection
     {
         private C _entities;
         public C Context
         {
-
             get { return _entities; }
             set { _entities = value; }
         }
 
-        static readonly object Locker = new object();
+        static protected readonly object Locker = new object();
 
         public GenericRepo(C conn)
         {

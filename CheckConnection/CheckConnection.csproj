@@ -106,6 +106,7 @@
     <Compile Include="Methods\GatewayManager.cs" />
     <Compile Include="Methods\GatewayRepo.cs" />
     <Compile Include="Methods\GenericNameRepo.cs" />
+    <Compile Include="Methods\GenericWMIRepo.cs" />
     <Compile Include="Methods\IConnectionManager.cs" />
     <Compile Include="Methods\IConnectionRepo.cs" />
     <Compile Include="Methods\IDNSManager.cs" />
@@ -115,12 +116,20 @@
     <Compile Include="Methods\IGenericNameRepo.cs" />
     <Compile Include="Methods\IGenericRepo.cs" />
     <Compile Include="Methods\GenericRepo.cs" />
+    <Compile Include="Methods\IGenericWMIRepo.cs" />
+    <Compile Include="Methods\IWMIMediumTypeRepo.cs" />
+    <Compile Include="Methods\IWMIConnectionManager.cs" />
+    <Compile Include="Methods\IWMIAccountManager.cs" />
+    <Compile Include="Methods\IWMIConnectionRepo.cs" />
+    <Compile Include="Methods\WMIMediumTypeRepo.cs" />
     <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Methods\WMIAccountManager.cs" />
     <Compile Include="Methods\WMIConnectionManager.cs" />
     <Compile Include="Methods\WMIInterface.cs" />
+    <Compile Include="Methods\WMIManagementObjectRepo.cs" />
     <Compile Include="Methods\WMIManager.cs" />
+    <Compile Include="Methods\WMIConnectionRepo.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\ConnectionParam.cs" />
@@ -128,6 +137,7 @@
     <Compile Include="Model\Gateway.cs" />
     <Compile Include="Model\IEntity.cs" />
     <Compile Include="Model\INameEntity.cs" />
+    <Compile Include="Model\MediumType.cs" />
     <Compile Include="Model\MObject.cs">
       <SubType>Component</SubType>
     </Compile>

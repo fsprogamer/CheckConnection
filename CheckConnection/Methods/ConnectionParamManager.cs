@@ -8,7 +8,6 @@ using System.Management;
 using CheckConnection.Model;
 using Common;
 
-
 namespace CheckConnection.Methods
 {
     public class ConnectionParamManager:ClassWithLog

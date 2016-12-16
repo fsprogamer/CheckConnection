@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionWizardTests", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPAddressControlLib", "ipaddresscontrollib\VS2015\IPAddressControlLib\IPAddressControlLib.csproj", "{A5ED2B33-5644-47C4-BC30-A4840F67FF87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckConnectionActivityLibrary", "CheckConnectionActivityLibrary\CheckConnectionActivityLibrary.csproj", "{D9C04E4C-91F5-4312-9246-4CEE2FB1325A}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -75,6 +77,10 @@ Global
 		{A5ED2B33-5644-47C4-BC30-A4840F67FF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5ED2B33-5644-47C4-BC30-A4840F67FF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5ED2B33-5644-47C4-BC30-A4840F67FF87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9C04E4C-91F5-4312-9246-4CEE2FB1325A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C04E4C-91F5-4312-9246-4CEE2FB1325A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C04E4C-91F5-4312-9246-4CEE2FB1325A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C04E4C-91F5-4312-9246-4CEE2FB1325A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

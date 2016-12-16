@@ -1,6 +1,6 @@
 ﻿namespace CheckConnection.Model
 {
-    public interface INameEntity:IEntity
+    public interface INameEntity
     {
         string Name { get; set; }
     }
