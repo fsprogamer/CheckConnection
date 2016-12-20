@@ -9,35 +9,24 @@ namespace CheckConnection.Methods
     class AnalyzeManager:ClassWithLog
     {
         public string _ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
-        private string _IpAddress;
-        private string _DHCPEnabled;
         private int _ValidatedDNS = -1;
         private int _subnet = -1;
-        private List<Gateway> _IPGateway;
-        private List<DNS> _DNS;
+        private Connection _conn;
         private PingResultManager _pingmgr;
         private List<PingResult> _pngresult = new List<PingResult>(6);
+        private bool _Wireless;
 
-        public AnalyzeManager(string IpAddress, string DHCPEnabled)
+        public AnalyzeManager(Connection conn)
         {
             _pingmgr = new PingResultManager();
-            _IpAddress = IpAddress;
-            _DHCPEnabled = DHCPEnabled;
-        }
-
-        public void SetGateway(List<Gateway> IPGateway)
-        {
-            _IPGateway = IPGateway;
-        }
-        public void SetDNS(List<DNS> DNS)
-        {
-            _DNS = DNS;
+            _conn = conn;
         }
 
         public void CompareWithStandartParam()
         {
             _ValidatedDNS = CheckDNS();
             _subnet = CheckIP();
+            _Wireless = IsWireless(_conn);
         }
 
         public List<string[]> GetPingResults()
@@ -73,9 +62,9 @@ namespace CheckConnection.Methods
             AkadoDNS.CopyTo(strArray, 0);
             log.Info("before foreach");
 
-            if (_DNS != null)
+            if (_conn.DNS_list != null)
             {                
-                foreach (DNS dns in _DNS)
+                foreach (DNS dns in _conn.DNS_list)
                 {
                     foreach (string akadodns in AkadoDNS)
                     {
@@ -104,7 +93,7 @@ namespace CheckConnection.Methods
                 System.Collections.Specialized.StringCollection TestNetwork = Properties.Settings.Default.TestNetwork;
                 System.Collections.Specialized.StringCollection WorkingNetwork = Properties.Settings.Default.WorkingNetwork;
 
-                string substr = _IpAddress.Substring(0, _IpAddress.LastIndexOf('.') );
+                string substr = _conn.Ip_Address_v4.Substring(0, _conn.Ip_Address_v4.LastIndexOf('.') );
                 substr = substr.Substring(0, substr.LastIndexOf('.') );
 
                 log.InfoFormat("substr = {0}",substr);
@@ -144,9 +133,25 @@ namespace CheckConnection.Methods
             return subnet; 
         }
 
+        public bool IsWireless(Connection conn)
+        {
+            IWMIMediumTypeManager mtmgr = new WMIMediumTypeManager();
+
+            uint PhysicalMediumType = mtmgr.GetItem(p=>p.Name == conn.Name).NdisPhysicalMediumType;
+            log.InfoFormat("PhysicalMediumType = {0}", PhysicalMediumType);
+            if ((PhysicalMediumType == 1)||(PhysicalMediumType == 9))
+                    return true;
+            return false;
+        }
+
         public List<string> MakeConclusion()
         {            
             List<string> lst = new List<string>();
+
+            if (_Wireless == true)
+                lst.Add("Беспроводное подключение.");
+            else
+                lst.Add("Проводное подключение.");
 
             foreach (PingResult png in _pngresult)
             {
@@ -155,7 +160,7 @@ namespace CheckConnection.Methods
                     lst.Add("При анализе сетевого подключения обнаружены ошибки.");
                     lst.Add("Они могут влиять на работу компьютера в сети.");
                     //"Обнаружены ошибки при анализе сетевого подключения";
-                    if ((_IpAddress == "0.0.0.0")&&(_DHCPEnabled == "True"))
+                    if ((_conn.Ip_Address_v4 == "0.0.0.0")&&(_conn.DHCP_Enabled == "True"))
                         lst.Add("Проверьте питание и работоспособность модема.");
                     //if ((_IPGateway == null)&&(_DHCPEnabled == "True"))
                     //    Conclusion += "\n\rПроверьте питание и работоспособность модема";

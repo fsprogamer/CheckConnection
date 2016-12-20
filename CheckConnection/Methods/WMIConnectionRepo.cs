@@ -8,12 +8,19 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    public class WMIConnectionRepo : GenericWMIRepo<Connection>//, IWMIConnectionRepo
+    public class WMIConnectionRepo : GenericWMIRepo<Connection>, IWMIConnectionRepo
     {
-        public WMIConnectionRepo() : base("SELECT * FROM Win32_NetworkAdapterConfiguration")
+        private WMIManagementObjectRepo _mo_repo;
+
+        public WMIManagementObjectRepo mo_repo
+        {
+            get { return _mo_repo; }
+            set { _mo_repo = value; }
+        }
+        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT * FROM Win32_NetworkAdapterConfiguration")
         {
             int Conn_id = 0;
-            WMIManagementObjectRepo mo_repo = new WMIManagementObjectRepo(this._query);
+            mo_repo = new WMIManagementObjectRepo(this._scope, this._query);
             Context = new List<Connection>(mo_repo.Context.Count);
 
             foreach (ManagementObject mo in mo_repo.GetItems(m=>m.Properties["Description"].Value!=null))
@@ -61,9 +68,18 @@ namespace CheckConnection.Methods
                     if (mo["DefaultIPGateway"] != null)
                     {
                         string[] defaultgateways = (string[])mo["DefaultIPGateway"];
-                        foreach (string defaultipgateway in defaultgateways)
+                        item.Gateway_list = new List<Gateway>(2);
+
+                        foreach (string defaultipgateway_str in defaultgateways)
                         {
-                            item.IPGateway = item.IPGateway + defaultipgateway + "; ";
+                            Gateway gtw = new Gateway
+                            {
+                                IPGateway = defaultipgateway_str,
+                                Connection_Id = Conn_id
+                            };
+                            item.Gateway_list.Add(gtw);
+
+                            item.IPGateway += defaultipgateway_str + "; ";
                         }
                         item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
                     }
@@ -71,9 +87,23 @@ namespace CheckConnection.Methods
                     if (mo["DNSServerSearchOrder"] != null)
                     {
                         string[] DNSarray = (string[])mo["DNSServerSearchOrder"];
-                        foreach (string dns in DNSarray)
+                        int Order_Id = 0;
+
+                        item.DNS_list = new List<DNS>(2);
+
+                        foreach (string dns_str in DNSarray)
                         {
-                            item.DNSServer = item.DNSServer + dns + "; ";
+                            DNS _dns = new DNS
+                            {
+                                DNSServer = dns_str,
+                                Connection_Id = Conn_id,
+                                Order_Id = Order_Id
+                            };
+                            item.DNS_list.Add(_dns);
+
+                            item.DNSServer += dns_str + "; ";
+
+                            Order_Id++;
                         }
                         item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
                     }
@@ -92,9 +122,6 @@ namespace CheckConnection.Methods
             }
             Context = Context.OrderByDescending(p => p.Ip_Address_v4).ToList();
         }
-
-        public List<Connection> GetItems() {            
-            return Context;
-        }
+         
     }
 }

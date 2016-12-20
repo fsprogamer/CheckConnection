@@ -3,16 +3,14 @@ using System.Management;
 
 namespace CheckConnection.Methods
 {
-    class WMIManagementObjectRepo : GenericWMIRepo<ManagementObject>
+    public class WMIManagementObjectRepo : GenericWMIRepo<ManagementObject>, IWMIManagementObjectRepo
     {
         public int ret = 0;
-        public WMIManagementObjectRepo(string query) : base(query)
+        public WMIManagementObjectRepo(string scope, string query) : base(query, scope)
         {
             int ret = 0;
+            ManagementObjectSearcher moSearch = new ManagementObjectSearcher(scope, query);
 
-            //ManagementObjectSearcher moSearch = new ManagementObjectSearcher("root\\CIMV2", query);
-            ManagementObjectSearcher moSearch = new ManagementObjectSearcher("root\\wmi", query);
-            
             Context = moSearch.Get().Cast<ManagementObject>().ToList();
 
             //Context = moSearch.Get();

@@ -5,6 +5,8 @@ namespace CheckConnection.Methods
 {
     public interface IWMIConnectionRepo: IGenericWMIRepo<Connection>
     {       
-        List<Connection> GetItems();
+        //List<Connection> GetItems();
+
+        WMIManagementObjectRepo mo_repo { get; set; }
     }
 }

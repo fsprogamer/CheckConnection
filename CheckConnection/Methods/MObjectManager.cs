@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Management;
-using log4net;
-using Ninject;
 
-namespace CheckConnection.Model
+using Common;
+
+namespace CheckConnection.Methods
 {
-    class MObject: ManagementObject
+    class MObjectManager: ClassWithLog, IMObjectManager
     {
-        private ManagementObject _objMO;
-        private readonly ILog log;// = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public MObject(ManagementObject pobjMO)
+        private ManagementObject _objMO;        
+        public MObjectManager(ManagementObject pobjMO)
         {
             _objMO = pobjMO;
-            log = Common.NinjectProgram.Kernel.Get<ILog>();
         }
-
-        public bool IpEnabled()
-        {
-            return (bool)_objMO["IPEnabled"];
-        }       
+        public bool IpEnabled { get  { return (bool)_objMO["IPEnabled"]; }                         
+                              }
 
         public int setStaticIP(string ip_address, string subnet_mask)
         {
@@ -46,7 +41,7 @@ namespace CheckConnection.Model
             int ret = 0;
             try
             {
-                _objMO.InvokeMethod("EnableDHCP", null);                
+                _objMO.InvokeMethod("EnableDHCP", null);
                 ret = 1;
             }
             catch (Exception ex)
@@ -71,8 +66,8 @@ namespace CheckConnection.Model
                 ManagementBaseObject newGateway =
                     _objMO.GetMethodParameters("SetGateways");
 
-                newGateway["DefaultIPGateway"] = gateway ;
-                newGateway["GatewayCostMetric"] = new int[] { 1,2 };
+                newGateway["DefaultIPGateway"] = gateway;
+                newGateway["GatewayCostMetric"] = new int[] { 1, 2 };
 
                 setGateway = _objMO.InvokeMethod("SetGateways", newGateway, null);
                 ret = 1;
@@ -95,7 +90,7 @@ namespace CheckConnection.Model
         {
             int ret = 0;
 
-            if (this["Caption"].Equals(NIC))
+            if (_objMO["Caption"].Equals(NIC))
             {
                 try
                 {
@@ -126,7 +121,7 @@ namespace CheckConnection.Model
         {
             int ret = 0;
 
-            if (this["Caption"].Equals(NIC))
+            if (_objMO["Caption"].Equals(NIC))
             {
                 try
                 {
@@ -175,7 +170,7 @@ namespace CheckConnection.Model
             {
                 ManagementBaseObject newDNS = _objMO.GetMethodParameters("SetDNSServerSearchOrder");
                 log.InfoFormat("name.Length == {0}", name.Length);
-                if( name.Length == 0 )
+                if (name.Length == 0)
                     newDNS["DNSServerSearchOrder"] = null;
                 else
                     newDNS["DNSServerSearchOrder"] = name;
@@ -198,7 +193,7 @@ namespace CheckConnection.Model
             try
             {
                 _objMO.InvokeMethod("ReleaseDHCPLease", null);
-                _objMO.InvokeMethod("RenewDHCPLease", null);                                
+                _objMO.InvokeMethod("RenewDHCPLease", null);
                 ret = 1;
             }
             catch (Exception ex)
@@ -208,6 +203,6 @@ namespace CheckConnection.Model
             }
             return ret;
         }
-        
+
     }
 }

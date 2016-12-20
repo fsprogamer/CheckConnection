@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 using CheckConnection.Methods;
 using CheckConnection.Model;
 using Common;
-
+using log4net;
 
 namespace CheckConnection
 {
-    public partial class AnalyzeForm : FormWithLog
+    public partial class AnalyzeForm : Form//WithLog
     {
-        private ConnectionParam _connparam;        
+        private Connection _conn;        
         private AnalyzeManager analyze;
-        
 
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        
         //public delegate int BinaryOp(int data, int time);
 
         //static int DelegateThread(int data, int time)
@@ -45,21 +46,17 @@ namespace CheckConnection
         //    }
         //}
 
-        public AnalyzeForm(ConnectionParam connparam)
+        public AnalyzeForm(Connection conn)
         {
             InitializeComponent();
-            _connparam = connparam;            
+            _conn = conn;            
         }
 
         private void AnalyzeForm_Load(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            log.InfoFormat("_connparam.Connection.Ip_Address_v4 = {0}", _connparam.Connection.Ip_Address_v4);
-            analyze = new AnalyzeManager(_connparam.Connection.Ip_Address_v4, _connparam.Connection.DHCP_Enabled);
-            log.Info("SetGateway");
-            analyze.SetGateway(_connparam.Gateway_list);
-            log.Info("SetDNS");
-            analyze.SetDNS(_connparam.DNS_list);
+            log.InfoFormat("conn.Ip_Address_v4 = {0}", _conn.Ip_Address_v4);
+            analyze = new AnalyzeManager(_conn);
         }
 
         delegate void SetTextDelegate(string ipaddress);
@@ -91,18 +88,18 @@ namespace CheckConnection
         {
             SetTextDelegate ts = SetText;
 
-            if (_connparam.Connection.Ip_Address_v4 != null)
+            if (_conn.Ip_Address_v4 != null)
             {
                 if (this.InvokeRequired)
                 {
-                    this.BeginInvoke(ts, _connparam.Connection.Ip_Address_v4 );
+                    this.BeginInvoke(ts, _conn.Ip_Address_v4 );
                 }  
             }
 
-            if (_connparam.Gateway_list != null)
+            if (_conn.Gateway_list != null)
             {
                 log.Info("_IPGateway != null");
-                foreach (Gateway gateway in _connparam.Gateway_list)
+                foreach (Gateway gateway in _conn.Gateway_list)
                 {
                     if (this.InvokeRequired)
                     {
@@ -111,10 +108,10 @@ namespace CheckConnection
                 }
             }
 
-            if (_connparam.DNS_list != null)
+            if (_conn.DNS_list != null)
             {
                 log.Info("_DNS != null");
-                foreach (DNS dns in _connparam.DNS_list)
+                foreach (DNS dns in _conn.DNS_list)
                 {
                     if (this.InvokeRequired)
                     {
@@ -135,7 +132,7 @@ namespace CheckConnection
             t.Start();
 
             analyze.CompareWithStandartParam();
-
+            
             this.Refresh();
             this.Cursor = Cursors.Default;
         }

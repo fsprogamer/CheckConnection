@@ -7,7 +7,8 @@ namespace CheckConnection.Methods
     {
         T GetItem(Func<T, bool> predicate);
         //int Query(string wmiquery);
-        IEnumerable<T> GetItems(Func<T, bool> predicate);
+        List<T> GetItems(Func<T, bool> predicate);
+        List<T> GetItems();
         int SaveItem(T item);
         int SaveItems(IEnumerable<T> items);
     }

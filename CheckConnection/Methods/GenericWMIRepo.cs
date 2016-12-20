@@ -12,36 +12,30 @@ namespace CheckConnection.Methods
     {
         private List<T> _entities;
         protected string _query = String.Empty;
+        protected string _scope = String.Empty;
 
         public List<T> Context
         {
             get { return _entities; }
             set { _entities = value; }
         }
-        public GenericWMIRepo(string query)
+        public GenericWMIRepo(string scope, string query)
         {
             _query = query;
+            _scope = scope;
            // Query(_query);
         }
-        //public int Query(string query)
-        //{
-        //    int ret = 0;
-        //    ManagementObjectSearcher moSearch = new ManagementObjectSearcher(query);
-        //    Context = moSearch.Get().Cast<T>().ToList();
-
-        //    //Context = moSearch.Get();
-        //    if (Context != null)
-        //        ret = Context.Count;
-
-        //    return ret;
-        //}
         public T GetItem(Func<T, bool> predicate)
         {
             return Context.Where<T>(predicate).First();
         }
-        public IEnumerable<T> GetItems(Func<T, bool> predicate)
+        public List<T> GetItems(Func<T, bool> predicate)
         {
-            return Context.Where<T>(predicate);
+            return Context.Where<T>(predicate).ToList();
+        }
+        public List<T> GetItems()
+        {
+            return Context;
         }
         public int SaveItem(T item)
         {

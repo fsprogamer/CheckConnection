@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using SQLite;
 
 namespace CheckConnection.Model
@@ -35,6 +36,10 @@ namespace CheckConnection.Model
         [Ignore]
         [Display(Name = "DNS-серверы...")]
         public string DNSServer { get; set; }
+        [Ignore]
+        public List<DNS> DNS_list { get; set; }
+        [Ignore]
+        public List<Gateway> Gateway_list { get; set; }
     }
 
 }

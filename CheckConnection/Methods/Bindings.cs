@@ -7,8 +7,8 @@ namespace CheckConnection.Methods
     public class Bindings : NinjectModule
     {
         public override void Load()
-        {
-            Bind<WMIInterface>().To<WMIManager>();
+        {            
+            Bind<IWMIConnectionManager>().To<WMIConnectionManager>();
             Bind<IConnectionManager>().To<ConnectionManager>();
             Bind<IDNSManager>().To<DNSManager>();
             Bind<IGatewayManager>().To<GatewayManager>();

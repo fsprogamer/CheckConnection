@@ -7,43 +7,40 @@ using System.IO;
 using SQLite;
 using System.Linq;
 using System;
-using Common;
+
 using CheckConnection.Methods;
 using CheckConnection.Model;
 
 using Ninject;
 using Ninject.Parameters;
+using log4net;
 
 namespace CheckConnection
 {
-    public partial class DisplayConnections : FormWithLog
+    public partial class DisplayConnections : Form//WithLog
     {
         //delegate void SetComboBoxCellType(int iRowIndex);                     
         private bool FormLoadComplete = false;
         private bool IsAdminAccount = false;
         const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";
-        
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private int HistorypageSize = Properties.Settings.Default.HistoryPageSize;//10;
 
         private SQLiteConnection sqlconn;
-        private WMIInterface wmi;
+
         private IConnectionManager connmgr;
         private IDNSManager dnsmgr;
         private IGatewayManager gatewaymgr;
+        private IWMIConnectionManager cpmgr;
 
         public DisplayConnections( )
         {
             InitializeComponent();
-
-            wmi = Common.NinjectProgram.Kernel.Get<WMIInterface>();// new WMIManager();
-            
+                                    
             HistorybindingNavigator.BindingSource = HistorybindingSource;
-            //--------------------------
-            WMIMediumTypeRepo mt_repo = new WMIMediumTypeRepo();
-
-            WMIConnectionRepo wmi_repo = new WMIConnectionRepo();
-            //--------------------------
-            WMIAccountManager wmiacc = new WMIAccountManager(wmi);
+        
+            WMIAccountManager wmiacc = new WMIAccountManager();
             if ((IsAdminAccount = wmiacc.IsAdminAccount()) == true)
                 this.Text += " (Администратор)";
 
@@ -95,12 +92,14 @@ namespace CheckConnection
                                 MessageBoxIcon.Error);
             }
 
-            //Set the parameter
+            //Set the parameter for Ninject
             IParameter parameter = new ConstructorArgument("conn", sqlconn);
 
             connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
             dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);           
             gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
+
+            cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
@@ -132,9 +131,7 @@ namespace CheckConnection
    
         private void BindConnectionGrid()
         {
-            WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
-            wconnmgr.GetNetworkDevicesConfig();
-            List<Connection> connlist = wconnmgr.GetItems();
+            List<Connection> connlist = cpmgr.GetItems();
 
             if (connlist.Count > 0)
             {
@@ -149,37 +146,35 @@ namespace CheckConnection
         {
             base.OnFormClosing(e);
 
-
             if ( (sqlconn!= null)&&
                  (File.Exists(sqlconn.DatabasePath))//&&
                  //(WinObjMethods.HasWritePermission( sqlconn.DatabasePath.Substring(0, sqlconn.DatabasePath.LastIndexOf("\\")) )) 
                )
-            {               
-                ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
-                List<ConnectionParam> connparam = cpmgr.GetItems().Where(p => p.Connection.Ip_Address_v4 != null).ToList();
+            {
+                List<Connection> connparam = cpmgr.GetItems().Where(p => p.Ip_Address_v4 != null).ToList();
 
                 if (connparam.Count > 0)
                 {
-                    foreach (ConnectionParam conn in connparam)
+                    foreach (Connection conn in connparam)
                     {
                         sqlconn.RunInTransaction(() =>
                         {
-                            int ret = connmgr.SaveConnection(conn.Connection);
+                            int ret = connmgr.SaveConnection(conn);
                             if (ret > 0)
                             {
-                                conn.Connection.Id = connmgr.GetLastInsertRowId();
+                                conn.Id = connmgr.GetLastInsertRowId();
 
                                 if (conn.DNS_list != null)
                                 {
                                     foreach (DNS dns in conn.DNS_list)
-                                        dns.Connection_Id = conn.Connection.Id;
+                                        dns.Connection_Id = conn.Id;
                                     dnsmgr.SaveDNSs(conn.DNS_list);
                                 }
 
                                 if (conn.Gateway_list != null)
                                 {
                                     foreach (Gateway gtw in conn.Gateway_list)
-                                        gtw.Connection_Id = conn.Connection.Id;
+                                        gtw.Connection_Id = conn.Id;
                                     gatewaymgr.SaveGateways(conn.Gateway_list);
                                 }
                             }
@@ -360,7 +355,7 @@ namespace CheckConnection
                 if (ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value != null)
                 {
                     string Name = ConnectionsdataGridView.Rows[selectedrow].Cells["Name"].Value.ToString();
-                    var ChangeConnectionForm = new ChangeConnectionForm(wmi, Name);
+                    var ChangeConnectionForm = new ChangeConnectionForm(/*wmi, */Name);
 
                     ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
                     ChangeConnectionForm.ShowDialog();
@@ -377,8 +372,6 @@ namespace CheckConnection
 
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
-            WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
-            wconnmgr.GetNetworkDevicesConfig();
             BindConnectionGrid();
         }
 
@@ -433,13 +426,12 @@ namespace CheckConnection
                 int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
                 string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
 
-                ConnectionParamManager connparammgr = new ConnectionParamManager();
-                ConnectionParam connparam = connparammgr.GetItem(HistorydataGridView);
-                if (connparam != null)
+                Connection conn = cpmgr.GetItem(HistorydataGridView);
+                if (conn != null)
                 {
                     //Прописываем название подключения, для которого изменяются параметы
-                    connparam.Connection.Name = Name;
-                    var ChangeConnectionForm = new ChangeConnectionForm(wmi, connparam);
+                    conn.Name = Name;
+                    var ChangeConnectionForm = new ChangeConnectionForm(/*wmi,*/ conn);
 
                     ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
                     ChangeConnectionForm.Show();
@@ -556,7 +548,8 @@ namespace CheckConnection
             {
                 log.Info("Before toolStripButtonRenewDHCP_Click");
                 string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-                MObject objMO = new MObject(wmi.GetManagementObject(name));
+
+                IMObjectManager objMO = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
                 objMO.RenewDHCPLease();
                 log.Info("Before toolStripButtonRenewDHCP_Click");
             }
@@ -573,15 +566,10 @@ namespace CheckConnection
 
         private void toolStripButtonAnalyze_Click(object sender, EventArgs e)
         {
-            //string RouterDeafultIpAddress = Properties.Settings.Default.RouterDeafultIpAddress;
-            //string ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
-            //string IPGateway = GetSelectedConnectionParam(ConnectionsdataGridView, "IPGateway");
-
-            ConnectionParamManager connparammgr = new ConnectionParamManager();
-            ConnectionParam connparam = connparammgr.GetItem(ConnectionsdataGridView);
-            if (connparam.Connection.Ip_Address_v4 != null)
+            Connection conn = cpmgr.GetItem(ConnectionsdataGridView);
+            if (conn.Ip_Address_v4 != null)
             {
-                AnalyzeForm analyze = new AnalyzeForm(connparam);
+                AnalyzeForm analyze = new AnalyzeForm(conn);
                 analyze.StartPosition = FormStartPosition.CenterScreen;
                 analyze.ShowDialog();
             }
@@ -610,6 +598,19 @@ namespace CheckConnection
                 toolStripButtonRestore.Enabled = false;
                 toolStripButtonRenewDHCP.Enabled = false;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            if (disposing && (sqlconn != null))
+            {
+                sqlconn.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

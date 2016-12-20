@@ -20,7 +20,7 @@ namespace ConnectionWizard
         //int page_index = 0;
         const string FlowPanelName = "FlowPanel";
         private ConnectionWizard.Methods.DBInterface db;
-        private WMIInterface wmi;
+        //private WMIInterface wmi;
         private PingInterface png;
         private int forms_visit_id = 0;
 
@@ -29,7 +29,7 @@ namespace ConnectionWizard
             InitializeComponent();
 
             db = new ConnectionWizard.Methods.DBMethods();
-            wmi = new WMIManager();
+            //wmi = new WMIManager();
             png = new PingMethods();
         }
 
@@ -216,15 +216,11 @@ namespace ConnectionWizard
             {
                 DataGridView dgv = WinObjMethods.GetConnectionGrid();
 
-                WMIConnectionManager wconnmgr = new WMIConnectionManager(wmi);
-                wconnmgr.GetNetworkDevicesConfig();
-
-                ConnectionParamManager cpmgr = new ConnectionParamManager(wmi);
-                   
-                List<ConnectionParam> connlist = cpmgr.GetItems();
+                IWMIConnectionManager wconnmgr = new WMIConnectionManager();
+                List<Connection> connlist = wconnmgr.GetItems();
                 if (connlist.Count > 0)
                 {
-                    var bindsList = new BindingList<ConnectionParam>(connlist);
+                    var bindsList = new BindingList<Connection>(connlist);
                     //Bind BindingList directly to the DataGrid
                     var source = new BindingSource(bindsList, null);
                     dgv.DataSource = source;

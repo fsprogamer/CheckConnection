@@ -5,7 +5,7 @@ using Ninject;
 
 namespace Common
 {
-    public abstract class FormWithLog:Form
+    public class FormWithLog:Form
     {
         protected readonly ILog log;
 

@@ -89,6 +89,7 @@ namespace CheckConnection.Methods
             return dgv;
         }
 
+
         //public static bool HasWritePermission(string dir)
         //{
         //    bool Allow = false;
