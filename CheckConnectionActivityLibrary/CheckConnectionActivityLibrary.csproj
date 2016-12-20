@@ -45,6 +45,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetNetworkAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +53,16 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CheckConnection\CheckConnection.csproj">
+      <Project>{9e74be01-b0c1-419b-b760-a80289104b44}</Project>
+      <Name>CheckConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{2e728e94-a37e-4b82-97d1-e22a51319659}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
