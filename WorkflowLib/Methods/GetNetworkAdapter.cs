@@ -5,7 +5,7 @@ using System.Text;
 using System.Activities;
 using CheckConnection.Methods;
 
-namespace CheckConnectionActivityLibrary
+namespace WorkflowLib
 {
     public sealed class GetNetworkAdapter : NativeActivity<int>
     {

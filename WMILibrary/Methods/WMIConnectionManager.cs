@@ -148,7 +148,11 @@ namespace CheckConnection.Methods
         public Connection GetItem(DataGridView dgv)
         {
             log.Info("before GetItem");
-            int selectedRow = WinObjMethods.GetSelectedRow(dgv);
+
+            int selectedRow = 0;
+            if (dgv.SelectedRows.Count > 0)
+                selectedRow = dgv.SelectedRows[0].Index;
+            
             if (dgv.RowCount > 0)
             {
                 string Name = dgv.Rows[selectedRow].Cells["Name"].Value.ToString();

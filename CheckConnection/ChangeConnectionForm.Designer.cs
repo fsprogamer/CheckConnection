@@ -34,6 +34,10 @@
             this.radioButtonStaticIP = new System.Windows.Forms.RadioButton();
             this.radioButtonDHCP = new System.Windows.Forms.RadioButton();
             this.groupBoxIPAddress = new System.Windows.Forms.GroupBox();
+            this.labelDNSDomain = new System.Windows.Forms.Label();
+            this.textBoxDNSDomain = new System.Windows.Forms.TextBox();
+            this.labelDHCPServer = new System.Windows.Forms.Label();
+            this.DHCPServerControl = new IPAddressControlLib.IPAddressControl();
             this.labelNetMask = new System.Windows.Forms.Label();
             this.DNSControl2 = new IPAddressControlLib.IPAddressControl();
             this.DNSControl1 = new IPAddressControlLib.IPAddressControl();
@@ -45,10 +49,6 @@
             this.GatewayControl1 = new IPAddressControlLib.IPAddressControl();
             this.labelGateway = new System.Windows.Forms.Label();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.labelDHCPServer = new System.Windows.Forms.Label();
-            this.DHCPServerControl = new IPAddressControlLib.IPAddressControl();
-            this.textBoxDNSDomain = new System.Windows.Forms.TextBox();
-            this.labelDNSDomain = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             this.groupBoxIPType.SuspendLayout();
             this.groupBoxIPAddress.SuspendLayout();
@@ -76,6 +76,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonSave.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonSave.Location = new System.Drawing.Point(48, 222);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
@@ -148,6 +149,46 @@
             this.groupBoxIPAddress.TabIndex = 3;
             this.groupBoxIPAddress.TabStop = false;
             this.groupBoxIPAddress.Text = "Параметры подключения";
+            // 
+            // labelDNSDomain
+            // 
+            this.labelDNSDomain.AutoSize = true;
+            this.labelDNSDomain.Location = new System.Drawing.Point(263, 80);
+            this.labelDNSDomain.Name = "labelDNSDomain";
+            this.labelDNSDomain.Size = new System.Drawing.Size(66, 13);
+            this.labelDNSDomain.TabIndex = 17;
+            this.labelDNSDomain.Text = "DNSDomain";
+            // 
+            // textBoxDNSDomain
+            // 
+            this.textBoxDNSDomain.Location = new System.Drawing.Point(263, 96);
+            this.textBoxDNSDomain.Name = "textBoxDNSDomain";
+            this.textBoxDNSDomain.Size = new System.Drawing.Size(123, 20);
+            this.textBoxDNSDomain.TabIndex = 16;
+            // 
+            // labelDHCPServer
+            // 
+            this.labelDHCPServer.AutoSize = true;
+            this.labelDHCPServer.Location = new System.Drawing.Point(260, 20);
+            this.labelDHCPServer.Name = "labelDHCPServer";
+            this.labelDHCPServer.Size = new System.Drawing.Size(76, 13);
+            this.labelDHCPServer.TabIndex = 14;
+            this.labelDHCPServer.Text = "DHCP сервер";
+            // 
+            // DHCPServerControl
+            // 
+            this.DHCPServerControl.AllowInternalTab = false;
+            this.DHCPServerControl.AutoHeight = true;
+            this.DHCPServerControl.BackColor = System.Drawing.SystemColors.Window;
+            this.DHCPServerControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.DHCPServerControl.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.DHCPServerControl.Location = new System.Drawing.Point(263, 36);
+            this.DHCPServerControl.MinimumSize = new System.Drawing.Size(87, 20);
+            this.DHCPServerControl.Name = "DHCPServerControl";
+            this.DHCPServerControl.ReadOnly = false;
+            this.DHCPServerControl.Size = new System.Drawing.Size(87, 20);
+            this.DHCPServerControl.TabIndex = 15;
+            this.DHCPServerControl.Text = "...";
             // 
             // labelNetMask
             // 
@@ -278,6 +319,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Location = new System.Drawing.Point(334, 222);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -285,46 +327,6 @@
             this.buttonCancel.Text = "Закрыть";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
-            // labelDHCPServer
-            // 
-            this.labelDHCPServer.AutoSize = true;
-            this.labelDHCPServer.Location = new System.Drawing.Point(260, 20);
-            this.labelDHCPServer.Name = "labelDHCPServer";
-            this.labelDHCPServer.Size = new System.Drawing.Size(76, 13);
-            this.labelDHCPServer.TabIndex = 14;
-            this.labelDHCPServer.Text = "DHCP сервер";
-            // 
-            // DHCPServerControl
-            // 
-            this.DHCPServerControl.AllowInternalTab = false;
-            this.DHCPServerControl.AutoHeight = true;
-            this.DHCPServerControl.BackColor = System.Drawing.SystemColors.Window;
-            this.DHCPServerControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DHCPServerControl.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.DHCPServerControl.Location = new System.Drawing.Point(263, 36);
-            this.DHCPServerControl.MinimumSize = new System.Drawing.Size(87, 20);
-            this.DHCPServerControl.Name = "DHCPServerControl";
-            this.DHCPServerControl.ReadOnly = false;
-            this.DHCPServerControl.Size = new System.Drawing.Size(87, 20);
-            this.DHCPServerControl.TabIndex = 15;
-            this.DHCPServerControl.Text = "...";
-            // 
-            // textBoxDNSDomain
-            // 
-            this.textBoxDNSDomain.Location = new System.Drawing.Point(263, 96);
-            this.textBoxDNSDomain.Name = "textBoxDNSDomain";
-            this.textBoxDNSDomain.Size = new System.Drawing.Size(123, 20);
-            this.textBoxDNSDomain.TabIndex = 16;
-            // 
-            // labelDNSDomain
-            // 
-            this.labelDNSDomain.AutoSize = true;
-            this.labelDNSDomain.Location = new System.Drawing.Point(263, 80);
-            this.labelDNSDomain.Name = "labelDNSDomain";
-            this.labelDNSDomain.Size = new System.Drawing.Size(66, 13);
-            this.labelDNSDomain.TabIndex = 17;
-            this.labelDNSDomain.Text = "DNSDomain";
             // 
             // ChangeConnectionForm
             // 

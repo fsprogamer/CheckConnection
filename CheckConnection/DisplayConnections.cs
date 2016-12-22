@@ -14,6 +14,9 @@ using CheckConnection.Model;
 using Ninject;
 using Ninject.Parameters;
 using log4net;
+using System.Activities;
+using System.Threading;
+
 
 namespace CheckConnection
 {
@@ -611,6 +614,14 @@ namespace CheckConnection
                 sqlconn.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            //Activity wf = new Workflow.Flowchart.CheckConnection();
+            //IDictionary<string, object> outputs =  WorkflowInvoker.Invoke(wf);
+
+            WorkflowLib.WorkFlowApp.Run();
         }
     }
 }

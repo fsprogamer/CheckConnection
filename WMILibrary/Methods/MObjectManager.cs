@@ -5,7 +5,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    class MObjectManager: ClassWithLog, IMObjectManager
+    public class MObjectManager: ClassWithLog, IMObjectManager
     {
         private ManagementObject _objMO;        
         public MObjectManager(ManagementObject pobjMO)

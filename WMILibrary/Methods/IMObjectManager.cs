@@ -1,6 +1,6 @@
 ﻿namespace CheckConnection.Methods
 {
-    interface IMObjectManager
+    public interface IMObjectManager
     {
         bool IpEnabled
         {

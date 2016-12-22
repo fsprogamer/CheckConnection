@@ -9,7 +9,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    class WMIAccountManager:ClassWithLog
+    public class WMIAccountManager:ClassWithLog
     {                
         public WMIAccountManager()
         {            

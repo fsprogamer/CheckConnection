@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CheckConnectionActivityLibrary")]
+[assembly: AssemblyTitle("WMILibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CheckConnectionActivityLibrary")]
+[assembly: AssemblyProduct("WMILibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,9 +19,8 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d9c04e4c-91f5-4312-9246-4cee2fb1325a")]
+[assembly: Guid("08a38414-6c0d-46cc-8545-dc38fcd78fb1")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -58,18 +58,26 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Management" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Workflow.ComponentModel" />
+    <Reference Include="System.Workflow.Runtime" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyzeForm.cs">
@@ -99,15 +107,12 @@
     <Compile Include="Methods\AnalyzeManager.cs" />
     <Compile Include="Methods\Bindings.cs" />
     <Compile Include="Methods\ConnectionManager.cs" />
-    <Compile Include="Methods\IMObjectManager.cs" />
-    <Compile Include="Methods\IWMIManagementObjectRepo.cs" />
     <Compile Include="Methods\ConnectionRepo.cs" />
     <Compile Include="Methods\DNSManager.cs" />
     <Compile Include="Methods\DNSRepo.cs" />
     <Compile Include="Methods\GatewayManager.cs" />
     <Compile Include="Methods\GatewayRepo.cs" />
     <Compile Include="Methods\GenericNameRepo.cs" />
-    <Compile Include="Methods\GenericWMIRepo.cs" />
     <Compile Include="Methods\IConnectionManager.cs" />
     <Compile Include="Methods\IConnectionRepo.cs" />
     <Compile Include="Methods\IDNSManager.cs" />
@@ -117,30 +122,8 @@
     <Compile Include="Methods\IGenericNameRepo.cs" />
     <Compile Include="Methods\IGenericRepo.cs" />
     <Compile Include="Methods\GenericRepo.cs" />
-    <Compile Include="Methods\IGenericWMIRepo.cs" />
-    <Compile Include="Methods\IWMIMediumTypeManager.cs" />
-    <Compile Include="Methods\IWMIMediumTypeRepo.cs" />
-    <Compile Include="Methods\IWMIConnectionManager.cs" />
-    <Compile Include="Methods\IWMIAccountManager.cs" />
-    <Compile Include="Methods\IWMIConnectionRepo.cs" />
-    <Compile Include="Methods\IWMIManagementObjectManager.cs" />
-    <Compile Include="Methods\WMIManagementObjectManager.cs" />
-    <Compile Include="Methods\WMIMediumTypeManager.cs" />
-    <Compile Include="Methods\WMIMediumTypeRepo.cs" />
     <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
-    <Compile Include="Methods\WMIAccountManager.cs" />
-    <Compile Include="Methods\WMIConnectionManager.cs" />
-    <Compile Include="Methods\WMIManagementObjectRepo.cs" />
-    <Compile Include="Methods\WMIConnectionRepo.cs" />
-    <Compile Include="Model\Account.cs" />
-    <Compile Include="Model\Connection.cs" />
-    <Compile Include="Model\DNS.cs" />
-    <Compile Include="Model\Gateway.cs" />
-    <Compile Include="Model\IEntity.cs" />
-    <Compile Include="Model\INameEntity.cs" />
-    <Compile Include="Model\MediumType.cs" />
-    <Compile Include="Methods\MObjectManager.cs" />
     <Compile Include="Model\PageOffsetList.cs" />
     <Compile Include="Model\PingResult.cs" />
     <Compile Include="Model\Tracert.cs" />
@@ -201,6 +184,14 @@
       <Project>{18ca356f-fb1f-45eb-8d0a-4ce593692bd8}</Project>
       <Name>tracert</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WMILibrary\WMILib.csproj">
+      <Project>{08a38414-6c0d-46cc-8545-dc38fcd78fb1}</Project>
+      <Name>WMILib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkflowLib\WorkflowLib.csproj">
+      <Project>{cb10e8eb-a70f-41f0-b9b3-0bd259dfde82}</Project>
+      <Name>WorkflowLib</Name>
+    </ProjectReference>
     <ProjectReference Include="PingForm\PingForm.csproj">
       <Project>{2c80c7c4-be99-4616-9273-965e191b5d7b}</Project>
       <Name>PingForm</Name>
@@ -221,6 +212,7 @@
   <ItemGroup>
     <Content Include="20gear2.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
