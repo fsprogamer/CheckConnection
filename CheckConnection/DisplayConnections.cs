@@ -133,7 +133,7 @@ namespace CheckConnection
         }       
    
         private void BindConnectionGrid()
-        {
+        {            
             List<Connection> connlist = cpmgr.GetItems();
 
             if (connlist.Count > 0)
@@ -375,6 +375,7 @@ namespace CheckConnection
 
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
+            cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
             BindConnectionGrid();
         }
 
@@ -620,8 +621,19 @@ namespace CheckConnection
         {
             //Activity wf = new Workflow.Flowchart.CheckConnection();
             //IDictionary<string, object> outputs =  WorkflowInvoker.Invoke(wf);
+            //WorkflowLib.WorkFlowApp.Run();
 
-            WorkflowLib.WorkFlowApp.Run();
+            string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+
+            IWMINetworkAdapterManager namgr = new WMINetworkAdapterManager();
+
+            IMObjectManager objMOConnection = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
+
+            IMObjectManager objMONetAdapter = new MObjectManager(new WMINetworkAdapterManager().mo_repo.GetItem(p => p.Properties["Name"].Value.ToString() == name));
+
+            if(!objMOConnection.IpEnabled)
+                objMONetAdapter.EnableAdapter();
+
         }
     }
 }

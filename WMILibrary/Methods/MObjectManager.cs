@@ -15,6 +15,17 @@ namespace CheckConnection.Methods
         public bool IpEnabled { get  { return (bool)_objMO["IPEnabled"]; }                         
                               }
 
+        //public bool Enabled(string conn)
+        //{
+        //    bool ret = false;
+        //    foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+        //    {
+        //        if ((ni.Description == conn) && (ni.OperationalStatus.ToString() == "Up"))
+        //            ret = true;
+        //    }
+        //    return ret;
+        //}
+
         public int setStaticIP(string ip_address, string subnet_mask)
         {
             int ret = 0;
@@ -204,5 +215,38 @@ namespace CheckConnection.Methods
             return ret;
         }
 
+        public int DisableAdapter()
+        {
+            int ret = 0;
+            try
+            {
+                //Disable the Network Adapter 
+                _objMO.InvokeMethod("Disable", null);
+                ret = 1;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Ошибка при изменении отключении адаптера", ex);
+                throw;
+            }
+            return ret;
+        }
+
+        public int EnableAdapter()
+        {
+            int ret = 0;
+            try
+            {
+                //Enable the Network Adapter 
+                _objMO.InvokeMethod("Enable", null);
+                ret = 1;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Ошибка при изменении вкключении адаптера", ex);
+                throw;
+            }
+            return ret;
+        }
     }
 }

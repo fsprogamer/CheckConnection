@@ -32,5 +32,7 @@
         int setDNSDomain(string name);
         int setDNSServerSearchOrder(string[] name);
         int RenewDHCPLease();
+        int EnableAdapter();
+        int DisableAdapter();
     }
 }

@@ -7,7 +7,7 @@
     <ProjectGuid>{08A38414-6C0D-46CC-8545-DC38FCD78FB1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WMILib</RootNamespace>
+    <RootNamespace>CheckConnection</RootNamespace>
     <AssemblyName>WMILib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -56,6 +56,8 @@
     <Compile Include="Methods\IWMIManagementObjectRepo.cs" />
     <Compile Include="Methods\IWMIMediumTypeManager.cs" />
     <Compile Include="Methods\IWMIMediumTypeRepo.cs" />
+    <Compile Include="Methods\IWMINetworkAdapterManager.cs" />
+    <Compile Include="Methods\IWMINetworkAdapterRepo.cs" />
     <Compile Include="Methods\MObjectManager.cs" />
     <Compile Include="Methods\WMIAccountManager.cs" />
     <Compile Include="Methods\WMIConnectionManager.cs" />
@@ -64,6 +66,8 @@
     <Compile Include="Methods\WMIManagementObjectRepo.cs" />
     <Compile Include="Methods\WMIMediumTypeManager.cs" />
     <Compile Include="Methods\WMIMediumTypeRepo.cs" />
+    <Compile Include="Methods\WMINetworkAdapterManager.cs" />
+    <Compile Include="Methods\WMINetworkAdapterRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
