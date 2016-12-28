@@ -13,6 +13,7 @@ namespace CheckConnection.Methods
 
         public ConnectionRepo(SQLiteConnection conn) : base(conn)
         {
+            log.Info("ConnectionRepo costructor");
         }
         public IEnumerable<Connection> GetItemsPage(int Offset = 0, int Pagesize = 0)
         {
@@ -20,7 +21,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    return Context.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
+                    return Context.Query<Connection>(@"select Id,Date,NetConnectionID,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask,NetConnectionStatus,NetEnabled 
                         from (SELECT *,
                         (SELECT COUNT(*)
                         FROM Connection AS t2
@@ -43,7 +44,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    return Context.Query<Connection>(@"select Id,Date,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask 
+                    return Context.Query<Connection>(@"select Id,Date,NetConnectionID,Name,MAC,Ip_Address_v4,Ip_Address_v6,DHCP_Enabled,DHCPServer,DNSDomain,IPSubnetMask,NetConnectionStatus,NetEnabled  
                         from (SELECT *,
                         (SELECT COUNT(*)
                         FROM Connection AS t2

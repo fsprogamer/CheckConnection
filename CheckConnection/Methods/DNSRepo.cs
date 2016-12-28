@@ -14,6 +14,7 @@ namespace CheckConnection.Methods
 
         public DNSRepo(SQLiteConnection conn) : base(conn)
         {
+            log.Info("DNSRepo costructor");
         }
 
         public IEnumerable<DNS> GetDNSsByConnectionId(int ConnectionId)

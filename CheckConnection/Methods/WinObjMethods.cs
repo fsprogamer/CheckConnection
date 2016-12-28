@@ -1,8 +1,6 @@
 ﻿using System.Windows.Forms;
 using CheckConnection.Model;
 using System.Linq;
-using System.IO;
-using System.Security.AccessControl;
 using System.ComponentModel.DataAnnotations;
 
 namespace CheckConnection.Methods

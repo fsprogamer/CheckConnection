@@ -13,8 +13,11 @@ namespace CheckConnection.Model
         [NotNull, Indexed]
         [Display(Name = "Дата и время")]
         public DateTime Date { get; set; }
-        [NotNull, Indexed]
+        [Indexed]
         [Display(Name = "Название подключения")]
+        public string NetConnectionID { get; set; }
+        [NotNull, Indexed]
+        [Display(Name = "Название адаптера")]
         public string Name { get; set; }
         [Display(Name = "MAC адрес")]
         public string MAC { get; set; }
@@ -40,6 +43,10 @@ namespace CheckConnection.Model
         public List<DNS> DNS_list { get; set; }
         [Ignore]
         public List<Gateway> Gateway_list { get; set; }
+        public ushort NetConnectionStatus { get; set; }
+        public bool NetEnabled { get; set; }                
+        [NotNull]
+        public uint Index { get; set; } //связь networkadapter и networkadapterconfiguration
     }
 
 }

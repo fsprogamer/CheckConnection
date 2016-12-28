@@ -136,12 +136,7 @@ namespace CheckConnection.Methods
         public bool IsWireless(Connection conn)
         {
             IWMIMediumTypeManager mtmgr = new WMIMediumTypeManager();
-
-            uint PhysicalMediumType = mtmgr.GetItem(p=>p.Name == conn.Name).NdisPhysicalMediumType;
-            log.InfoFormat("PhysicalMediumType = {0}", PhysicalMediumType);
-            if ((PhysicalMediumType == 1)||(PhysicalMediumType == 9))
-                    return true;
-            return false;
+            return mtmgr.IsWireless(conn.Name);
         }
 
         public List<string> MakeConclusion()

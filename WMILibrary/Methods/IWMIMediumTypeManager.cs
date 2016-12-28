@@ -8,6 +8,6 @@ namespace CheckConnection.Methods
     {
         MediumType GetItem(Func<MediumType, bool> predicate);
 
-        //List<MediumType> GetItems();
+        bool IsWireless(string name);
     }
 }

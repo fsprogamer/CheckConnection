@@ -14,9 +14,6 @@ using CheckConnection.Model;
 using Ninject;
 using Ninject.Parameters;
 using log4net;
-using System.Activities;
-using System.Threading;
-
 
 namespace CheckConnection
 {
@@ -35,12 +32,14 @@ namespace CheckConnection
         private IConnectionManager connmgr;
         private IDNSManager dnsmgr;
         private IGatewayManager gatewaymgr;
-        private IWMIConnectionManager cpmgr;
+        //private IWMIConnectionManager cpmgr;
+        private IWMINetworkAdapterManager namgr;
 
         public DisplayConnections( )
         {
             InitializeComponent();
-                                    
+
+            log.Info("DisplayConnections, before");
             HistorybindingNavigator.BindingSource = HistorybindingSource;
         
             WMIAccountManager wmiacc = new WMIAccountManager();
@@ -98,15 +97,24 @@ namespace CheckConnection
             //Set the parameter for Ninject
             IParameter parameter = new ConstructorArgument("conn", sqlconn);
 
-            connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
-            dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);           
-            gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
+            log.Info("DisplayConnections, before Ninject");
 
-            cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
+            connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
+            log.Info("DisplayConnections, after Ninject IConnectionManager");
+            dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
+            log.Info("DisplayConnections, before Ninject IDNSManager");
+            gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
+            log.Info("DisplayConnections, after Ninject IGatewayManager");
+            log.Info("DisplayConnections, before IWMINetworkAdapterManager");
+            //cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
+            namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
+
+            log.Info("DisplayConnections, after Ninject");
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
         {
+            log.Info("DisplayConnections_Load, before");
             ConnectionsdataGridView.Name = WinObjMethods.ConnGridName;
             WinObjMethods.AddColumn(ref ConnectionsdataGridView);
 
@@ -130,11 +138,12 @@ namespace CheckConnection
             }
 
             FormLoadComplete = true;
+            log.Info("DisplayConnections_Load, after");
         }       
    
         private void BindConnectionGrid()
         {            
-            List<Connection> connlist = cpmgr.GetItems();
+            List<Connection> connlist = namgr.GetItems();
 
             if (connlist.Count > 0)
             {
@@ -154,7 +163,7 @@ namespace CheckConnection
                  //(WinObjMethods.HasWritePermission( sqlconn.DatabasePath.Substring(0, sqlconn.DatabasePath.LastIndexOf("\\")) )) 
                )
             {
-                List<Connection> connparam = cpmgr.GetItems().Where(p => p.Ip_Address_v4 != null).ToList();
+                List<Connection> connparam = namgr.GetItems().Where(p => p.Ip_Address_v4 != null).ToList();
 
                 if (connparam.Count > 0)
                 {
@@ -375,15 +384,16 @@ namespace CheckConnection
 
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
-            cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
+            namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
             BindConnectionGrid();
         }
 
         string GetSelectedConnectionParam(DataGridView dgv, string paramname)
         {
             int selectedrow = WinObjMethods.GetSelectedRow(dgv);
+            log.InfoFormat("WinObjMethods.GetSelectedRow {0},{1}", paramname, selectedrow.ToString());
             string Name = string.Empty;
-            if (ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value != null)
+            if ((ConnectionsdataGridView.RowCount>0) &&(ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value != null))
                 Name = ConnectionsdataGridView.Rows[selectedrow].Cells[paramname].Value.ToString();
             return Name;
         }
@@ -430,7 +440,7 @@ namespace CheckConnection
                 int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
                 string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
 
-                Connection conn = cpmgr.GetItem(HistorydataGridView);
+                Connection conn = namgr.GetItem(HistorydataGridView);
                 if (conn != null)
                 {
                     //Прописываем название подключения, для которого изменяются параметы
@@ -552,9 +562,11 @@ namespace CheckConnection
             {
                 log.Info("Before toolStripButtonRenewDHCP_Click");
                 string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-
-                IMObjectManager objMO = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
-                objMO.RenewDHCPLease();
+                if (!String.IsNullOrEmpty(name))
+                {
+                    IMObjectManager objMO = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
+                    objMO.RenewDHCPLease();
+                }
                 log.Info("Before toolStripButtonRenewDHCP_Click");
             }
         }
@@ -570,7 +582,7 @@ namespace CheckConnection
 
         private void toolStripButtonAnalyze_Click(object sender, EventArgs e)
         {
-            Connection conn = cpmgr.GetItem(ConnectionsdataGridView);
+            Connection conn = namgr.GetItem(ConnectionsdataGridView);
             if (conn.Ip_Address_v4 != null)
             {
                 AnalyzeForm analyze = new AnalyzeForm(conn);
@@ -596,7 +608,8 @@ namespace CheckConnection
             toolStripButtonRenewDHCP.Text = "Обновить" + Environment.NewLine + "ip-адрес";
             toolStripButtonRefresh.Text = "Обновить";
             toolStripButtonAnalyze.Text = "Анализ" + Environment.NewLine + "подключения";
-            if(!IsAdminAccount)
+            toolStripButtonRepair.Text = "Восстановление" + Environment.NewLine + "подключения";
+            if (!IsAdminAccount)
             {
                 toolStripButtonChangeConnection.Enabled = false;
                 toolStripButtonRestore.Enabled = false;
@@ -619,20 +632,24 @@ namespace CheckConnection
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            //Activity wf = new Workflow.Flowchart.CheckConnection();
-            //IDictionary<string, object> outputs =  WorkflowInvoker.Invoke(wf);
-            //WorkflowLib.WorkFlowApp.Run();
+            ///Activity wf = new WorkFlowApp. .Flowchart.CheckConnection();
+            //IDictionary<string, object> outputs = WorkflowInvoker.Invoke(wf);
 
             string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            if (!String.IsNullOrEmpty(name))
+            {
+                WorkflowLib.WorkFlowApp.Run(name);
+            }
+                        
 
-            IWMINetworkAdapterManager namgr = new WMINetworkAdapterManager();
+            //IWMINetworkAdapterManager namgr = new WMINetworkAdapterManager();
 
-            IMObjectManager objMOConnection = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
+            //IMObjectManager objMOConnection = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
 
-            IMObjectManager objMONetAdapter = new MObjectManager(new WMINetworkAdapterManager().mo_repo.GetItem(p => p.Properties["Name"].Value.ToString() == name));
+            //IMObjectManager objMONetAdapter = new MObjectManager(new WMINetworkAdapterManager().mo_repo.GetItem(p => p.Properties["Name"].Value.ToString() == name));
 
-            if(!objMOConnection.IpEnabled)
-                objMONetAdapter.EnableAdapter();
+            //if(!objMOConnection.IpEnabled)
+            //    objMONetAdapter.EnableAdapter();
 
         }
     }

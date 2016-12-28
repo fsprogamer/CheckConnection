@@ -25,9 +25,10 @@ namespace CheckConnection.Methods
             //Create the tables
             try
             {
-                Context.CreateTable<Connection>();
-                Context.CreateTable<DNS>();
-                Context.CreateTable<Gateway>();
+                Context.CreateTable<T>();
+                //Context.CreateTable<DNS>();
+                //Context.CreateTable<Gateway>();
+                log.Info("DB Created.");
             }
             catch (Exception e)
             {

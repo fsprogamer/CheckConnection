@@ -21,5 +21,19 @@ namespace CheckConnection.Methods
             return _repository.GetItem(predicate);
         }
 
+        public bool IsWireless(string name)
+        {
+            try
+            {
+                uint PhysicalMediumType = GetItem(p => p.Name == name).NdisPhysicalMediumType;
+                if ((PhysicalMediumType == 1) || (PhysicalMediumType == 9))
+                    return true;
+            }
+            catch(Exception e)
+            {
+                log.Error("Ошибка чтения PhysicalMediumType: ", e);
+            } 
+            return false;
+        }
     }
 }

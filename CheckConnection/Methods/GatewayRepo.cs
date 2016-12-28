@@ -13,6 +13,7 @@ namespace CheckConnection.Methods
 
         public GatewayRepo(SQLiteConnection conn) : base(conn)
         {
+            log.Info("GatewayRepo costructor");
         }
 
         public IEnumerable<Gateway> GetGatewaysByConnectionId(int ConnectionId)

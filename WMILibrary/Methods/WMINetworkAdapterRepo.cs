@@ -16,43 +16,42 @@ namespace CheckConnection.Methods
             get { return _mo_repo; }
             set { _mo_repo = value; }
         }
-        public WMINetworkAdapterRepo() : base("root\\CIMV2", "SELECT * FROM Win32_NetworkAdapter")
+        public WMINetworkAdapterRepo() : base("root\\CIMV2", "SELECT NetConnectionID, Name, Index, NetConnectionStatus FROM Win32_NetworkAdapter")
         {
             //int Conn_id = 0;
             mo_repo = new WMIManagementObjectRepo(this._scope, this._query);
             Context = new List<NetworkAdapter>(mo_repo.Context.Count);
 
-            foreach (ManagementObject mo in mo_repo.GetItems(m => true))
+            foreach (ManagementObject mo in mo_repo.GetItems())
             {
                 try
                 {
                     NetworkAdapter item = new NetworkAdapter();
 
-                    if (mo["Name"] != null)                    
-                       item.Name = mo["Name"].ToString();                                            
+                    if (mo["name"] != null)                    
+                       item.Name = mo["name"].ToString();                                            
 
                     if (mo["NetConnectionID"] != null)
                         item.NetConnectionID = mo["NetConnectionID"].ToString();
 
                     if (mo["NetConnectionStatus"] != null)
-                        item.NetConnectionID = mo["NetConnectionStatus"].ToString();
+                        item.NetConnectionStatus = (ushort)mo["NetConnectionStatus"];
 
-                    if (mo["NetConnectionStatus"] != null)
-                        item.NetConnectionStatus = (uint)mo["NetConnectionStatus"];
+                    if (mo["Index"] != null)
+                        item.Index = (uint)mo["Index"];
 
-                    if (mo["NetEnabled"] != null)
-                        item.NetEnabled = (bool)mo["NetEnabled"];                    
+                    //if (mo["netenabled"] != null)
+                    //    item.NetEnabled = (bool)mo["netenabled"];
 
-                    if (mo["Status"] != null)
-                        item.Status = mo["Status"].ToString();
-
-                    log.InfoFormat("{0}, IPEnabled={1}", item.Name, item.NetEnabled.ToString());
+                    log.InfoFormat("{0}, NetEnabled={1}", item.Name, item.NetEnabled.ToString());
+                    log.InfoFormat("NetConnectionID={0}, NetConnectionStatus={1}", item.NetConnectionID, item.NetConnectionStatus.ToString());
+                    log.InfoFormat("Index={0}", item.Index.ToString());
 
                     Context.Add(item);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    log.Error("Ошибка чтения значений NetworkAdapter");
+                    log.Error("Ошибка чтения значений NetworkAdapter:"+e.Message);
                 }
 
             }         

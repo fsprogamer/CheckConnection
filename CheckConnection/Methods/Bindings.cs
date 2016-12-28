@@ -9,6 +9,7 @@ namespace CheckConnection.Methods
         public override void Load()
         {            
             Bind<IWMIConnectionManager>().To<WMIConnectionManager>();
+            Bind<IWMINetworkAdapterManager>().To<WMINetworkAdapterManager>();
             Bind<IConnectionManager>().To<ConnectionManager>();
             Bind<IDNSManager>().To<DNSManager>();
             Bind<IGatewayManager>().To<GatewayManager>();

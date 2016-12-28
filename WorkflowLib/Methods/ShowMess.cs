@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
-using CheckConnection.Methods;
+﻿using System.Activities;
+using System.Windows.Forms;
 
 namespace WorkflowLib
 {
-    public sealed class GetNetworkAdapter : CodeActivity
+    public sealed class ShowMess : CodeActivity
     {
         // Define an activity input argument of type string
         public InArgument<string> Text { get; set; }
@@ -19,6 +15,11 @@ namespace WorkflowLib
             // Obtain the runtime value of the Text input argument
             string text = context.GetValue(this.Text);
 
+            ShowMessForm userform = new ShowMessForm(text);
+            if (userform.ShowDialog() == DialogResult.OK)
+            {
+                //this.Result.Set(context, userform.Checked);
+            }
         }
     }
 }

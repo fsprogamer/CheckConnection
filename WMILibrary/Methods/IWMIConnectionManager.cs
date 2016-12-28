@@ -10,10 +10,12 @@ namespace CheckConnection.Methods
     {
         Connection GetItem(Func<Connection, bool> predicate);
 
-        Connection GetItem(DataGridView dgv);
+        //Connection GetItem(DataGridView dgv);
 
         List<Connection> GetItems();
 
-        int SaveItem(Connection conn); 
+        int SaveItem(Connection conn);
+
+        IWMIManagementObjectRepo mo_repo { get; set; }
     }
 }

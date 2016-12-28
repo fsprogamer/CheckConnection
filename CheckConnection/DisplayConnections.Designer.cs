@@ -43,6 +43,7 @@
             this.toolStripButtonRenewDHCP = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAnalyze = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRepair = new System.Windows.Forms.ToolStripButton();
             this.HistorybindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
@@ -55,7 +56,6 @@
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -82,7 +82,7 @@
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
             this.ConnectionsdataGridView.ReadOnly = true;
             this.ConnectionsdataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ConnectionsdataGridView.Size = new System.Drawing.Size(1060, 141);
+            this.ConnectionsdataGridView.Size = new System.Drawing.Size(1107, 141);
             this.ConnectionsdataGridView.TabIndex = 0;
             this.ConnectionsdataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_RowEnter);
             this.ConnectionsdataGridView.SelectionChanged += new System.EventHandler(this.ConnectionsdataGridView_SelectionChanged);
@@ -101,7 +101,7 @@
             this.HistorydataGridView.Name = "HistorydataGridView";
             this.HistorydataGridView.ReadOnly = true;
             this.HistorydataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.HistorydataGridView.Size = new System.Drawing.Size(1060, 205);
+            this.HistorydataGridView.Size = new System.Drawing.Size(1107, 205);
             this.HistorydataGridView.TabIndex = 1;
             // 
             // splitContainer1
@@ -123,7 +123,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.HistorybindingNavigator);
             this.splitContainer1.Panel2.Controls.Add(this.ConnectionHistorylabel);
             this.splitContainer1.Panel2.Controls.Add(this.HistorydataGridView);
-            this.splitContainer1.Size = new System.Drawing.Size(1060, 458);
+            this.splitContainer1.Size = new System.Drawing.Size(1107, 458);
             this.splitContainer1.SplitterDistance = 218;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -139,10 +139,10 @@
             this.toolStripButtonRenewDHCP,
             this.toolStripButtonRefresh,
             this.toolStripButtonAnalyze,
-            this.toolStripButton1});
+            this.toolStripButtonRepair});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1060, 38);
+            this.toolStrip1.Size = new System.Drawing.Size(1107, 38);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -244,6 +244,17 @@
             this.toolStripButtonAnalyze.ToolTipText = "Анализ подключения";
             this.toolStripButtonAnalyze.Click += new System.EventHandler(this.toolStripButtonAnalyze_Click);
             // 
+            // toolStripButtonRepair
+            // 
+            this.toolStripButtonRepair.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRepair.Image")));
+            this.toolStripButtonRepair.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRepair.Name = "toolStripButtonRepair";
+            this.toolStripButtonRepair.Size = new System.Drawing.Size(180, 35);
+            this.toolStripButtonRepair.Text = "Восстановление подключения";
+            this.toolStripButtonRepair.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButtonRepair.ToolTipText = "Восстановление неработающего подключения";
+            this.toolStripButtonRepair.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // HistorybindingNavigator
             // 
             this.HistorybindingNavigator.AddNewItem = null;
@@ -266,7 +277,7 @@
             this.HistorybindingNavigator.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.HistorybindingNavigator.Name = "HistorybindingNavigator";
             this.HistorybindingNavigator.PositionItem = this.bindingNavigatorPositionItem;
-            this.HistorybindingNavigator.Size = new System.Drawing.Size(1060, 25);
+            this.HistorybindingNavigator.Size = new System.Drawing.Size(1107, 25);
             this.HistorybindingNavigator.TabIndex = 3;
             this.HistorybindingNavigator.Text = "HistorybindingNavigator1";
             // 
@@ -352,21 +363,11 @@
             // 
             this.HistorybindingSource.CurrentChanged += new System.EventHandler(this.HistorybindingSource_CurrentChanged);
             // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 20);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
             // DisplayConnections
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 485);
+            this.ClientSize = new System.Drawing.Size(1107, 485);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(40, 40);
@@ -418,6 +419,6 @@
         private System.Windows.Forms.BindingSource HistorybindingSource;
         private System.Windows.Forms.ToolStripButton toolStripButtonRenewDHCP;
         private System.Windows.Forms.ToolStripButton toolStripButtonAnalyze;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRepair;
     }
 }

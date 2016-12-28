@@ -37,7 +37,7 @@ namespace CheckConnection.Methods
                 newIP["SubnetMask"] = new string[] { subnet_mask };
 
                 _objMO.InvokeMethod("EnableStatic", newIP, null);
-                ret = 1;
+                ret = 0;
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении ip-адреса", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }
@@ -86,7 +86,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении ip-адреса", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }
@@ -115,7 +115,7 @@ namespace CheckConnection.Methods
                 catch (Exception ex)
                 {
                     log.ErrorFormat("Ошибка при изменении ip-адреса", ex);
-                    throw;
+                    ret = 0;
                 }
             }
             return ret;
@@ -148,7 +148,7 @@ namespace CheckConnection.Methods
                 catch (Exception ex)
                 {
                     log.ErrorFormat("Ошибка при изменении ip-адреса", ex);
-                    throw;
+                    ret = 0;
                 }
             }
             return ret;
@@ -169,7 +169,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении DNSDomain", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }
@@ -193,7 +193,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении SetDNSServerSearchOrder", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }
@@ -210,7 +210,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении ip-адреса", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }
@@ -227,7 +227,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении отключении адаптера", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }
@@ -244,7 +244,7 @@ namespace CheckConnection.Methods
             catch (Exception ex)
             {
                 log.ErrorFormat("Ошибка при изменении вкключении адаптера", ex);
-                throw;
+                ret = 0;
             }
             return ret;
         }

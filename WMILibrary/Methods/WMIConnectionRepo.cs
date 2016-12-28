@@ -17,7 +17,7 @@ namespace CheckConnection.Methods
             get { return _mo_repo; }
             set { _mo_repo = value; }
         }
-        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT * FROM Win32_NetworkAdapterConfiguration")
+        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer FROM Win32_NetworkAdapterConfiguration")
         {
             int Conn_id = 0;
             mo_repo = new WMIManagementObjectRepo(this._scope, this._query);
@@ -27,12 +27,20 @@ namespace CheckConnection.Methods
             {
                 try
                 {
+                    //Set colDrives = oWMI.ExecQuery(@"ASSOCIATORS OF {Win32_NetworkAdapterConfiguration.DeviceID='"
+                    //    & oPartition.DeviceID & "'} WHERE ResultClass=Win32_NetworkAdapter");
+
                     Connection item = new Connection();
 
                     if (mo["Description"] != null)
                     {
                         item.Name = mo["Description"].ToString();
                         log.InfoFormat("{0}, IPEnabled={1}", item.Name, mo["IPEnabled"].ToString());
+                    }
+
+                    if (mo["Index"] != null)
+                    {
+                        item.Index = (uint)mo["Index"];
                     }
 
                     item.Id = Conn_id;
@@ -114,9 +122,9 @@ namespace CheckConnection.Methods
                     Context.Add(item);
                     Conn_id++;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    log.Error("Ошибка чтения значений Connection");
+                    log.Error("Ошибка чтения значений Connection: ",e);
                 }
 
             }

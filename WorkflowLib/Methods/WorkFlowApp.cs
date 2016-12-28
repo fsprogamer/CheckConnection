@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Activities;
 using System.Threading;
 
-using Common;
 using System.Windows.Forms;
 
 namespace WorkflowLib
 {
     public class WorkFlowApp
     {
-        public static void Run()
+        public static void Run(string adaptername)
         {
 
             AutoResetEvent syncEvent = new AutoResetEvent(false);
             AutoResetEvent idleEvent = new AutoResetEvent(false);
 
-            //var inputs = new Dictionary<string, object>() { { "MaxNumber", 100 } };
+            var inputs = new Dictionary<string, object>() { { "adaptername", adaptername } };
 
             WorkflowApplication wfApp =
-                new WorkflowApplication(new Flowchart.CheckConnection()/*, inputs*/);
+                new WorkflowApplication(new Flowchart.CheckConnection(), inputs);
 
             wfApp.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {

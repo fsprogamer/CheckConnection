@@ -9,38 +9,43 @@ namespace CheckConnection.Methods
     {        
         public WMIMediumTypeRepo() : base("root\\wmi", "SELECT * FROM MSNdis_PhysicalMediumType")
         {
+            log.Info("before WMIManagementObjectRepo");
             WMIManagementObjectRepo mo_repo = new WMIManagementObjectRepo(this._scope, this._query);
+            log.Info("after WMIManagementObjectRepo");
+
+            if(mo_repo.Context != null) { 
             Context = new List<MediumType>(mo_repo.Context.Count);
 
-            foreach (ManagementObject mo in mo_repo.GetItems(m => true))
-            {
-                try
+                foreach (ManagementObject mo in mo_repo.GetItems(m => true))
                 {
-                    MediumType item = new MediumType();
-
-                    if (mo["Active"] != null)
+                    try
                     {
-                        item.Active = mo["Active"].ToString();
-                        log.InfoFormat("Active={0}", mo["Active"].ToString());
-                    }
+                        MediumType item = new MediumType();
 
-                    if (mo["InstanceName"] != null)
+                        if (mo["Active"] != null)
+                        {
+                            item.Active = mo["Active"].ToString();
+                            log.InfoFormat("Active={0}", mo["Active"].ToString());
+                        }
+
+                        if (mo["InstanceName"] != null)
+                        {
+                            item.Name = mo["InstanceName"].ToString();
+                            log.InfoFormat("InstanceName={0}", mo["InstanceName"].ToString());
+                        }
+
+                        if (mo["NdisPhysicalMediumType"] != null)
+                        {
+                            item.NdisPhysicalMediumType = Convert.ToUInt32(mo["NdisPhysicalMediumType"]);
+                            log.InfoFormat("NdisPhysicalMediumType={0}", mo["NdisPhysicalMediumType"].ToString());
+                        }
+
+                        Context.Add(item);
+                    }
+                    catch (Exception)
                     {
-                        item.Name = mo["InstanceName"].ToString();
-                        log.InfoFormat("InstanceName={0}", mo["InstanceName"].ToString());
+                        log.Error("Ошибка чтения значений MSNdis_PhysicalMediumType");
                     }
-
-                    if (mo["NdisPhysicalMediumType"] != null)
-                    {
-                        item.NdisPhysicalMediumType = Convert.ToUInt32(mo["NdisPhysicalMediumType"]);
-                        log.InfoFormat("NdisPhysicalMediumType={0}", mo["NdisPhysicalMediumType"].ToString());
-                    }
-
-                    Context.Add(item);
-                }
-                catch (Exception)
-                {
-                    log.Error("Ошибка чтения значений MSNdis_PhysicalMediumType");
                 }
 
             }

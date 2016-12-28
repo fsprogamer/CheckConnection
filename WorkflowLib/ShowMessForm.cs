@@ -3,29 +3,20 @@ using System.Windows.Forms;
 
 namespace WorkflowLib
 {
-    public partial class MakeChoiceForm : Form
+    public partial class ShowMessForm : Form
     {
-        private string[] /*List<KeyValuePair<int, string>>*/ _valuelist;
-        readonly string FlowPanelName = "FlowPanel";
+        readonly string FlowPanelName   = "FlowPanel";
         readonly string ButtonPanelName = "ButtonPanel";
         readonly string GlobalPanelName = "GlobalPanel";
-        public int Checked = 0;
-        public MakeChoiceForm(string[] /*List<KeyValuePair<int, string>>*/ valuelist)
+        private string _text = String.Empty;
+        public ShowMessForm(string text)
         {
-            _valuelist = valuelist;
+            _text = text;
             InitializeComponent();
-        }
-
-        private void MakeChoiceForm_Load(object sender, EventArgs e)
-        {
-            System.Collections.ArrayList myAL = new System.Collections.ArrayList() { "dddd", "wwww" };
-            this.Controls.Add(FillForm());
         }
 
         private FlowLayoutPanel FillForm()
         {
-            int i = 1;
-
             FlowLayoutPanel globalpanel = new FlowLayoutPanel();
 
             #region Panel                
@@ -36,6 +27,7 @@ namespace WorkflowLib
             globalpanel.Dock = DockStyle.Fill;
             globalpanel.Name = GlobalPanelName;
             #endregion
+            //--------------------------------------------------
 
             FlowLayoutPanel flpanel = new FlowLayoutPanel();
 
@@ -45,19 +37,15 @@ namespace WorkflowLib
             flpanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flpanel.WrapContents = true;
             flpanel.Dock = DockStyle.Fill;
-            flpanel.Name = FlowPanelName;            
+            flpanel.Name = FlowPanelName;
             #endregion
 
-            foreach (/*KeyValuePair<int, string>*/string element in _valuelist)
-            {
-                RadioButton box = new RadioButton();
-                box.Text = /*element.Value*/element;
-                box.AutoSize = true;
-                box.Dock = DockStyle.Fill;
-                box.Tag = i++/*element.Key*/;
-                flpanel.Controls.Add(box);
-            }
-
+            Label Textlabel = new Label();
+            Textlabel.AutoSize = true;            
+            Textlabel.Dock = DockStyle.Fill;
+            Textlabel.Text = _text;
+            flpanel.Controls.Add(Textlabel);
+           
             //-------------------------------------------------
 
             FlowLayoutPanel buttonpanel = new FlowLayoutPanel();
@@ -70,18 +58,16 @@ namespace WorkflowLib
             buttonpanel.Dock = DockStyle.Fill;
             buttonpanel.Name = ButtonPanelName;
             #endregion
-           
 
             Button OkButton = new Button();
-            OkButton.Text = "Подтвердить";   
+            OkButton.Text = "Подтвердить";
             OkButton.DialogResult = DialogResult.OK;
 
             OkButton.AutoSize = true;
-            OkButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;      
+            OkButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             OkButton.Dock = DockStyle.Fill;
 
             buttonpanel.Controls.Add(OkButton);
-            
 
             Button CancelButton = new Button();
             CancelButton.Text = "Отменить";
@@ -89,7 +75,7 @@ namespace WorkflowLib
 
             CancelButton.AutoSize = true;
             CancelButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            CancelButton.Dock = DockStyle.Fill;            
+            CancelButton.Dock = DockStyle.Fill;
 
             buttonpanel.Controls.Add(CancelButton);
 
@@ -99,30 +85,9 @@ namespace WorkflowLib
             return globalpanel;
         }
 
-        private void MakeChoiceForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void ShowMessForm_Load(object sender, EventArgs e)
         {
-            FlowLayoutPanel flpanel = (FlowLayoutPanel)this.Controls[GlobalPanelName].Controls[FlowPanelName];
-            if (flpanel != null)
-            {
-
-                #region Save_results
-                RadioButton rb = new RadioButton();
-                foreach (Control cntrl in flpanel.Controls)
-                {
-                    if (cntrl is RadioButton)
-                    {
-                        rb = (RadioButton)cntrl;
-
-                        if (rb.Checked == true)
-                        {
-                            Checked = Convert.ToInt32(rb.Tag);
-                            break;
-                        }
-                    }
-                }
-                #endregion
-               
-            }
+            this.Controls.Add(FillForm());
         }
     }
 }

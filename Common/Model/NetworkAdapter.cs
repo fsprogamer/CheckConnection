@@ -11,10 +11,12 @@ namespace CheckConnection.Model
         [NotNull]
         public string NetConnectionID { get; set; }
         [NotNull]
-        public uint NetConnectionStatus { get; set; }
+        public ushort NetConnectionStatus { get; set; }
+        [NotNull]
+        public uint Index { get; set; }        
         [NotNull]
         public bool NetEnabled { get; set; }
-        [NotNull]
-        public string Status { get; set; }
+        //[NotNull]
+        //public string Status { get; set; }
     }
 }
