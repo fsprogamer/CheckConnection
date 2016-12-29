@@ -109,7 +109,8 @@ namespace CheckConnection
             //cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
             namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
 
-            log.Info("DisplayConnections, after Ninject");
+
+
         }
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
