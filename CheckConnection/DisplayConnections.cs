@@ -88,7 +88,7 @@ namespace CheckConnection
             catch(Exception e)
             {
                 string CantMakeDir = "Невозможно открыть файл " + Environment.NewLine + conn_string;
-                log.Info(CantMakeDir);
+                log.Error(CantMakeDir,e);
                 MessageBox.Show(CantMakeDir, "Ошибка",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
@@ -134,7 +134,7 @@ namespace CheckConnection
             {
                 HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
                 HistorybindingSource.MoveFirst();
-                BindHistoryGrid(sqlconn);
+                BindHistoryGrid();
             }
 
             FormLoadComplete = true;
@@ -465,11 +465,11 @@ namespace CheckConnection
             if (FormLoadComplete)
             {
                 if ((HistorybindingSource.Current != null)&&((int)HistorybindingSource.Current>0))
-                    BindHistoryGrid(sqlconn);
+                    BindHistoryGrid();
             }
         }
 
-        private void BindHistoryGrid(SQLiteConnection sqlconn)
+        private void BindHistoryGrid()
         {
             //string SelectedConnectionName = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
             //if (!String.IsNullOrEmpty(SelectedConnectionName))
@@ -545,7 +545,7 @@ namespace CheckConnection
             if (FormLoadComplete)
             {
                 if (HistorybindingSource.Current != null) 
-                    BindHistoryGrid(sqlconn);
+                    BindHistoryGrid();
             }
         }
 
@@ -576,7 +576,7 @@ namespace CheckConnection
             if (FormLoadComplete)
             {
                 if (HistorybindingSource.Current != null)
-                    BindHistoryGrid(sqlconn);
+                    BindHistoryGrid();
             }
         }
 

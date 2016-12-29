@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using CheckConnection.Model;
 using System;
 
@@ -54,7 +55,7 @@ namespace CheckConnection.Methods
 
         public int CheckDNS() {
             int ValidatedDNS = 0;            
-            System.Collections.Specialized.StringCollection AkadoDNS = Properties.Settings.Default.AkadoDNS;
+            StringCollection AkadoDNS = Properties.Settings.Default.AkadoDNS;
 
             log.InfoFormat("before CheckDNS, AkadoDNS.Count = {0}", AkadoDNS.Count);
 
@@ -89,41 +90,14 @@ namespace CheckConnection.Methods
             int subnet = -1;
             log.Info("before CheckIP");
             try
-            {
-                System.Collections.Specialized.StringCollection TestNetwork = Properties.Settings.Default.TestNetwork;
-                System.Collections.Specialized.StringCollection WorkingNetwork = Properties.Settings.Default.WorkingNetwork;
+            {                
+                StringCollection iprange = Properties.Settings.Default.WorkingNetwork;
+                if (IsAkadoSubnet(_conn.Ip_Address_v4, iprange) == 1)
+                    subnet = 1;
 
-                string substr = _conn.Ip_Address_v4.Substring(0, _conn.Ip_Address_v4.LastIndexOf('.') );
-                substr = substr.Substring(0, substr.LastIndexOf('.') );
-
-                log.InfoFormat("substr = {0}",substr);
-                if (substr.Substring(0, substr.LastIndexOf('.')) == WorkingNetwork[0].Substring(0, WorkingNetwork[0].LastIndexOf('.')))
-                {
-                    string strpart = substr.Substring(substr.IndexOf('.') + 1 , substr.Length - (substr.IndexOf('.') + 1));
-                    int part = Convert.ToInt32(strpart);
-                    int lowerbound = Convert.ToInt32(WorkingNetwork[0].Substring(WorkingNetwork[0].IndexOf('.') + 1, WorkingNetwork[0].Length - (WorkingNetwork[0].IndexOf('.') + 1)), 10);
-                    int upperbound = Convert.ToInt32(WorkingNetwork[1].Substring(WorkingNetwork[1].IndexOf('.') + 1, WorkingNetwork[1].Length - (WorkingNetwork[1].IndexOf('.') + 1)), 10);
-
-                    log.InfoFormat("part = {0}, lowerbound = {1}, upperbound = {2}", part, lowerbound, upperbound);
-                    if ((part >= lowerbound) && (part <= upperbound))
-                    {
-                        subnet = 1;
-                    }
-                }
-
-                if (substr.Substring(0, substr.LastIndexOf('.')) == TestNetwork[0].Substring(0, TestNetwork[0].LastIndexOf('.')))
-                {
-                    string strpart = substr.Substring(substr.IndexOf('.')+1, substr.Length - (substr.IndexOf('.') + 1));
-                    int part = Convert.ToInt32(strpart);
-                    int lowerbound = Convert.ToInt32(TestNetwork[0].Substring(TestNetwork[0].IndexOf('.') + 1, TestNetwork[0].Length - (TestNetwork[0].IndexOf('.') + 1)), 10);
-                    int upperbound = Convert.ToInt32(TestNetwork[1].Substring(TestNetwork[1].IndexOf('.') + 1, TestNetwork[1].Length - (TestNetwork[0].IndexOf('.') + 1)), 10);
-
-                    log.InfoFormat("part = {0}, lowerbound = {1}, upperbound = {2}", part, lowerbound, upperbound);
-                    if ((part >= lowerbound) && (part <= upperbound))
-                    {
-                        subnet = 0;
-                    }
-                }
+                iprange = Properties.Settings.Default.TestNetwork;
+                if (IsAkadoSubnet(_conn.Ip_Address_v4, iprange) == 1)
+                    subnet = 0;
             }
             catch(Exception ex)
             {
@@ -131,6 +105,29 @@ namespace CheckConnection.Methods
             }
             log.Info("after CheckIP");
             return subnet; 
+        }
+
+        public int IsAkadoSubnet(string ipaddress, StringCollection iprange)
+        {
+            int subnet = 0;
+            string substr = _conn.Ip_Address_v4.Substring(0, _conn.Ip_Address_v4.LastIndexOf('.'));
+            substr = substr.Substring(0, substr.LastIndexOf('.'));
+
+            log.InfoFormat("substr = {0}", substr);
+            if (substr.Substring(0, substr.LastIndexOf('.')) == iprange[0].Substring(0, iprange[0].LastIndexOf('.')))
+            {
+                string strpart = substr.Substring(substr.IndexOf('.') + 1, substr.Length - (substr.IndexOf('.') + 1));
+                int part = Convert.ToInt32(strpart);
+                int lowerbound = Convert.ToInt32(iprange[0].Substring(iprange[0].IndexOf('.') + 1, iprange[0].Length - (iprange[0].IndexOf('.') + 1)), 10);
+                int upperbound = Convert.ToInt32(iprange[1].Substring(iprange[1].IndexOf('.') + 1, iprange[1].Length - (iprange[1].IndexOf('.') + 1)), 10);
+
+                log.InfoFormat("part = {0}, lowerbound = {1}, upperbound = {2}", part, lowerbound, upperbound);
+                if ((part >= lowerbound) && (part <= upperbound))
+                {
+                    subnet = 1;
+                }
+            }
+            return subnet;
         }
 
         public bool IsWireless(Connection conn)

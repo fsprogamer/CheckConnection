@@ -49,6 +49,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenericForm.Designer.cs">
+      <DependentUpon>GenericForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MakeChoiceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GenericForm.resx">
+      <DependentUpon>GenericForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MakeChoiceForm.resx">
       <DependentUpon>MakeChoiceForm.cs</DependentUpon>
     </EmbeddedResource>
