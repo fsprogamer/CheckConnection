@@ -70,7 +70,7 @@ namespace CheckConnection.Methods
             }
             catch (ManagementException e)
             {
-                Console.WriteLine("Failed to run query: " + e.Message);
+                log.Error("Failed to run query: ", e);
                 throw;
             }
 
@@ -85,10 +85,11 @@ namespace CheckConnection.Methods
             try
             {
                 Context.Add((ManagementObject)obj.NewObject);
+                log.InfoFormat("obj.NewObject: " + obj.NewObject["Index"]);
             }
             catch (ManagementException e)
             {
-                Console.WriteLine("Error: " + e.Message);
+                log.Error("Error: ",e);
             }
 
         }
