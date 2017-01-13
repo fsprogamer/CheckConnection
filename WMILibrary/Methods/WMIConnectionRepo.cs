@@ -41,6 +41,7 @@ namespace CheckConnection.Methods
                     if (mo["Index"] != null)
                     {
                         item.Index = (uint)mo["Index"];
+                        log.InfoFormat("Index={0}", mo["Index"].ToString());
                     }
 
                     item.Id = Conn_id;
@@ -128,7 +129,7 @@ namespace CheckConnection.Methods
                 }
 
             }
-            Context = Context.OrderByDescending(p => p.Ip_Address_v4).ToList();
+            Context = Context.OrderByDescending(p => p.NetConnectionID).ToList();
         }
          
     }

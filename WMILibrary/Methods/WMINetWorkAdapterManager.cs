@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Management;
 
 using CheckConnection.Model;
 using Common;
@@ -23,7 +24,7 @@ namespace CheckConnection.Methods
             log.Info("WMIConnectionRepo, before");
             _child_repository = new WMIConnectionRepo();
             log.Info("WMIConnectionRepo, after");
-            log.Info("WMINetworkAdapterManager, aftere");
+            log.Info("WMINetworkAdapterManager, after");
         }
 
         public IWMIManagementObjectRepo mo_repo
@@ -32,10 +33,48 @@ namespace CheckConnection.Methods
             set { mo_repo = value; }
         }
 
-        public NetworkAdapter GetItem(Func<NetworkAdapter, bool> predicate)
+        public IWMIManagementObjectRepo mo_con_repo
         {
-            return _repository.GetItem(predicate);
+            get { return _child_repository.mo_repo; }
+            set { mo_con_repo = value; }
         }
+
+        //public NetworkAdapter GetItem(Func<NetworkAdapter, bool> predicate)
+        //{
+        //    return _repository.GetItem(predicate);
+        //}
+
+        public Connection GetItem(Func<Connection, bool> predicate)
+        {
+            Connection conn = null; 
+            try
+            {
+                conn = _child_repository.GetItem(predicate);
+                NetworkAdapter adapter = _repository.GetItem(p => p.Index == conn.Index);
+                if ((conn != null) && (adapter != null))
+                {
+                    conn.NetConnectionID = adapter.NetConnectionID;
+                    conn.NetConnectionStatus = adapter.NetConnectionStatus;
+                    conn.NetEnabled = adapter.NetEnabled;
+                }
+            }
+            catch(Exception ex)
+            {
+                log.Error("error GetItem",ex);
+            }
+            
+            return conn;
+        }
+
+        //public ManagementObject GetMOItem(Func<ManagementObject, bool> predicate)
+        //{
+        //    return mo_repo.GetItem(predicate);
+        //}
+
+        //public ManagementObject GetConMOItem(Func<ManagementObject, bool> predicate)
+        //{
+        //    return mo_con_repo.GetItem(predicate);
+        //}
 
         public List<Connection> GetItems()
         {
@@ -55,7 +94,28 @@ namespace CheckConnection.Methods
                 }
             }
 
-            return connlist.OrderByDescending(p => p.Ip_Address_v4 != null).ToList();
+            return connlist.OrderByDescending(p => p.NetConnectionID != null).ToList();
+        }
+
+        public List<Connection> GetItems(Func<NetworkAdapter, bool> predicate)
+        {
+            List<Connection> connlist = new List<Connection>();
+            foreach (NetworkAdapter adapter in _repository.GetItems(predicate))
+            {
+                foreach (Connection conn in _child_repository.GetItems())
+                {
+                    if (conn.Index == adapter.Index)
+                    //if (conn.Name == adapter.Name)
+                    {
+                        conn.NetConnectionID = adapter.NetConnectionID;
+                        conn.NetConnectionStatus = adapter.NetConnectionStatus;
+                        conn.NetEnabled = adapter.NetEnabled;
+                        connlist.Add(conn);
+                    }
+                }
+            }
+
+            return connlist.OrderByDescending(p => p.NetConnectionID != null).ToList();
         }
 
         public Connection GetItem(DataGridView dgv)

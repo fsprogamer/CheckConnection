@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Methods\CNICManager.cs" />
+    <Compile Include="Methods\ExtProgrammManager.cs" />
     <Compile Include="Methods\GenericWMIRepo.cs" />
     <Compile Include="Methods\IGenericWMIRepo.cs" />
     <Compile Include="Methods\IMObjectManager.cs" />

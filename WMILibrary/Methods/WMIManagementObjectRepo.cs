@@ -8,30 +8,32 @@ namespace CheckConnection.Methods
     public class WMIManagementObjectRepo : GenericWMIRepo<ManagementObject>, IWMIManagementObjectRepo
     {
         public int ret = 0;
-        //public WMIManagementObjectRepo(string scope, string query) : base(query, scope)
-        //{
-        //    int ret = 0;
-        //    log.Info("before WMIManagementObjectRepo constuctor");
-        //    try
-        //    {
-        //        ManagementObjectSearcher moSearch = new ManagementObjectSearcher(scope, query);
-        //        log.Info("after ManagementObjectSearcher");
+        public WMIManagementObjectRepo(string scope, string query) : base(query, scope)
+        {
+            int ret = 0;
+            log.InfoFormat("before WMIManagementObjectRepo constuctor, {0}", query);
+            try
+            {
+                ManagementObjectSearcher moSearch = new ManagementObjectSearcher(scope, query);
+                log.Info("after ManagementObjectSearcher");
 
-        //        Context = moSearch.Get().Cast<ManagementObject>().ToList();
+                ManagementObjectCollection mo = moSearch.Get();
+                if (mo.Count > 0)
+                    Context = mo.Cast<ManagementObject>().ToList();
+                log.InfoFormat("count: ", mo.Count);
+                //Context = moSearch.Get();
+                if (Context != null)
+                    ret = Context.Count;
+            }
+            catch (Exception e)
+            {
+                log.Error("exception ManagementObjectSearcher ToList()", e);
+            }
 
-        //        //Context = moSearch.Get();
-        //        if (Context != null)
-        //            ret = Context.Count;
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        log.Error("exception ManagementObjectSearcher ToList()", e);
-        //    }            
-            
-        //    log.Info("after WMIManagementObjectRepo constuctor");
-        //}
+            log.Info("after WMIManagementObjectRepo constuctor");
+        }
 
-
+/*
         public WMIManagementObjectRepo(string scope, string query) : base(query, scope)
         {
             log.Info("before WMIManagementObjectRepo constuctor");
@@ -59,8 +61,9 @@ namespace CheckConnection.Methods
                 // Do something else while results
                 // arrive asynchronously.
                 while (!this.Completed)
-                {
-                    System.Threading.Thread.Sleep(300);
+                {                    
+                    System.Threading.Thread.Sleep(100);
+                    log.InfoFormat("100");
                 }
 
                 if (Context != null)
@@ -112,5 +115,6 @@ namespace CheckConnection.Methods
         {
             isCompleted = true;
         }
+        */
     }
 }

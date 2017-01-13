@@ -14,6 +14,8 @@ namespace CheckConnection.Methods
 
         List<Connection> GetItems();
 
+        List<Connection> GetItems(Func<Connection, bool> predicate);
+
         int SaveItem(Connection conn);
 
         IWMIManagementObjectRepo mo_repo { get; set; }

@@ -7,6 +7,7 @@ using System.IO;
 using SQLite;
 using System.Linq;
 using System;
+using System.Management;
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
@@ -129,7 +130,7 @@ namespace CheckConnection
             if (!String.IsNullOrEmpty(name))
             {
                 //Get count
-                rowcnt = connmgr.GetConnectionsAmountByName(name);
+                rowcnt = connmgr.GetConnectionsAmount();// ByName(name);
             }
             if (rowcnt > 0)
             {
@@ -385,8 +386,10 @@ namespace CheckConnection
 
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
             BindConnectionGrid();
+            this.Cursor = Cursors.Default;
         }
 
         string GetSelectedConnectionParam(DataGridView dgv, string paramname)
@@ -637,11 +640,81 @@ namespace CheckConnection
             //IDictionary<string, object> outputs = WorkflowInvoker.Invoke(wf);
 
             string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+
             if (!String.IsNullOrEmpty(name))
             {
                 WorkflowLib.WorkFlowApp.Run(name);
             }
-                        
+
+            //----------------------------------------------------------------------------------------
+            //log.Info("start test");
+            //SelectQuery wmiQuery = new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionId != NULL");
+            //ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(wmiQuery);
+            //foreach (ManagementObject item in searchProcedure.Get())
+            //{
+            //    if (((string)item["NetConnectionId"]).IndexOf("Подключение по локальной сети") != -1)
+            //    {
+            //        log.InfoFormat("find test {0}", (string)item["NetConnectionId"]);
+            //        try
+            //        {
+            //            item.InvokeMethod("Disable", null);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            log.Error("error test", ex);
+            //        }
+            //    }
+            //}
+            //log.Info("end test");
+            //----------------------------------------------------------------------------------------
+            //log.Info("start test");
+            //SelectQuery wmiQuery = new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionId != NULL");
+            //ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(wmiQuery);
+            //foreach (ManagementObject item in searchProcedure.Get())
+            //{
+            //    if (((string)item["NetConnectionId"]).IndexOf("Подключение по локальной сети") != -1)
+            //    {
+            //        log.InfoFormat("find test {0}", (string)item["NetConnectionId"]);
+            //        try
+            //        {
+            //            CNICManager cnic = new CNICManager();
+            //            cnic.DisableConnection((string)item["NetConnectionId"]);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            log.Error("error test", ex);
+            //        }
+            //    }
+            //}
+            //log.Info("end test");
+
+            //----------------------------------------------------------------------------------------            
+            //string interfaceName = GetSelectedConnectionParam(ConnectionsdataGridView, "NetConnectionID");
+            //System.Diagnostics.ProcessStartInfo psi =
+            //    new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" disable");
+            //System.Diagnostics.Process p = new System.Diagnostics.Process();
+            //p.StartInfo = psi;
+            //p.Start();
+            //----------------------------------------------------------------------------------------
+
+            //void Enable(string interfaceName)
+            //{
+            //System.Diagnostics.ProcessStartInfo psi =
+            //       new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" enable");
+            //System.Diagnostics.Process p = new System.Diagnostics.Process();
+            //p.StartInfo = psi;
+            //p.Start();
+            //        }
+
+            //void Disable(string interfaceName)
+            //{
+            //            System.Diagnostics.ProcessStartInfo psi =
+            //                new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" disable");
+            //            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            //            p.StartInfo = psi;
+            //            p.Start();
+            //        }
+
 
             //IWMINetworkAdapterManager namgr = new WMINetworkAdapterManager();
 

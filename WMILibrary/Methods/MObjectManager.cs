@@ -218,10 +218,21 @@ namespace CheckConnection.Methods
         public int DisableAdapter()
         {
             int ret = 0;
+            System.OperatingSystem osInfo = System.Environment.OSVersion;
+
             try
             {
+                log.Info("before DisableAdapter");
                 //Disable the Network Adapter 
-                _objMO.InvokeMethod("Disable", null);
+
+                if ((osInfo.Version.Major <= 5) && (osInfo.Version.Minor <= 1))
+                {
+                    CNICManager cnic = new CNICManager();
+                    cnic.EnableConnection(_objMO.Properties["NetConnectionId"].ToString());
+                }
+                else
+                    _objMO.InvokeMethod("Disable", null);
+                log.Info("after DisableAdapter");
                 ret = 1;
             }
             catch (Exception ex)
@@ -235,15 +246,24 @@ namespace CheckConnection.Methods
         public int EnableAdapter()
         {
             int ret = 0;
+            System.OperatingSystem osInfo = System.Environment.OSVersion;
             try
             {
+                log.Info("before EnableAdapter");
                 //Enable the Network Adapter 
-                _objMO.InvokeMethod("Enable", null);
+                if ((osInfo.Version.Major <= 5) && (osInfo.Version.Minor <= 1))
+                {
+                    CNICManager cnic = new CNICManager();
+                    cnic.EnableConnection(_objMO.Properties["NetConnectionId"].Value.ToString());
+                }
+                else
+                    _objMO.InvokeMethod("Enable", null);
+                log.Info("after EnableAdapter");
                 ret = 1;
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("Ошибка при изменении вкключении адаптера", ex);
+                log.ErrorFormat("Ошибка при изменении включении адаптера", ex);
                 ret = 0;
             }
             return ret;

@@ -16,7 +16,7 @@ namespace CheckConnection.Methods
             get { return _mo_repo; }
             set { _mo_repo = value; }
         }
-        public WMINetworkAdapterRepo() : base("root\\CIMV2", "SELECT NetConnectionID, Name, Index, NetConnectionStatus FROM Win32_NetworkAdapter")
+        public WMINetworkAdapterRepo() : base("root\\CIMV2", "SELECT * FROM Win32_NetworkAdapter") //NetConnectionID, Name, Index, NetConnectionStatus
         {
             //int Conn_id = 0;
             mo_repo = new WMIManagementObjectRepo(this._scope, this._query);

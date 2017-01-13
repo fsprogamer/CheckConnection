@@ -35,5 +35,6 @@ namespace CheckConnection.Methods
             } 
             return false;
         }
+
     }
 }

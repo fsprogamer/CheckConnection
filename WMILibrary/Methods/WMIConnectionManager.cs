@@ -32,6 +32,11 @@ namespace CheckConnection.Methods
             return new List<Connection>(_repository.GetItems());
         }
 
+        public List<Connection> GetItems(Func<Connection, bool> predicate)
+        {
+            return new List<Connection>(_repository.GetItems(predicate));
+        }        
+
         public int SaveItem(Connection conn)
         {
             int ret = 0;
