@@ -7,7 +7,8 @@ using System.IO;
 using SQLite;
 using System.Linq;
 using System;
-using System.Management;
+using System.Threading;
+using System.Threading.Tasks;
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
@@ -15,12 +16,20 @@ using CheckConnection.Model;
 using Ninject;
 using Ninject.Parameters;
 using log4net;
+using System.Runtime.Remoting.Messaging;
 
 namespace CheckConnection
 {
+
+
     public partial class DisplayConnections : Form//WithLog
     {
-        //delegate void SetComboBoxCellType(int iRowIndex);                     
+        //delegate void SetComboBoxCellType(int iRowIndex);
+        delegate IWMINetworkAdapterManager dReadWMIInfo();
+        delegate IConnectionManager dReadConnectionInfo(IParameter parameter);
+        delegate IDNSManager dReadDNSInfo(IParameter parameter);
+        delegate IGatewayManager dReadGatewayInfo(IParameter parameter);
+
         private bool FormLoadComplete = false;
         private bool IsAdminAccount = false;
         const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";
@@ -100,6 +109,33 @@ namespace CheckConnection
 
             log.Info("DisplayConnections, before Ninject");
 
+            log.Info("DisplayConnections, before IWMINetworkAdapterManager");            
+            dReadWMIInfo dwmi = new dReadWMIInfo(ReadWMIInfo);
+            //Invoke our method in another thread
+            IAsyncResult asyncWMI = dwmi.BeginInvoke(new AsyncCallback(WMICallBack), null);
+            log.Info("DisplayConnections, after IWMINetworkAdapterManager");
+
+            #region not used
+            //dReadConnectionInfo dconnection = new dReadConnectionInfo(ReadConnectionInfo);
+            ////Invoke our method in another thread
+            //IAsyncResult asyncConnection = dconnection.BeginInvoke(parameter, new AsyncCallback(ConnectionCallBack), null);
+            //log.Info("DisplayConnections, after Ninject IConnectionManager");
+
+            //dReadDNSInfo ddns = new dReadDNSInfo(ReadDNSInfo);
+            ////Invoke our method in another thread
+            //IAsyncResult asyncDNS = ddns.BeginInvoke(parameter, new AsyncCallback(DNSCallBack), null);
+            //log.Info("DisplayConnections, after Ninject IDNSManager");
+
+            //dReadGatewayInfo dgateway = new dReadGatewayInfo(ReadGatewayInfo);
+            ////Invoke our method in another thread
+            //IAsyncResult asyncGateway = dgateway.BeginInvoke(parameter, new AsyncCallback(GatewayCallBack), null);
+            //log.Info("DisplayConnections, after Ninject IGatewayManager");
+
+            //asyncConnection.AsyncWaitHandle.WaitOne();
+            //asyncGateway.AsyncWaitHandle.WaitOne();
+            //asyncDNS.AsyncWaitHandle.WaitOne();
+            #endregion
+
             connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
             log.Info("DisplayConnections, after Ninject IConnectionManager");
             dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
@@ -107,12 +143,68 @@ namespace CheckConnection
             gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
             log.Info("DisplayConnections, after Ninject IGatewayManager");
             log.Info("DisplayConnections, before IWMINetworkAdapterManager");
-            //cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
-            namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
 
-
+            asyncWMI.AsyncWaitHandle.WaitOne();
 
         }
+
+        void WMICallBack(IAsyncResult async)
+        {
+            AsyncResult ar  = (AsyncResult)async;
+            dReadWMIInfo dwmi = (dReadWMIInfo)ar.AsyncDelegate;
+            namgr = dwmi.EndInvoke(async);
+            log.Info("DisplayConnections, complete IWMINetworkAdapterManager");
+        }
+        //A method to be invoke by the delegate
+        IWMINetworkAdapterManager ReadWMIInfo()
+        {
+            IWMINetworkAdapterManager namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
+            return namgr;
+        }
+
+        #region not used
+        void ConnectionCallBack(IAsyncResult async)
+        {
+            AsyncResult ar = (AsyncResult)async;
+            dReadConnectionInfo dconnection = (dReadConnectionInfo)ar.AsyncDelegate;
+            connmgr = dconnection.EndInvoke(async);
+            log.Info("DisplayConnections, complete IConnectionManager");
+        }
+        //A method to be invoke by the delegate
+        IConnectionManager ReadConnectionInfo(IParameter parameter)
+        {
+            IConnectionManager connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
+            return connmgr;
+        }
+
+        void DNSCallBack(IAsyncResult async)
+        {
+            AsyncResult ar = (AsyncResult)async;
+            dReadDNSInfo ddns = (dReadDNSInfo)ar.AsyncDelegate;
+            dnsmgr = ddns.EndInvoke(async);
+            log.Info("DisplayConnections, complete IDNSManager");
+        }
+        //A method to be invoke by the delegate
+        IDNSManager ReadDNSInfo(IParameter parameter)
+        {
+            IDNSManager dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
+            return dnsmgr;
+        }
+
+        void GatewayCallBack(IAsyncResult async)
+        {
+            AsyncResult ar = (AsyncResult)async;
+            dReadGatewayInfo dgateway = (dReadGatewayInfo)ar.AsyncDelegate;
+            gatewaymgr = dgateway.EndInvoke(async);
+            log.Info("DisplayConnections, complete IGatewayManager");
+        }
+        //A method to be invoke by the delegate
+        IGatewayManager ReadGatewayInfo(IParameter parameter)
+        {
+            IGatewayManager gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
+            return gatewaymgr;
+        }
+        #endregion
 
         private void DisplayConnections_Load(object sender, System.EventArgs e)
         {
@@ -141,8 +233,9 @@ namespace CheckConnection
 
             FormLoadComplete = true;
             log.Info("DisplayConnections_Load, after");
-        }       
-   
+        }
+
+
         private void BindConnectionGrid()
         {            
             List<Connection> connlist = namgr.GetItems();
