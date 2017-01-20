@@ -17,6 +17,6 @@ namespace CheckConnection.Model
         [NotNull]
         public bool NetEnabled { get; set; }
         //[NotNull]
-        //public string Status { get; set; }
+        public string GUID { get; set; }
     }
 }

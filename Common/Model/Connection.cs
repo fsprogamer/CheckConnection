@@ -47,6 +47,7 @@ namespace CheckConnection.Model
         public bool NetEnabled { get; set; }                
         [NotNull]
         public uint Index { get; set; } //связь networkadapter и networkadapterconfiguration
+        public string GUID { get; set; }
     }
 
 }

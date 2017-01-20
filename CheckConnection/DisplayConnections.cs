@@ -7,8 +7,7 @@ using System.IO;
 using SQLite;
 using System.Linq;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+
 
 using CheckConnection.Methods;
 using CheckConnection.Model;
@@ -732,12 +731,14 @@ namespace CheckConnection
             ///Activity wf = new WorkFlowApp. .Flowchart.CheckConnection();
             //IDictionary<string, object> outputs = WorkflowInvoker.Invoke(wf);
 
-            string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            //string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
 
-            if (!String.IsNullOrEmpty(name))
-            {
-                WorkflowLib.WorkFlowApp.Run(name);
-            }
+            string[] log = { "111", "222" };
+
+            RepairForm repair = new RepairForm(log);
+            repair.Show();                
+
+            //WorkflowLib.WorkFlowApp.Run(log);
 
             //----------------------------------------------------------------------------------------
             //log.Info("start test");

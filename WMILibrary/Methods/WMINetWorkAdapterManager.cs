@@ -43,6 +43,13 @@ namespace CheckConnection.Methods
         //{
         //    return _repository.GetItem(predicate);
         //}
+        private void CopyFields(ref Connection conn, ref NetworkAdapter adapter)
+        {
+            conn.NetConnectionID = adapter.NetConnectionID;
+            conn.NetConnectionStatus = adapter.NetConnectionStatus;
+            conn.NetEnabled = adapter.NetEnabled;
+            conn.GUID = adapter.GUID;
+        }
 
         public Connection GetItem(Func<Connection, bool> predicate)
         {
@@ -53,9 +60,7 @@ namespace CheckConnection.Methods
                 NetworkAdapter adapter = _repository.GetItem(p => p.Index == conn.Index);
                 if ((conn != null) && (adapter != null))
                 {
-                    conn.NetConnectionID = adapter.NetConnectionID;
-                    conn.NetConnectionStatus = adapter.NetConnectionStatus;
-                    conn.NetEnabled = adapter.NetEnabled;
+                    CopyFields( ref conn, ref adapter);
                 }
             }
             catch(Exception ex)
@@ -89,6 +94,7 @@ namespace CheckConnection.Methods
                         conn.NetConnectionID = adapter.NetConnectionID;
                         conn.NetConnectionStatus = adapter.NetConnectionStatus;
                         conn.NetEnabled = adapter.NetEnabled;
+                        conn.GUID = adapter.GUID;
                         connlist.Add(conn);
                     }
                 }
@@ -110,6 +116,7 @@ namespace CheckConnection.Methods
                         conn.NetConnectionID = adapter.NetConnectionID;
                         conn.NetConnectionStatus = adapter.NetConnectionStatus;
                         conn.NetEnabled = adapter.NetEnabled;
+                        conn.GUID = adapter.GUID;
                         connlist.Add(conn);
                     }
                 }

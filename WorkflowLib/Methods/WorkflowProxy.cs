@@ -134,5 +134,20 @@ namespace WorkflowLib
         {
            get { return cmgr.GetItems(p => p.NetConnectionID != null).Count; }            
         }
+
     }
+
+    //public class RegestryManagerProxy: RegistryManager<string>
+    //{
+    //    //RegistryManager<string> rmanager;
+    //    //public RegestryManagerProxy(string adapter)
+    //    //{
+    //    //    rmanager = new RegistryManager<string>("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + adapter);
+    //    //}
+
+    //    string GetValue("NameServer")
+    //    {
+    //        return rmanager.GetValue();
+    //    } 
+    //}
 }

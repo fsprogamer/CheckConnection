@@ -4,10 +4,12 @@ using log4net;
 
 namespace WorkflowLib
 {
-    public sealed class ShowMess : CodeActivity
+    public sealed class ShowLog : CodeActivity
     {
         // Define an activity input argument of type string
-        public InArgument<string> Text { get; set; }
+        public InArgument<string> In { get; set; }
+
+        public InOutArgument<string[]> InOut { get; set; }
 
         readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -16,14 +18,16 @@ namespace WorkflowLib
         protected override void Execute(CodeActivityContext context)
         {
             // Obtain the runtime value of the Text input argument
-            string text = context.GetValue(this.Text);
-            log.InfoFormat("Text value: {0}", text);
-            ShowMessForm userform = new ShowMessForm(text);
+            string text = context.GetValue(this.In);
 
-            if (userform.ShowDialog() == DialogResult.OK)
-            {
-            //this.Result.Set(context, userform.Checked);
-            }
+            string[] arrtext = context.GetValue(this.InOut);
+
+            System.Array.Resize(ref arrtext, arrtext.Length + 1);
+            arrtext[arrtext.Length - 1] = "new string";
+
+            context.SetValue(InOut, arrtext);
+            //LogForm logform = new LogForm(text);
+            //logform.ShowDialog();
         }
     }
 }
