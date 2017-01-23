@@ -32,20 +32,20 @@ namespace WorkflowLib
                 this.Result.Set(context, userform.Checked);
             }
 
-            //context.CreateBookmark(name, new BookmarkCallback(OnReadComplete));
+            context.CreateBookmark(name, new BookmarkCallback(OnReadComplete));
         }
 
         // NativeActivity derived activities that do asynchronous operations by calling 
         // one of the CreateBookmark overloads defined on System.Activities.NativeActivityContext 
         // must override the CanInduceIdle property and return true.
-        //protected override bool CanInduceIdle
-        //{
-        //    get { return true; }
-        //}
+        protected override bool CanInduceIdle
+        {
+            get { return true; }
+        }
 
-        //void OnReadComplete(NativeActivityContext context, Bookmark bookmark, object state)
-        //{
-        //    this.Result.Set(context, Convert.ToInt32(state));
-        //}
+        void OnReadComplete(NativeActivityContext context, Bookmark bookmark, object state)
+        {
+            this.Result.Set(context, Convert.ToInt32(state));
+        }
     }
 }

@@ -55,6 +55,15 @@ namespace WorkflowLib
 
             wfApp.Idle = delegate (WorkflowApplicationIdleEventArgs e)
             {
+
+
+                var writers = e.GetInstanceExtensions<StringWriter>();
+                foreach (var writer in writers)
+                {
+                    //string str = writer.ToString();                    
+                    //System.Array.Resize(ref log, log.Length + 1);
+                    //log[log.Length - 1] = writer.ToString(); ;
+                }
                 idleEvent.Set();
             };
 
@@ -79,7 +88,7 @@ namespace WorkflowLib
                 bool validEntry = false;
                 while (!validEntry)
                 {
-                    int Guess;
+                    //int Guess;
                     //if (!Int32.TryParse(Console.ReadLine(), out Guess))
                     //{
                     //    Console.WriteLine("Please enter an integer.");
