@@ -9,9 +9,9 @@ namespace WorkflowLib
         readonly string ButtonPanelName = "ButtonPanel";
         readonly string GlobalPanelName = "GlobalPanel";
 
-        private   FlowLayoutPanel globalpanel = new FlowLayoutPanel();
+        protected FlowLayoutPanel globalpanel = new FlowLayoutPanel();
         protected FlowLayoutPanel flpanel     = new FlowLayoutPanel();
-        private   FlowLayoutPanel buttonpanel = new FlowLayoutPanel();
+        protected FlowLayoutPanel buttonpanel = new FlowLayoutPanel();
 
         public GenericForm()
         {
@@ -28,6 +28,7 @@ namespace WorkflowLib
             globalpanel.WrapContents = true;
             globalpanel.Dock = DockStyle.Fill;
             globalpanel.Name = GlobalPanelName;
+            globalpanel.Anchor = AnchorStyles.None;
             #endregion
 
             //--------------------------------------------------
@@ -39,6 +40,7 @@ namespace WorkflowLib
             flpanel.WrapContents = true;
             flpanel.Dock = DockStyle.Fill;
             flpanel.Name = FlowPanelName;
+            flpanel.Anchor = AnchorStyles.None;
             #endregion
 
             //-------------------------------------------------
@@ -50,6 +52,7 @@ namespace WorkflowLib
             buttonpanel.WrapContents = true;
             buttonpanel.Dock = DockStyle.Fill;
             buttonpanel.Name = ButtonPanelName;
+            buttonpanel.Anchor = AnchorStyles.None;
 
             Button OkButton = new Button();
             OkButton.Text = "Подтвердить";

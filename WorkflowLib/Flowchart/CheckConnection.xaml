@@ -501,7 +501,7 @@
                                                                                               </sap:WorkflowViewStateService.ViewState>
                                                                                             </local:ShowLog>
                                                                                             <FlowStep.Next>
-                                                                                              <FlowDecision x:Name="__ReferenceID16" Condition="[item.Ip_Address_v4 = &quot;192.168.100.11&quot;]" sap:VirtualizedContainerService.HintSize="70,87">
+                                                                                              <FlowDecision x:Name="__ReferenceID16" Condition="[item.Ip_Address_v4 = &quot;10.249.150.32&quot;]" sap:VirtualizedContainerService.HintSize="70,87">
                                                                                                 <sap:WorkflowViewStateService.ViewState>
                                                                                                   <scg3:Dictionary x:TypeArguments="x:String, x:Object">
                                                                                                     <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -578,7 +578,7 @@
                                                                                                                     <av:PointCollection x:Key="ConnectorLocation">260,1841 260,1869.5</av:PointCollection>
                                                                                                                   </scg3:Dictionary>
                                                                                                                 </sap:WorkflowViewStateService.ViewState>
-                                                                                                                <local:ReadInt BookmarkName="UserAnswer" sap:VirtualizedContainerService.HintSize="200,22" Question="[Question]" Result="[Answer]">
+                                                                                                                <local:ReadInt BookmarkName="Show" sap:VirtualizedContainerService.HintSize="200,22" Question="[Question]" Result="[Answer]">
                                                                                                                   <sap:WorkflowViewStateService.ViewState>
                                                                                                                     <scg3:Dictionary x:TypeArguments="x:String, x:Object">
                                                                                                                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -667,14 +667,12 @@
                                                                                                                                 <local:ShowLog BookmarkName="Show" sap:VirtualizedContainerService.HintSize="553,22" Result="[ret]" />
                                                                                                                                 <If Condition="[Answer = 1]" sap:VirtualizedContainerService.HintSize="553,720">
                                                                                                                                   <If.Then>
-                                                                                                                                    <Sequence sap:VirtualizedContainerService.HintSize="264,347">
+                                                                                                                                    <Sequence sap:VirtualizedContainerService.HintSize="264,184">
                                                                                                                                       <sap:WorkflowViewStateService.ViewState>
                                                                                                                                         <scg3:Dictionary x:TypeArguments="x:String, x:Object">
                                                                                                                                           <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                                                                                                                                         </scg3:Dictionary>
                                                                                                                                       </sap:WorkflowViewStateService.ViewState>
-                                                                                                                                      <WriteLine sap:VirtualizedContainerService.HintSize="242,61" Text="Обратитесь в Абонентскую службу." />
-                                                                                                                                      <local:ShowLog BookmarkName="Show" sap:VirtualizedContainerService.HintSize="242,22" Result="[ret]" />
                                                                                                                                       <Assign sap:VirtualizedContainerService.HintSize="242,60">
                                                                                                                                         <Assign.To>
                                                                                                                                           <OutArgument x:TypeArguments="x:Int32">[iret]</OutArgument>
@@ -759,6 +757,7 @@
                                                                                                                                 <scg3:Dictionary x:TypeArguments="x:String, x:Object">
                                                                                                                                   <av:Point x:Key="ShapeLocation">280,2234.5</av:Point>
                                                                                                                                   <av:Size x:Key="ShapeSize">200,51</av:Size>
+                                                                                                                                  <av:PointCollection x:Key="ConnectorLocation">380,2285.5 380,2315.5 72.5,2315.5 72.5,2356.5</av:PointCollection>
                                                                                                                                 </scg3:Dictionary>
                                                                                                                               </sap:WorkflowViewStateService.ViewState>
                                                                                                                               <Sequence sap:VirtualizedContainerService.HintSize="200,51">
@@ -768,9 +767,18 @@
                                                                                                                                     <x:Boolean x:Key="IsPinned">False</x:Boolean>
                                                                                                                                   </scg3:Dictionary>
                                                                                                                                 </sap:WorkflowViewStateService.ViewState>
-                                                                                                                                <WriteLine sap:VirtualizedContainerService.HintSize="211,61" Text="Обратитесь в Абонентскую службу." />
-                                                                                                                                <local:ShowLog BookmarkName="Show" sap:VirtualizedContainerService.HintSize="211,22" Result="[ret]" />
+                                                                                                                                <Assign sap:VirtualizedContainerService.HintSize="242,60">
+                                                                                                                                  <Assign.To>
+                                                                                                                                    <OutArgument x:TypeArguments="x:Int32">[iret]</OutArgument>
+                                                                                                                                  </Assign.To>
+                                                                                                                                  <Assign.Value>
+                                                                                                                                    <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                                                                                                                                  </Assign.Value>
+                                                                                                                                </Assign>
                                                                                                                               </Sequence>
+                                                                                                                              <FlowStep.Next>
+                                                                                                                                <x:Reference>__ReferenceID1</x:Reference>
+                                                                                                                              </FlowStep.Next>
                                                                                                                             </FlowStep>
                                                                                                                             <FlowStep x:Key="3" x:Name="__ReferenceID25">
                                                                                                                               <sap:WorkflowViewStateService.ViewState>

@@ -244,19 +244,19 @@
   <data name="toolStripButtonRepair.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKqSURBVEhLrZU9aFRBFIUfIiIiIhJEtkghYiFiJSlEWPeX
-        ZXmIBHaRIBaWIYWFRbBwkVQiIYhIkFQiIYQUW6QK1hYhWAaRkCKIBBGLYCFBgn7n7Z3nvJ/NipsLh3kz
-        99xzZ+78vOB/rVarXS0Wi6ete7SG8EilUnlarVa/gelWq3XCXMObxJh9HeF18Nuwy9h5owxn9Xr9HLOf
-        Az+9BA6PjRZ0Op1jKiNjD0G70WicMddgsyTPCfxlwjEYV9kKlPE47Tj9L8D5Xh66b5qFZmbdIAzDUwS2
-        CfwgAYdyuXzA2FtwESybuEuyj/+KSfw1Mp/EeR/SNrjpJ5Ixdht8kohggiqj9kqripMYxi20Z2S9xmCX
-        dt8IU+kk+MYYf2/+SDAlmu63o0Bmf5bOI7DrOYUZ1ToimZHkDiJbjnNYEto14keiQAYKDCymyWDFvwfi
-        gTeeP5GE9jtYAhPgcuIOqSSQmjiimnoCKltTq7FSLoHECYPjJ9kslUpNk80aQhcgvk4L+P08pJLopM2r
-        /CabNYg6OTpVsYD77gc/ifW3QGiSWbNLt+ALuO9+ECeH9yLe8DzT6YEU3YM+SbQnXaBVax83cnifGaua
-        ZM90CrSx4C7OOZFEzgn+AZ5pxRbqVr/j8yzuVbwabRKDy0CbFhM9so9VMBoFmhGvN2vW4wi6b1P4eu8W
-        R07Pd+QclISVLsaBZjr+8B4YR6V8B28s8VJAuOVEnCit7keXds/5bHwTNCw0MonxvN/Dv41vMj2JyHDq
-        Fif2gHaNWl+iXQAHGvOwzupvWHhsKpt9Zs2e8CcSUBKwA0J7BUb5TqzGeBuZkgwyOyGTCMyA634w4/pZ
-        JZIA1X7WP2VDGWIFZv3VJSDpRzChChhleNMdQnwa4T0wz3fiCB+Z6Vect9n/ZkHwB79mObdLcADGAAAA
-        AElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAK2SURBVEhLrZU9aFRBFIUfIiIiQSSIbJFCxELESlKIsO4v
+        y7JICOwiQSwsQwoLi2DhIqlEQhCREFKJhBBSbGEVrC1CsAwiIUUQCSIWYiFBRL8ze+c57+3brLi5cHgz
+        c889d+bOz4v+1yqVypV8Pn/aukdrCI+WSqXH5XL5C5htNpsnzDW8SYzZVxHeBL8N+4ydM8pwVq1WzzL7
+        BfAjSODx0GhRu90+pjIydh+0arXaiLkGmyV5SuBPE47BuMqWo4zH+U4Wi8VPjHnf80P3TbPQzKwbNRqN
+        UwS2CHwnAY9CofCLsVfgAgnWTNz56B+Ayybx18h8EtJdSLvgRphIxtgt8EEiggmqjNorrSpOYpi00K6R
+        9SqDHWZ3YISZdBI444y/Nb8TTImm+y0XyOzP0HkA9gOnMKdaO5IZSSYQ2fGcw5Lw3SB+1AUykCN4JU0G
+        6+E9EA+8DPyJJGh8pb0KpsClxB1SSSDVcbiaehCkstW1Gtoq5SpInDAlEKy9TanrJttrCJ2HuJQWCPtZ
+        CJMwEZ20RZXfZHsNok6OTlUs4Nv9ECax/g5omGSv2aVbDgV8ux/EyeA9izc8y1jyBCR3D/ok0Z50gFZd
+        h7+VwfvIWNkku6ZToI0Ft3EuiCRyRvB38EQrtlC3euL2Qp7FvYhXo02CtAa0aTExIId4DcZcoBnxerPm
+        A46g+zaDr/tuceT0fDvnoCRMZCUONNPxh3fPOCrlG3jjiZcCwk0v4kUh6X50+H7zPvNvg5qFOpMYz/sd
+        /Lv4ptOTcIZTtzixB3w3qPVFvssqo8YCbLL66xYem8pmzV6zJ/yRBJQE0T2+DXsFxtKrERjbAsmSDDK7
+        H9MIzIFrYTDj+lklkgDVfj48ZUMZYjnK89knYAXvSTylChhleNMdQnxWZUN8kXbiCB+Z6Vectdn/ZlH0
+        B6zFOXXyPqGiAAAAAElFTkSuQmCC
 </value>
   </data>
   <metadata name="HistorybindingNavigator.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

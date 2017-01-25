@@ -29,9 +29,13 @@ namespace WorkflowLib
                 box.Text = /*element.Value*/element;
                 box.AutoSize = true;
                 box.Dock = DockStyle.Fill;
+                if (i == 1)
+                    box.Checked = true;
                 box.Tag = i++/*element.Key*/;
+
                 flpanel.Controls.Add(box);
             }
+            
         }
 
         private void MakeChoiceForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -58,6 +62,18 @@ namespace WorkflowLib
                 #endregion
                
             }
+        }
+
+        private void MakeChoiceForm_SizeChanged(object sender, EventArgs e)
+        {
+            globalpanel.Left = (this.ClientSize.Width - globalpanel.Width) / 2;
+            globalpanel.Top = (this.ClientSize.Height - globalpanel.Height) / 2;
+
+            flpanel.Left = (this.ClientSize.Width - flpanel.Width) / 2;
+            flpanel.Top = (this.ClientSize.Height - flpanel.Height) / 2;
+
+            buttonpanel.Left = (this.ClientSize.Width - buttonpanel.Width) / 2;
+            buttonpanel.Top = (this.ClientSize.Height - buttonpanel.Height) / 2;        
         }
     }
 }

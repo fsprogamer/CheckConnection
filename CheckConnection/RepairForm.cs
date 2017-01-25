@@ -63,8 +63,8 @@ namespace CheckConnection
                 string userinput = e.Outputs["UserAnswer1"].ToString();
 
                 string mess = "Подключения =" + ret + ";Выбор пользователя=" + userinput;
-                MessageBox.Show(mess, "", MessageBoxButtons.OK,
-                                          MessageBoxIcon.Information);
+                //MessageBox.Show(mess, "", MessageBoxButtons.OK,
+                //                          MessageBoxIcon.Information);
 
                 if (e.CompletionState == ActivityInstanceState.Faulted)
                 {

@@ -726,7 +726,8 @@ namespace CheckConnection
             base.Dispose(disposing);
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+     
+        private void toolStripRepairButton_Click(object sender, EventArgs e)
         {
             ///Activity wf = new WorkFlowApp. .Flowchart.CheckConnection();
             //IDictionary<string, object> outputs = WorkflowInvoker.Invoke(wf);
@@ -736,89 +737,90 @@ namespace CheckConnection
             string[] log = { "111", "222" };
 
             RepairForm repair = new RepairForm(log);
-            repair.Show();                
+            repair.Show();
 
             //WorkflowLib.WorkFlowApp.Run(log);
-
-            //----------------------------------------------------------------------------------------
-            //log.Info("start test");
-            //SelectQuery wmiQuery = new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionId != NULL");
-            //ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(wmiQuery);
-            //foreach (ManagementObject item in searchProcedure.Get())
-            //{
-            //    if (((string)item["NetConnectionId"]).IndexOf("Подключение по локальной сети") != -1)
-            //    {
-            //        log.InfoFormat("find test {0}", (string)item["NetConnectionId"]);
-            //        try
-            //        {
-            //            item.InvokeMethod("Disable", null);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            log.Error("error test", ex);
-            //        }
-            //    }
-            //}
-            //log.Info("end test");
-            //----------------------------------------------------------------------------------------
-            //log.Info("start test");
-            //SelectQuery wmiQuery = new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionId != NULL");
-            //ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(wmiQuery);
-            //foreach (ManagementObject item in searchProcedure.Get())
-            //{
-            //    if (((string)item["NetConnectionId"]).IndexOf("Подключение по локальной сети") != -1)
-            //    {
-            //        log.InfoFormat("find test {0}", (string)item["NetConnectionId"]);
-            //        try
-            //        {
-            //            CNICManager cnic = new CNICManager();
-            //            cnic.DisableConnection((string)item["NetConnectionId"]);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            log.Error("error test", ex);
-            //        }
-            //    }
-            //}
-            //log.Info("end test");
-
-            //----------------------------------------------------------------------------------------            
-            //string interfaceName = GetSelectedConnectionParam(ConnectionsdataGridView, "NetConnectionID");
-            //System.Diagnostics.ProcessStartInfo psi =
-            //    new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" disable");
-            //System.Diagnostics.Process p = new System.Diagnostics.Process();
-            //p.StartInfo = psi;
-            //p.Start();
-            //----------------------------------------------------------------------------------------
-
-            //void Enable(string interfaceName)
-            //{
-            //System.Diagnostics.ProcessStartInfo psi =
-            //       new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" enable");
-            //System.Diagnostics.Process p = new System.Diagnostics.Process();
-            //p.StartInfo = psi;
-            //p.Start();
-            //        }
-
-            //void Disable(string interfaceName)
-            //{
-            //            System.Diagnostics.ProcessStartInfo psi =
-            //                new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" disable");
-            //            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            //            p.StartInfo = psi;
-            //            p.Start();
-            //        }
-
-
-            //IWMINetworkAdapterManager namgr = new WMINetworkAdapterManager();
-
-            //IMObjectManager objMOConnection = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
-
-            //IMObjectManager objMONetAdapter = new MObjectManager(new WMINetworkAdapterManager().mo_repo.GetItem(p => p.Properties["Name"].Value.ToString() == name));
-
-            //if(!objMOConnection.IpEnabled)
-            //    objMONetAdapter.EnableAdapter();
-
         }
+
+        #region
+        //----------------------------------------------------------------------------------------
+        //log.Info("start test");
+        //SelectQuery wmiQuery = new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionId != NULL");
+        //ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(wmiQuery);
+        //foreach (ManagementObject item in searchProcedure.Get())
+        //{
+        //    if (((string)item["NetConnectionId"]).IndexOf("Подключение по локальной сети") != -1)
+        //    {
+        //        log.InfoFormat("find test {0}", (string)item["NetConnectionId"]);
+        //        try
+        //        {
+        //            item.InvokeMethod("Disable", null);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            log.Error("error test", ex);
+        //        }
+        //    }
+        //}
+        //log.Info("end test");
+        //----------------------------------------------------------------------------------------
+        //log.Info("start test");
+        //SelectQuery wmiQuery = new SelectQuery("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionId != NULL");
+        //ManagementObjectSearcher searchProcedure = new ManagementObjectSearcher(wmiQuery);
+        //foreach (ManagementObject item in searchProcedure.Get())
+        //{
+        //    if (((string)item["NetConnectionId"]).IndexOf("Подключение по локальной сети") != -1)
+        //    {
+        //        log.InfoFormat("find test {0}", (string)item["NetConnectionId"]);
+        //        try
+        //        {
+        //            CNICManager cnic = new CNICManager();
+        //            cnic.DisableConnection((string)item["NetConnectionId"]);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            log.Error("error test", ex);
+        //        }
+        //    }
+        //}
+        //log.Info("end test");
+
+        //----------------------------------------------------------------------------------------            
+        //string interfaceName = GetSelectedConnectionParam(ConnectionsdataGridView, "NetConnectionID");
+        //System.Diagnostics.ProcessStartInfo psi =
+        //    new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" disable");
+        //System.Diagnostics.Process p = new System.Diagnostics.Process();
+        //p.StartInfo = psi;
+        //p.Start();
+        //----------------------------------------------------------------------------------------
+
+        //void Enable(string interfaceName)
+        //{
+        //System.Diagnostics.ProcessStartInfo psi =
+        //       new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" enable");
+        //System.Diagnostics.Process p = new System.Diagnostics.Process();
+        //p.StartInfo = psi;
+        //p.Start();
+        //        }
+
+        //void Disable(string interfaceName)
+        //{
+        //            System.Diagnostics.ProcessStartInfo psi =
+        //                new System.Diagnostics.ProcessStartInfo("netsh", "interface set interface \"" + interfaceName + "\" disable");
+        //            System.Diagnostics.Process p = new System.Diagnostics.Process();
+        //            p.StartInfo = psi;
+        //            p.Start();
+        //        }
+
+
+        //IWMINetworkAdapterManager namgr = new WMINetworkAdapterManager();
+
+        //IMObjectManager objMOConnection = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
+
+        //IMObjectManager objMONetAdapter = new MObjectManager(new WMINetworkAdapterManager().mo_repo.GetItem(p => p.Properties["Name"].Value.ToString() == name));
+
+        //if(!objMOConnection.IpEnabled)
+        //    objMONetAdapter.EnableAdapter();
+        #endregion
     }
 }

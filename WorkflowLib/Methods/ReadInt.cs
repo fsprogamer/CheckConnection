@@ -24,15 +24,13 @@ namespace WorkflowLib
                     "BookmarkName");
             }
 
-            //ArrayList arr = new ArrayList() { "1", "2"};
-
-             MakeChoiceForm userform = new MakeChoiceForm(question);
+            MakeChoiceForm userform = new MakeChoiceForm(question);
             if (userform.ShowDialog() == DialogResult.OK)
             {
                 this.Result.Set(context, userform.Checked);
             }
 
-            context.CreateBookmark(name, new BookmarkCallback(OnReadComplete));
+            //context.CreateBookmark(name, new BookmarkCallback(OnReadComplete));
         }
 
         // NativeActivity derived activities that do asynchronous operations by calling 
@@ -45,7 +43,7 @@ namespace WorkflowLib
 
         void OnReadComplete(NativeActivityContext context, Bookmark bookmark, object state)
         {
-            this.Result.Set(context, Convert.ToInt32(state));
+            //this.Result.Set(context, Convert.ToInt32(state));
         }
     }
 }

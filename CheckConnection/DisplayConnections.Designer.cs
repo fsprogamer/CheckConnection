@@ -253,7 +253,7 @@
             this.toolStripButtonRepair.Text = "Восстановление подключения";
             this.toolStripButtonRepair.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolStripButtonRepair.ToolTipText = "Восстановление неработающего подключения";
-            this.toolStripButtonRepair.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButtonRepair.Click += new System.EventHandler(this.toolStripRepairButton_Click);
             // 
             // HistorybindingNavigator
             // 

@@ -36,10 +36,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Name = "MakeChoiceForm";
-            this.Text = "MakeChoiceForm";
+            this.Text = "Выберите вариант ответа";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MakeChoiceForm_FormClosing);
             this.Load += new System.EventHandler(this.MakeChoiceForm_Load);
+            this.SizeChanged += new System.EventHandler(this.MakeChoiceForm_SizeChanged);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -7,11 +7,6 @@ namespace WorkflowLib
 {
     public sealed class ShowLog : NativeActivity<string>
     {
-        // Define an activity input argument of type string
-        //public InArgument<string> In { get; set; }
-
-        //public InOutArgument<string[]> InOut { get; set; }
-
         readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         [RequiredArgument]
@@ -28,19 +23,8 @@ namespace WorkflowLib
                 throw new ArgumentException("BookmarkName cannot be an Empty string.",
                     "BookmarkName");
             }
-            // Obtain the runtime value of the Text input argument
-            //string text = context.GetValue(this.In);
 
-            //string[] arrtext = context.GetValue(this.InOut);
-
-            //System.Array.Resize(ref arrtext, arrtext.Length + 1);
-            //arrtext[arrtext.Length - 1] = "new string";
-            //context.SetValue(InOut, arrtext);
-
-            //LogForm logform = new LogForm(text);
-            //logform.ShowDialog();
-
-            context.CreateBookmark(name, new BookmarkCallback(OnReadComplete));
+            context.CreateBookmark(name/*, new BookmarkCallback(OnReadComplete)*/);
         }
         protected override bool CanInduceIdle
         {
