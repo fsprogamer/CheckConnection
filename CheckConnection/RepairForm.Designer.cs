@@ -34,16 +34,20 @@
             // 
             // listBox
             // 
+            this.listBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox.FormattingEnabled = true;
             this.listBox.HorizontalScrollbar = true;
             this.listBox.Location = new System.Drawing.Point(13, 13);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(618, 186);
+            this.listBox.Size = new System.Drawing.Size(639, 225);
             this.listBox.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(281, 228);
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.button1.Location = new System.Drawing.Point(280, 266);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -55,7 +59,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(643, 263);
+            this.ClientSize = new System.Drawing.Size(664, 314);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox);
             this.Name = "RepairForm";

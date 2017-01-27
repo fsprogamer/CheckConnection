@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using WorkflowLib;
 using Common;
 using System.Text;
+using System.Collections.Specialized;
 
 namespace CheckConnection
 {
@@ -14,10 +15,15 @@ namespace CheckConnection
     {
         string[] _text;
         WorkflowApplication wfApp;
+        string[] strArray;         
+
         public RepairForm(string[] text)
         {
             InitializeComponent();
             _text = text;
+            StringCollection AkadoDNS = Properties.Settings.Default.AkadoDNS;            
+            strArray = new string[AkadoDNS.Count];
+            AkadoDNS.CopyTo(strArray, 0);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -34,9 +40,9 @@ namespace CheckConnection
         {
             //WorkflowLib.WorkFlowApp.Run(_text);
 
-            //var inputs = new Dictionary<string, object>() { { "log", log } };
+            var inputs = new Dictionary<string, object>() { { "AkadoDNS", strArray } };
 
-            wfApp = new WorkflowApplication(new WorkflowLib.Flowchart.CheckConnection()/*, inputs*/);
+            wfApp = new WorkflowApplication(new WorkflowLib.Flowchart.CheckConnection(), inputs);
 
             // Configure the instance store, extensions, and 
             // workflow lifecycle handlers.

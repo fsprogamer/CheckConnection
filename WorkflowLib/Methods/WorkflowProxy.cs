@@ -134,20 +134,19 @@ namespace WorkflowLib
         {
            get { return cmgr.GetItems(p => p.NetConnectionID != null).Count; }            
         }
+        
+        //public int setDNSServerSearchOrder(uint index, string[] name)
+        //{
+        //    return GetMOByIndex(index).setDNSServerSearchOrder(name);
+        //}
 
     }
 
-    //public class RegestryManagerProxy: RegistryManager<string>
-    //{
-    //    //RegistryManager<string> rmanager;
-    //    //public RegestryManagerProxy(string adapter)
-    //    //{
-    //    //    rmanager = new RegistryManager<string>("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + adapter);
-    //    //}
-
-    //    string GetValue("NameServer")
-    //    {
-    //        return rmanager.GetValue();
-    //    } 
-    //}
+    public class RegestryDNSManagerProxy : RegistryManager<string>
+    {        
+        public RegestryDNSManagerProxy(string key):base("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + key)
+        {
+            
+        }
+    }
 }
