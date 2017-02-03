@@ -11,7 +11,7 @@ using ConnectionWizard.Model;
 using CheckConnection.Methods;
 using CheckConnection.Model;
 
-using PingForm.Methods;
+using PingLib.Methods;
 
 namespace ConnectionWizard
 {
@@ -21,7 +21,7 @@ namespace ConnectionWizard
         const string FlowPanelName = "FlowPanel";
         private ConnectionWizard.Methods.DBInterface db;
         //private WMIInterface wmi;
-        private PingInterface png;
+        private IPingResultRepo png;
         private int forms_visit_id = 0;
 
         public MainWizard()
@@ -30,7 +30,7 @@ namespace ConnectionWizard
 
             db = new ConnectionWizard.Methods.DBMethods();
             //wmi = new WMIManager();
-            png = new PingMethods();
+            png = new PingResultRepo();
         }
 
         private void MainWizard_Load(object sender, EventArgs e)

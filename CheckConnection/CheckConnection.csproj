@@ -122,11 +122,8 @@
     <Compile Include="Methods\IGenericNameRepo.cs" />
     <Compile Include="Methods\IGenericRepo.cs" />
     <Compile Include="Methods\GenericRepo.cs" />
-    <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Model\PageOffsetList.cs" />
-    <Compile Include="Model\PingResult.cs" />
-    <Compile Include="Model\Tracert.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepairForm.cs">
@@ -183,6 +180,14 @@
     <ProjectReference Include="..\ipaddresscontrollib\VS2015\IPAddressControlLib\IPAddressControlLib.csproj">
       <Project>{A5ED2B33-5644-47C4-BC30-A4840F67FF87}</Project>
       <Name>IPAddressControlLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PingLib\PingLib.csproj">
+      <Project>{5ee4a6af-87e1-4847-958f-50cd4e0a7202}</Project>
+      <Name>PingLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TelnetLib\TelnetLib.csproj">
+      <Project>{03e5bf4d-6bfc-40c7-b76a-9b0e42874eb4}</Project>
+      <Name>TelnetLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TracertForm\TracertForm.csproj">
       <Project>{32b24586-8bb7-44d6-bfa1-8f0c612f69d8}</Project>

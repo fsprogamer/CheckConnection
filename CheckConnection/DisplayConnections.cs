@@ -16,6 +16,7 @@ using Ninject;
 using Ninject.Parameters;
 using log4net;
 using System.Runtime.Remoting.Messaging;
+using PingLib.Model;
 
 namespace CheckConnection
 {

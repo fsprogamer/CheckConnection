@@ -112,6 +112,10 @@
       <Project>{2e728e94-a37e-4b82-97d1-e22a51319659}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PingLib\PingLib.csproj">
+      <Project>{5ee4a6af-87e1-4847-958f-50cd4e0a7202}</Project>
+      <Name>PingLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMILibrary\WMILib.csproj">
       <Project>{08a38414-6c0d-46cc-8545-dc38fcd78fb1}</Project>
       <Name>WMILib</Name>

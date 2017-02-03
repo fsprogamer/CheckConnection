@@ -32,23 +32,26 @@ namespace CheckConnection.Methods
 
                     Connection item = new Connection();
 
-                    if (mo["Description"] != null)
-                    {
-                        item.Name = mo["Description"].ToString();
-                        log.InfoFormat("{0}, IPEnabled={1}", item.Name, mo["IPEnabled"].ToString());
-                    }
-
                     if (mo["Index"] != null)
                     {
                         item.Index = (uint)mo["Index"];
                         log.InfoFormat("Index={0}", mo["Index"].ToString());
                     }
 
+                    if (mo["Description"] != null)
+                    {
+                        item.Name = mo["Description"].ToString();
+                        log.InfoFormat("{0}, IPEnabled={1}", item.Name, mo["IPEnabled"].ToString());
+                    }
+                    
                     item.Id = Conn_id;
                     item.Date = DateTime.Now;
 
                     if (mo["DHCPEnabled"] != null)
+                    {
                         item.DHCP_Enabled = mo["DHCPEnabled"].ToString();
+                        log.InfoFormat("DHCP_Enabled={0}", mo["DHCPEnabled"].ToString());
+                    }
 
                     if (mo["IPAddress"] != null)
                     {

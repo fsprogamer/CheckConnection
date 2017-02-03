@@ -45,8 +45,6 @@
     <Compile Include="MainPingForm.Designer.cs">
       <DependentUpon>MainPingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Methods\PingInterface.cs" />
-    <Compile Include="Methods\PingMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainPingForm.resx">
@@ -76,10 +74,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PingLib\PingLib.csproj">
+      <Project>{5ee4a6af-87e1-4847-958f-50cd4e0a7202}</Project>
+      <Name>PingLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\tracert\tracert.csproj">
       <Project>{18CA356F-FB1F-45EB-8D0A-4CE593692BD8}</Project>
       <Name>tracert</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Methods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

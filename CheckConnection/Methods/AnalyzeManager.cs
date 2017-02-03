@@ -4,6 +4,8 @@ using CheckConnection.Model;
 using System;
 
 using Common;
+using PingLib.Model;
+using PingLib.Methods;
 
 namespace CheckConnection.Methods
 {
@@ -145,7 +147,7 @@ namespace CheckConnection.Methods
             else
                 lst.Add("Проводное подключение.");
 
-            foreach (PingResult png in _pngresult)
+            foreach (PingLib.Model.PingResult png in _pngresult)
             {
                 if(png.StatusCode != "Успешно")
                 {

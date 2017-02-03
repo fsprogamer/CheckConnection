@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Windows.Forms;
 using System.Diagnostics;
-using PingForm.Methods;
+using PingLib.Methods;
 
 namespace PingForm
 {
@@ -29,7 +29,7 @@ namespace PingForm
             }
             try
             {
-                PingMethods pm = new PingMethods();
+                PingResultRepo pm = new PingResultRepo();
                 PingReply reply = pm.GetPing(strHostName);
                 if (reply.Status == IPStatus.Success)
                 {

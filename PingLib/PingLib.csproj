@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{08A38414-6C0D-46CC-8545-DC38FCD78FB1}</ProjectGuid>
+    <ProjectGuid>{5EE4A6AF-87E1-4847-958F-50CD4E0A7202}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CheckConnection</RootNamespace>
-    <AssemblyName>WMILib</AssemblyName>
+    <RootNamespace>PingLib</RootNamespace>
+    <AssemblyName>PingLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -37,45 +37,19 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Runtime.DurableInstancing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Methods\CNICManager.cs" />
-    <Compile Include="Methods\ExtProgrammManager.cs" />
-    <Compile Include="Methods\GenericWMIRepo.cs" />
-    <Compile Include="Methods\IGenericWMIRepo.cs" />
-    <Compile Include="Methods\IMObjectManager.cs" />
-    <Compile Include="Methods\IWMIAccountManager.cs" />
-    <Compile Include="Methods\IWMIConnectionManager.cs" />
-    <Compile Include="Methods\IWMIConnectionRepo.cs" />
-    <Compile Include="Methods\IWMIManagementObjectManager.cs" />
-    <Compile Include="Methods\IWMIManagementObjectRepo.cs" />
-    <Compile Include="Methods\IWMIMediumTypeManager.cs" />
-    <Compile Include="Methods\IWMIMediumTypeRepo.cs" />
-    <Compile Include="Methods\IWMINetworkAdapterManager.cs" />
-    <Compile Include="Methods\IWMINetworkAdapterRepo.cs" />
-    <Compile Include="Methods\IWMIServiceManager.cs" />
-    <Compile Include="Methods\IWMIServiceRepo.cs" />
-    <Compile Include="Methods\MObjectManager.cs" />
-    <Compile Include="Methods\RegistryManager.cs" />
-    <Compile Include="Methods\WMIAccountManager.cs" />
-    <Compile Include="Methods\WMIConnectionManager.cs" />
-    <Compile Include="Methods\WMIConnectionRepo.cs" />
-    <Compile Include="Methods\WMIManagementObjectManager.cs" />
-    <Compile Include="Methods\WMIManagementObjectRepo.cs" />
-    <Compile Include="Methods\WMIMediumTypeManager.cs" />
-    <Compile Include="Methods\WMIMediumTypeRepo.cs" />
-    <Compile Include="Methods\WMINetworkAdapterManager.cs" />
-    <Compile Include="Methods\WMINetworkAdapterRepo.cs" />
-    <Compile Include="Methods\WMIServiceManager.cs" />
-    <Compile Include="Methods\WMIServiceRepo.cs" />
+    <Compile Include="Methods\IPingResultRepo.cs" />
+    <Compile Include="Methods\PingResultRepo.cs" />
+    <Compile Include="Methods\PingResultManager.cs" />
+    <Compile Include="Model\PingResult.cs" />
+    <Compile Include="Model\Tracert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

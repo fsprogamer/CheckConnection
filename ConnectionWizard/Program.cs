@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 using ConnectionWizard.Methods;
 using CheckConnection.Methods;
-using PingForm.Methods;
+using PingLib.Methods;
 using Common;
 using Ninject;
 

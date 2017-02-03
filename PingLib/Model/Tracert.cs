@@ -1,9 +1,9 @@
 ﻿using System;
 using SQLite;
 
-namespace CheckConnection.Model
+namespace PingLib.Model
 {
-   public class PingResult
+   public class Tracert
     {
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }
@@ -14,17 +14,21 @@ namespace CheckConnection.Model
         [NotNull]
         public string Name { get; set; }
         [NotNull]
-        public string Ip_Address { get; set; }
-        [NotNull]
+        public string Ip_Address { get; set; }       
         public string StatusCode { get; set; }
-        [NotNull]
         public string ErrMessage { get; set; }
+
+    }
+
+    public class Hop
+    {
+        [PrimaryKey, AutoIncrement, Unique]
+        public int Id { get; set; }
         [NotNull]
-        public string ResponseTime { get; set; }
-        public PingResult(string strHostAddress)
-        {
-            Date = DateTime.Now;
-            Name = strHostAddress;
-        }
+        public int Tracert_Id { get; set; }
+        [NotNull]
+        public string Host{ get; set; }
+        [NotNull]
+        public int Time { get; set; }
     }
 }

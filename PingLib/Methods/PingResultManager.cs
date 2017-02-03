@@ -2,12 +2,10 @@
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-using PingForm.Methods;
-
-using CheckConnection.Model;
+using PingLib.Model;
 using Common;
 
-namespace CheckConnection.Methods
+namespace PingLib.Methods
 {
     public class PingResultManager: ClassWithLog
     {
@@ -17,7 +15,7 @@ namespace CheckConnection.Methods
 
         public PingResult GetPingResult(string strHostName)
         {
-            PingResult png = new PingResult(strHostName);
+            Model.PingResult png = new Model.PingResult(strHostName);
 
             if (String.IsNullOrEmpty(strHostName))
             {
@@ -25,7 +23,7 @@ namespace CheckConnection.Methods
             }
             try
             {
-                PingMethods pm = new PingMethods();
+                IPingResultRepo pm = new PingResultRepo();
                 PingReply reply = pm.GetPing(strHostName);
 
                 png.StatusCode = (reply.Status.ToString() == "Success" ? "Успешно" : reply.Status.ToString());

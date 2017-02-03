@@ -134,7 +134,7 @@ namespace CheckConnection
             }
             else
             {
-                if (!msg.EndsWith("\r\n"))
+                if (msg.EndsWith("\r\n"))
                 {
                     msg += "\r\n";
                 }

@@ -2,14 +2,14 @@
 using System.Net.NetworkInformation;
 using System.Text;
 
-namespace PingForm.Methods
+namespace PingLib.Methods
 {
-    public class PingMethods:PingInterface
+    public class PingResultRepo:IPingResultRepo
     {
         private Ping pingSender;
         private PingOptions options;
 
-        public PingMethods()
+        public PingResultRepo()
         {
             pingSender = new Ping();
             options = new PingOptions();

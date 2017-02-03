@@ -1,8 +1,8 @@
 ﻿using System.Net.NetworkInformation;
 
-namespace PingForm.Methods
+namespace PingLib.Methods
 {
-    public interface PingInterface
+    public interface IPingResultRepo
     {
         PingReply GetPing(string destination);
     }

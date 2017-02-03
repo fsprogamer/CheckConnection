@@ -116,14 +116,18 @@ namespace WorkflowLib
         {
             return GetMOByName(name).DisableAdapter();
         }
-
+        
         public int RenewDHCPLease(uint index)
         {
             return GetConnectionMOByIndex(index).RenewDHCPLease();
         }
+        public int setDinamicIP(uint index)
+        {
+            return GetConnectionMOByIndex(index).setDinamicIP();
+        }
         public List<Connection> GetItems()
         {
-            return cmgr.GetItems(p => p.NetConnectionID != null);
+            return cmgr.GetItems(p => p.NetConnectionID != null).OrderBy(s=>s.Ip_Address_v4).ToList();
         }
 
         public Connection GetItem(uint Index)
@@ -142,9 +146,52 @@ namespace WorkflowLib
 
     }
 
+    public class WMIServiceManagerProxy : ClassWithLog
+    {
+        IWMIServiceManager cmgr = new WMIServiceManager();
+        public IMObjectManager GetMOByName(string name)
+        {
+            IMObjectManager objMO = null;
+            log.InfoFormat("before GetMOByName, {0}", name);
+            try
+            {
+                objMO = new MObjectManager(cmgr.mo_repo.GetItem(p => p.Properties["Name"].Value.ToString() == name));
+                log.InfoFormat("after GetMOByName, {0}", name);
+            }
+            catch (Exception ex)
+            {
+                log.Error("cmgr.mo_repo.GetItem", ex);
+            }
+
+            return objMO;
+        }
+        public int StartService(string name)
+        {
+            return GetMOByName(name).StartService();
+        }
+
+        public int StopService(string name)
+        {
+            return GetMOByName(name).StopService();
+        }
+
+        public string GetState(string name)
+        {
+            return cmgr.GetItem(p => p.Name == name).State;
+        }
+    }
+    //NameServer = {"","11.11.11.11,22.22.22.22"}
     public class RegestryDNSManagerProxy : RegistryManager<string>
     {        
         public RegestryDNSManagerProxy(string key):base("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + key)
+        {
+            
+        }
+    }
+    //ProxyEnable = {0,1}
+    public class RegestryProxyEnableManagerProxy : RegistryManager<int>
+    {
+        public RegestryProxyEnableManagerProxy() : base("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\" )
         {
             
         }

@@ -215,6 +215,38 @@ namespace CheckConnection.Methods
             return ret;
         }
 
+        public int StartService()
+        {
+            int ret = 0;
+            try
+            {
+                _objMO.InvokeMethod("StartService", null);              
+                ret = 1;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Ошибка при старте сервиса", ex);
+                ret = 0;
+            }
+            return ret;
+        }
+
+        public int StopService()
+        {
+            int ret = 0;
+            try
+            {
+                _objMO.InvokeMethod("StopService", null);
+                ret = 1;
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Ошибка при остановке сервиса", ex);
+                ret = 0;
+            }
+            return ret;
+        }
+
         public int DisableAdapter()
         {
             int ret = 0;

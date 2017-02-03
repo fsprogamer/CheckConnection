@@ -1,0 +1,19 @@
+Get-WmiObject -Namespace "root/CIMV2" -Query "SELECT * FROM Win32_NetworkAdapter"
+
+Get-WmiObject -Namespace "root/CIMV2" -Query "SELECT * FROM Win32_Service where Name "
+
+
+
+Get-WmiObject -Namespace "root/WMI" -Query "SELECT * FROM MSNdis_PhysicalMediumType"
+
+search
+
+Get-WmiObject -Namespace root\wmi -list | Where-Object { $_.Name -match "MSNdis_80211" }
+
+
+Get-WmiObject -Namespace "root/WMI" -Query "SELECT * FROM MSNdis_80211_BSSIList"
+
+Get-WmiObject -Namespace "root/WMI" -Query "SELECT * FROM MSNdis_80211_WLanBssId"
+
+
+Get-WmiObject win32_networkadapter -Filter 'index = 7' | Invoke-WmiMethod -Name Enable

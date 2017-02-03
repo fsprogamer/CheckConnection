@@ -34,5 +34,7 @@
         int RenewDHCPLease();
         int EnableAdapter();
         int DisableAdapter();
+        int StartService();
+        int StopService();
     }
 }
