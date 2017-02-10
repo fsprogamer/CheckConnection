@@ -68,7 +68,9 @@ namespace CheckConnection
             if (result != null)
             {
                 var listViewItem = new ListViewItem(result);
-                if ((result.GetValue(2) != null) && (result.GetValue(2).ToString() == "Успешно"))
+                if ((result.GetValue(2) != null) && 
+                    (result.GetValue(2).ToString() == "Успешно")||(result.GetValue(2).ToString() == "Success")
+                   )
                 {
                     listViewItem.BackColor = System.Drawing.Color.LightGreen;
                 }

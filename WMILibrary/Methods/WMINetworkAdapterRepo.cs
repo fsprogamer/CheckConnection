@@ -40,8 +40,9 @@ namespace CheckConnection.Methods
                     if (mo["Index"] != null)
                         item.Index = (uint)mo["Index"];
 
-                    if (mo["GUID"] != null)
-                        item.GUID = mo["GUID"].ToString();
+                    // В XP GUID нет
+                    //if (mo["GUID"] != null)
+                    //    item.GUID = mo["GUID"].ToString();
 
                     //if (mo["netenabled"] != null)
                     //    item.NetEnabled = (bool)mo["netenabled"];

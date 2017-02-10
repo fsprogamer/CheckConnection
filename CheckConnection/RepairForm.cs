@@ -122,6 +122,10 @@ namespace CheckConnection
         private delegate void UpdateStatusDelegate(string msg);
         public void UpdateStatus(string msg)
         {
+            int i = 0;
+            int ind = 0;
+            string sub_str = null;
+            const int list_width = 90;
             // We may be on a different thread so we need to
             // make this call using BeginInvoke.
             if (InvokeRequired)
@@ -132,11 +136,19 @@ namespace CheckConnection
             {
                 if (!string.IsNullOrEmpty(msg))
                 {
-                    //string[] result = { msg,msg };
-                    //var listViewItem = new ListViewItem(msg);
-                    //this.listView.Items.Insert(0, listViewItem);
-
-                    listBox.Items.Add(msg);
+                    if(msg.IndexOf("\r\n")>0)
+                    {
+                        msg = msg.Substring(0,msg.Length-2);
+                    }
+                    while (msg.Length>0) {
+                        ind = (msg.Length < list_width) ? msg.Length: msg.IndexOf(" ", list_width);
+                        sub_str = msg.Substring(0, ((msg.Length < ind)||(ind<0)) ? msg.Length: ind);
+                        listBox.Items.Add(sub_str);
+                        msg = msg.Substring(sub_str.Length, msg.Length-sub_str.Length);
+                        i++;
+                        sub_str = null;
+                        ind = 0; 
+                    }
                     listBox.Refresh();
 
                 }
@@ -144,9 +156,5 @@ namespace CheckConnection
             }
         }
 
-        private void listView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
