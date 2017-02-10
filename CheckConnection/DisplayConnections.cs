@@ -48,7 +48,7 @@ namespace CheckConnection
         public DisplayConnections( )
         {
             InitializeComponent();
-
+           
             log.Info("DisplayConnections, before");
             HistorybindingNavigator.BindingSource = HistorybindingSource;
         

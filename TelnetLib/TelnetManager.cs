@@ -15,8 +15,9 @@ namespace TelnetLib
 
         public TelnetManager(string hostname, int port) {
             try
-            { 
+            {
                 _tc = new TelnetConnection(hostname, port);
+
             }
             catch(Exception ex)
             {

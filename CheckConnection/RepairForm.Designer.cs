@@ -41,7 +41,7 @@
             this.listBox.HorizontalScrollbar = true;
             this.listBox.Location = new System.Drawing.Point(13, 13);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(639, 433);
+            this.listBox.Size = new System.Drawing.Size(639, 446);
             this.listBox.TabIndex = 0;
             // 
             // button1

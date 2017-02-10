@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Activities;
-using System.Activities.Statements;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using WorkflowLib;
-using Common;
 using System.Text;
 using System.Collections.Specialized;
 
@@ -65,26 +62,26 @@ namespace CheckConnection
 
             wfApp.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {
-                string ret = e.Outputs["ret"].ToString();
-                string userinput = e.Outputs["UserAnswer1"].ToString();
+                //string ret = e.Outputs["ret"].ToString();
+                //string userinput = e.Outputs["UserAnswer1"].ToString();
 
-                string mess = "Подключения =" + ret + ";Выбор пользователя=" + userinput;
+                //string mess = "Подключения =" + ret + ";Выбор пользователя=" + userinput;
                 //MessageBox.Show(mess, "", MessageBoxButtons.OK,
                 //                          MessageBoxIcon.Information);
 
                 if (e.CompletionState == ActivityInstanceState.Faulted)
                 {
-                    UpdateStatus(string.Format("Workflow Terminated. Exception: {0}\r\n{1}",
+                    UpdateStatus(string.Format("Процесс остановлен. Причина: {0}\r\n{1}",
                         e.TerminationException.GetType().FullName,
                         e.TerminationException.Message));
                 }
                 else if (e.CompletionState == ActivityInstanceState.Canceled)
                 {
-                    UpdateStatus("Workflow Canceled.");
+                    UpdateStatus("Процесс прерван.");
                 }
                 else
                 {                    
-                    UpdateStatus(mess);
+                    //UpdateStatus(mess);
                 }
 
                 //syncEvent.Set();
@@ -92,8 +89,7 @@ namespace CheckConnection
 
             wfApp.Aborted = delegate (WorkflowApplicationAbortedEventArgs e)
             {
-                UpdateStatus(string.Format("Workflow Aborted. Exception: {0}\r\n{1}",
-                             e.Reason.GetType().FullName,
+                UpdateStatus(string.Format("Процесс прерван. Причина: {0}",                             
                              e.Reason.Message)
                             );
                 
@@ -102,7 +98,7 @@ namespace CheckConnection
 
             wfApp.OnUnhandledException = delegate (WorkflowApplicationUnhandledExceptionEventArgs e)
             {
-                UpdateStatus(string.Format("Unhandled Exception: {0}\r\n{1}",
+                UpdateStatus(string.Format("Ошибка: {0}\r\n{1}",
                                             e.UnhandledException.GetType().FullName,
                                             e.UnhandledException.Message));
                 return UnhandledExceptionAction.Terminate;
@@ -134,15 +130,23 @@ namespace CheckConnection
             }
             else
             {
-                if (msg.EndsWith("\r\n"))
+                if (!string.IsNullOrEmpty(msg))
                 {
-                    msg += "\r\n";
-                }
-                listBox.Items.Add(msg);
-                listBox.Refresh();
+                    //string[] result = { msg,msg };
+                    //var listViewItem = new ListViewItem(msg);
+                    //this.listView.Items.Insert(0, listViewItem);
 
+                    listBox.Items.Add(msg);
+                    listBox.Refresh();
+
+                }
                 wfApp.ResumeBookmark("Show", "");
             }
+        }
+
+        private void listView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

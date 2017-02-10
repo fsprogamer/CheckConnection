@@ -32,7 +32,11 @@ namespace TelnetLib
 
             public TelnetConnection(string hostname, int port)
             {
-                    tcpSocket = new TcpClient(hostname, port);  
+                tcpSocket = new TcpClient();
+
+                var result = tcpSocket.BeginConnect(hostname, port, null, null);
+                var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+                tcpSocket.EndConnect(result);
             }
 
             public string Login(string Username, string Password, int LoginTimeOutMs)

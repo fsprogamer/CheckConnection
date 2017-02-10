@@ -15,9 +15,14 @@ namespace WorkflowLib
         private new void FillForm()
         {  
             Label Textlabel = new Label();
-            Textlabel.AutoSize = true;            
-            Textlabel.Dock = DockStyle.Fill;
+            //Textlabel.AutoSize = true;            
+            //Textlabel.Dock = DockStyle.Fill;
             Textlabel.Text = _text;
+
+            Textlabel.Width = 250;
+            Textlabel.Height = 100;
+
+
             flpanel.Controls.Add(Textlabel);           
         }
 

@@ -26,7 +26,7 @@ namespace PingLib.Methods
                 IPingResultRepo pm = new PingResultRepo();
                 PingReply reply = pm.GetPing(strHostName);
 
-                png.StatusCode = (reply.Status.ToString() == "Success" ? "Успешно" : reply.Status.ToString());
+                png.StatusCode = GetStatusCode((int)reply.Status); //(reply.Status.ToString() == "Success" ? "Успешно" : reply.Status.ToString());
                 log.InfoFormat("Status : {0}", png.StatusCode );
 
                 if (reply.Status == IPStatus.Success) { 

@@ -31,12 +31,12 @@ namespace WorkflowLib
 
             wfApp.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {
-                string ret = e.Outputs["ret"].ToString();
-                string userinput = e.Outputs["UserAnswer1"].ToString();
+                //string ret = e.Outputs["ret"].ToString();
+                //string userinput = e.Outputs["UserAnswer1"].ToString();
 
-                string mess = "Подключения =" + ret+ ";Выбор пользователя=" + userinput;  
-                MessageBox.Show(mess, "", MessageBoxButtons.OK,
-                                          MessageBoxIcon.Information);
+                //string mess = "Подключения =" + ret+ ";Выбор пользователя=" + userinput;  
+                //MessageBox.Show(mess, "", MessageBoxButtons.OK,
+                //                          MessageBoxIcon.Information);
 
                 syncEvent.Set();
             };

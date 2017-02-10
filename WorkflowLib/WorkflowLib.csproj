@@ -78,6 +78,7 @@
     <Compile Include="Methods\ShowLog.cs" />
     <Compile Include="Methods\ShowMess.cs" />
     <Compile Include="Methods\WorkFlowApp.cs" />
+    <Compile Include="Methods\WorkFlowException.cs" />
     <Compile Include="Methods\WorkflowProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShowMessForm.cs">
