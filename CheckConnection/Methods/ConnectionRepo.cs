@@ -68,7 +68,7 @@ namespace CheckConnection.Methods
             lock (Locker)
             {
                 try
-                {
+                {                    
                     return Context.ExecuteScalar<int>("SELECT count(*) FROM Connection");
                 }
                 catch (Exception e)

@@ -25,7 +25,8 @@ namespace CheckConnection.Methods
         {
             try
             {
-                uint PhysicalMediumType = GetItem(p => p.Name == name).NdisPhysicalMediumType;
+                log.InfoFormat("p => p.Name == {0}",name);
+                uint PhysicalMediumType = GetItem(p => p.Name.StartsWith(name)).NdisPhysicalMediumType;
                 if ((PhysicalMediumType == 1) || (PhysicalMediumType == 9))
                     return true;
             }

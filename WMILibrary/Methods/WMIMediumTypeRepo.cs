@@ -31,7 +31,7 @@ namespace CheckConnection.Methods
                         if (mo["InstanceName"] != null)
                         {
                             item.Name = mo["InstanceName"].ToString();
-                            log.InfoFormat("InstanceName={0}", mo["InstanceName"].ToString());
+                            log.InfoFormat("Name={0}", mo["InstanceName"].ToString());
                         }
 
                         if (mo["NdisPhysicalMediumType"] != null)
