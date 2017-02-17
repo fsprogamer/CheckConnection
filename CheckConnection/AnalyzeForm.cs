@@ -11,7 +11,7 @@ using log4net;
 
 namespace CheckConnection
 {
-    public partial class AnalyzeForm : Form//WithLog
+    public partial class AnalyzeForm : BaseForm
     {
         private Connection _conn;        
         private AnalyzeManager analyze;
@@ -49,7 +49,14 @@ namespace CheckConnection
         public AnalyzeForm(Connection conn)
         {
             InitializeComponent();
-            _conn = conn;            
+            _conn = conn;
+
+            // Define the border style of the form to a dialog box.
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            // Set the MaximizeBox to false to remove the maximize box.
+            this.MaximizeBox = false;
+            // Set the MinimizeBox to false to remove the minimize box.
+            this.MinimizeBox = false;
         }
 
         private void AnalyzeForm_Load(object sender, EventArgs e)

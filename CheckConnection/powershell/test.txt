@@ -1,5 +1,11 @@
 Get-WmiObject -Namespace "root/CIMV2" -Query "SELECT * FROM Win32_NetworkAdapter"
 
+Get-WmiObject -Namespace "root/CIMV2" -Query "SELECT * FROM Win32_NetworkAdapterConfiguration"
+
+Get-WmiObject -Namespace "root/CIMV2" -Query "SELECT * FROM Win32_NetworkAdapter where not name like
+'%RAS Async Adapter%' and  not name like '%WAN Miniport (IP)%'"
+
+
 Get-WmiObject -Namespace "root/CIMV2" -Query "SELECT * FROM Win32_Service where Name "
 
 

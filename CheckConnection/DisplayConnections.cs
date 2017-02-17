@@ -8,7 +8,7 @@ using SQLite;
 using System.Linq;
 using System;
 
-
+using Common;
 using CheckConnection.Methods;
 using CheckConnection.Model;
 
@@ -21,8 +21,7 @@ using PingLib.Model;
 namespace CheckConnection
 {
 
-
-    public partial class DisplayConnections : Form//WithLog
+    public partial class DisplayConnections : BaseForm
     {
         //delegate void SetComboBoxCellType(int iRowIndex);
         delegate IWMINetworkAdapterManager dReadWMIInfo();
@@ -307,7 +306,7 @@ namespace CheckConnection
         {
             var PingForm = new PingForm.MainPingForm();
             PingForm.StartPosition=FormStartPosition.CenterScreen;
-            PingForm.Show();
+            PingForm.ShowDialog();
         }
 
         private void TracerttoolStripButton_Click(object sender, System.EventArgs e)
@@ -316,7 +315,7 @@ namespace CheckConnection
 
             var TracertForm = new TracertForm.MainForm();
             TracertForm.StartPosition=FormStartPosition.CenterScreen;
-            TracertForm.Show();
+            TracertForm.ShowDialog();
         }
 
         private void ComparetoolStripButton_Click(object sender, System.EventArgs e)
@@ -391,7 +390,7 @@ namespace CheckConnection
                     CompareConnections compareForm = new CompareConnections();
                     compareForm.StartPosition=FormStartPosition.CenterScreen;
                     compareForm.NewDataTable(ConnectionsdataGridView, HistorydataGridView.Rows[rowIndex]);
-                    compareForm.Show();
+                    compareForm.ShowDialog();
                 }
             }
         }
@@ -545,7 +544,7 @@ namespace CheckConnection
                     var ChangeConnectionForm = new ChangeConnectionForm(/*wmi,*/ conn);
 
                     ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
-                    ChangeConnectionForm.Show();
+                    ChangeConnectionForm.ShowDialog();
                 }
                 else
                 {
@@ -698,10 +697,10 @@ namespace CheckConnection
         {
             PingtoolStripButton.Text = "Ping";
             TracerttoolStripButton.Text = "Tracert";
-            ComparetoolStripButton.Text = "Сравнить" + Environment.NewLine + "параметры" + Environment.NewLine + "подключения";
+            ComparetoolStripButton.Text = "Сравнить" + Environment.NewLine + "параметры" /*+ Environment.NewLine + "подключения"*/;
             ViewComparetoolStripButton.Text = "Табличное" + Environment.NewLine + "сравнение";
-            toolStripButtonChangeConnection.Text = "Изменить"+ Environment.NewLine + "параметры"+ Environment.NewLine + "подключения";
-            toolStripButtonRestore.Text = "Восстановить" + Environment.NewLine + "параметры" + Environment.NewLine + "подключения"; ;
+            toolStripButtonChangeConnection.Text = "Изменить"+ Environment.NewLine + "параметры"/*+ Environment.NewLine + "подключения"*/;
+            toolStripButtonRestore.Text = "Восстановить" + Environment.NewLine + "параметры" /*+ Environment.NewLine + "подключения"*/;
             toolStripButtonRenewDHCP.Text = "Обновить" + Environment.NewLine + "ip-адрес";
             toolStripButtonRefresh.Text = "Обновить";
             toolStripButtonAnalyze.Text = "Анализ" + Environment.NewLine + "подключения";
@@ -738,7 +737,7 @@ namespace CheckConnection
             string[] log = { "111", "222" };
 
             RepairForm repair = new RepairForm(log);
-            repair.Show();
+            repair.ShowDialog();
 
             //WorkflowLib.WorkFlowApp.Run(log);
         }

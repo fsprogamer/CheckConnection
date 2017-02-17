@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using CheckConnection.Methods;
+
+using Common;
 
 namespace CheckConnection
 {
-    public partial class CompareConnections : Form
+    public partial class CompareConnections : BaseForm
     {
         public CompareConnections()
         {
@@ -106,11 +106,13 @@ namespace CheckConnection
 
         private void resultDataGridView_SizeChanged(object sender, EventArgs e)
         {
-            if (resultDataGridView.Columns[1].AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
+            if (resultDataGridView.Columns.Count > 0)
             {
-                resultDataGridView.Columns[1].Width += (resultDataGridView.Width - formSize);
-                formSize = resultDataGridView.Width;
-                
+                if (resultDataGridView.Columns[1].AutoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
+                {
+                    resultDataGridView.Columns[1].Width += (resultDataGridView.Width - formSize);
+                    formSize = resultDataGridView.Width;
+                }
             }
         }
     }

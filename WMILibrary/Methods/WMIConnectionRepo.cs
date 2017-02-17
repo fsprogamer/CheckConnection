@@ -19,6 +19,7 @@ namespace CheckConnection.Methods
         }
         public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer FROM Win32_NetworkAdapterConfiguration")
         {
+            //where not Description like '%virtual%' and not Description like '%hamachi%' and not Description like '%1394%' 
             int Conn_id = 0;
             mo_repo = new WMIManagementObjectRepo(this._scope, this._query);
             Context = new List<Connection>(mo_repo.Context.Count);

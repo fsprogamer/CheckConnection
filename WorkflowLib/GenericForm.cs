@@ -1,9 +1,10 @@
-﻿using System;
+﻿
 using System.Windows.Forms;
+using Common;
 
 namespace WorkflowLib
 {
-    public partial class GenericForm : Form
+    public partial class GenericForm : BaseForm
     {
         readonly string FlowPanelName   = "FlowPanel";
         readonly string ButtonPanelName = "ButtonPanel";

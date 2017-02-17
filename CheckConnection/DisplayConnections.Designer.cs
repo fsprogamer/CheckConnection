@@ -77,12 +77,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ConnectionsdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 74);
+            this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 62);
             this.ConnectionsdataGridView.MultiSelect = false;
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
             this.ConnectionsdataGridView.ReadOnly = true;
             this.ConnectionsdataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ConnectionsdataGridView.Size = new System.Drawing.Size(1107, 141);
+            this.ConnectionsdataGridView.Size = new System.Drawing.Size(1107, 153);
             this.ConnectionsdataGridView.TabIndex = 0;
             this.ConnectionsdataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_RowEnter);
             this.ConnectionsdataGridView.SelectionChanged += new System.EventHandler(this.ConnectionsdataGridView_SelectionChanged);
@@ -194,8 +194,8 @@
             this.toolStripButtonChangeConnection.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonChangeConnection.Image")));
             this.toolStripButtonChangeConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonChangeConnection.Name = "toolStripButtonChangeConnection";
-            this.toolStripButtonChangeConnection.Size = new System.Drawing.Size(209, 35);
-            this.toolStripButtonChangeConnection.Text = "Изменить параметры подключения";
+            this.toolStripButtonChangeConnection.Size = new System.Drawing.Size(130, 35);
+            this.toolStripButtonChangeConnection.Text = "Изменить параметры";
             this.toolStripButtonChangeConnection.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolStripButtonChangeConnection.ToolTipText = "Изменить параметры подключения";
             this.toolStripButtonChangeConnection.Click += new System.EventHandler(this.toolStripButtonChangeConnection_Click);
@@ -205,10 +205,10 @@
             this.toolStripButtonRestore.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRestore.Image")));
             this.toolStripButtonRestore.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRestore.Name = "toolStripButtonRestore";
-            this.toolStripButtonRestore.Size = new System.Drawing.Size(230, 35);
-            this.toolStripButtonRestore.Text = "Восстановить параметры подключения";
+            this.toolStripButtonRestore.Size = new System.Drawing.Size(151, 35);
+            this.toolStripButtonRestore.Text = "Восстановить параметры";
             this.toolStripButtonRestore.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolStripButtonRestore.ToolTipText = "Восстановить параметры из истории";
+            this.toolStripButtonRestore.ToolTipText = "Восстановить параметры подключения из истории";
             this.toolStripButtonRestore.Click += new System.EventHandler(this.toolStripButtonRestore_Click);
             // 
             // toolStripButtonRenewDHCP

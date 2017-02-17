@@ -30,6 +30,7 @@
         {
             this.listBox = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.listView = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // listBox
@@ -41,8 +42,9 @@
             this.listBox.HorizontalScrollbar = true;
             this.listBox.Location = new System.Drawing.Point(13, 13);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(639, 446);
+            this.listBox.Size = new System.Drawing.Size(639, 4);
             this.listBox.TabIndex = 0;
+            this.listBox.Visible = false;
             // 
             // button1
             // 
@@ -55,11 +57,25 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // listView
+            // 
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView.GridLines = true;
+            this.listView.Location = new System.Drawing.Point(13, 23);
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(639, 438);
+            this.listView.TabIndex = 2;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
+            // 
             // RepairForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(664, 528);
+            this.Controls.Add(this.listView);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox);
             this.Name = "RepairForm";
@@ -75,5 +91,6 @@
 
         private System.Windows.Forms.ListBox listBox;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListView listView;
     }
 }

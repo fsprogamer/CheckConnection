@@ -18,7 +18,7 @@ namespace CheckConnection.Methods
         }
         public WMINetworkAdapterRepo() : base("root\\CIMV2", "SELECT * FROM Win32_NetworkAdapter") //NetConnectionID, Name, Index, NetConnectionStatus
         {
-            //int Conn_id = 0;
+            //"SELECT * FROM Win32_NetworkAdapter where not name like '%virtual%' and not name like '%hamachi%' and not name like '%1394%'"
             mo_repo = new WMIManagementObjectRepo(this._scope, this._query);
             Context = new List<NetworkAdapter>(mo_repo.Context.Count);
 

@@ -6,13 +6,17 @@ using System.Windows.Forms;
 using System.Text;
 using System.Collections.Specialized;
 
+using Common;
+using log4net;
+
 namespace CheckConnection
 {
-    public partial class RepairForm : Form
+    public partial class RepairForm : BaseForm
     {
         string[] _text;
         WorkflowApplication wfApp;
-        string[] strArray;         
+        string[] strArray;
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public RepairForm(string[] text)
         {
@@ -21,6 +25,16 @@ namespace CheckConnection
             StringCollection AkadoDNS = Properties.Settings.Default.AkadoDNS;            
             strArray = new string[AkadoDNS.Count];
             AkadoDNS.CopyTo(strArray, 0);
+
+            listView.Columns.Add(new ColumnHeader() { Width = listView.Width , Text = "Журнал операций" });
+            listView.Dock = DockStyle.None;
+
+            // Define the border style of the form to a dialog box.
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            // Set the MaximizeBox to false to remove the maximize box.
+            this.MaximizeBox = false;
+            // Set the MinimizeBox to false to remove the minimize box.
+            this.MinimizeBox = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -126,6 +140,7 @@ namespace CheckConnection
             int ind = 0;
             string sub_str = null;
             const int list_width = 90;
+            string bookmark_name = null;
             // We may be on a different thread so we need to
             // make this call using BeginInvoke.
             if (InvokeRequired)
@@ -134,6 +149,20 @@ namespace CheckConnection
             }
             else
             {
+                //если работа прервана пользователем, то закладок нет
+                try
+                {
+                    // Inspect the bookmarks
+                    foreach (System.Activities.Hosting.BookmarkInfo info in wfApp.GetBookmarks())
+                    {
+                        bookmark_name = info.BookmarkName;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    log.ErrorFormat("Bookmark отсутствуют", ex);
+                }
+
                 if (!string.IsNullOrEmpty(msg))
                 {
                     if(msg.IndexOf("\r\n")>0)
@@ -143,16 +172,32 @@ namespace CheckConnection
                     while (msg.Length>0) {
                         ind = (msg.Length < list_width) ? msg.Length: msg.IndexOf(" ", list_width);
                         sub_str = msg.Substring(0, ((msg.Length < ind)||(ind<0)) ? msg.Length: ind);
-                        listBox.Items.Add(sub_str);
+ 
+                        //--------------------------------------------
+                        var listViewItem = new ListViewItem(sub_str);
+                        if (bookmark_name == "Result")           
+                        {
+                            listViewItem.ForeColor = System.Drawing.Color.Crimson;
+                            listViewItem.Font = new System.Drawing.Font(listView.Font, System.Drawing.FontStyle.Bold);
+                        }
+                       
+                        listView.Items.Add(listViewItem);
+                        //--------------------------------------------
+
                         msg = msg.Substring(sub_str.Length, msg.Length-sub_str.Length);
                         i++;
                         sub_str = null;
                         ind = 0; 
                     }
-                    listBox.Refresh();
+                    listView.Refresh();
+
+                    //-------------------------------------------------------
 
                 }
-                wfApp.ResumeBookmark("Show", "");
+
+                //если работа прервана пользователем, то закладок нет 
+                if (!String.IsNullOrEmpty(bookmark_name))
+                    wfApp.ResumeBookmark(/*"Show"*/bookmark_name, "");
             }
         }
 

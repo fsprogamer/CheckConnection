@@ -5,10 +5,11 @@ using System.Net;
 using System.Windows.Forms;
 using System.Diagnostics;
 using PingLib.Methods;
+using Common;
 
 namespace PingForm
 {
-    public partial class MainPingForm : Form
+    public partial class MainPingForm : BaseForm
     {
         public MainPingForm()
         {

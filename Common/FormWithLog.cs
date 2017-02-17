@@ -1,11 +1,9 @@
-﻿using System.Windows.Forms;
-
-using log4net;
+﻿using log4net;
 using Ninject;
 
 namespace Common
 {
-    public class FormWithLog:Form
+    public class FormWithLog:BaseForm
     {
         protected readonly ILog log;
 

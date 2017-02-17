@@ -132,6 +132,7 @@
     <Compile Include="RepairForm.Designer.cs">
       <DependentUpon>RepairForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="AnalyzeForm.resx">
       <DependentUpon>AnalyzeForm.cs</DependentUpon>
     </EmbeddedResource>

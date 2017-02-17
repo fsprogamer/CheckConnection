@@ -1,18 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
+using Common;
 
 namespace TracertForm
 {
-	public partial class MainForm : Form
+	public partial class MainForm : BaseForm
 	{
 		public MainForm()
 		{

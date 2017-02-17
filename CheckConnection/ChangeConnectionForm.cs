@@ -12,7 +12,7 @@ using Ninject;
 
 namespace CheckConnection
 {
-    public partial class ChangeConnectionForm : Form//WithLog
+    public partial class ChangeConnectionForm : BaseForm
     {
         private Connection conn;
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
