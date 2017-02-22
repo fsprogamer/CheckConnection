@@ -49,18 +49,7 @@ namespace WorkflowLib
         const string exConnName = "ExceptionConnName";
 
         public WMINetworkAdapterManagerProxy() {
-          
-            //ExeConfigurationFileMap map = new ExeConfigurationFileMap();
-            //map.ExeConfigFilename = Assembly.GetEntryAssembly().Location + ".config";
-            //Configuration conf = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-
-            //ConfigurationSectionGroup appSettingsGroup = conf.GetSectionGroup("userSettings");
-            //ClientSettingsSection clientSettings = (ClientSettingsSection)appSettingsGroup.Sections["CheckConnection.Properties.Settings"];
-            //ConfigurationElement element = clientSettings.Settings.Get("ExceptionConnName");
-            //string xml = ((SettingElement)element).Value.ValueXml.InnerXml;
-            //XmlSerializer xs = new XmlSerializer(typeof(string[]));
-            //string[] strings = (string[])xs.Deserialize(new XmlTextReader(xml, XmlNodeType.Element, null));
-
+                      
             exceptionConnNameLst = new List<string>(new ConfigManager().GetStringArray(exConnName));
             foreach (string ex in exceptionConnNameLst)
             {

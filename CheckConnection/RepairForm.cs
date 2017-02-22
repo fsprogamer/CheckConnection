@@ -21,7 +21,7 @@ namespace CheckConnection
         public RepairForm(string[] text)
         {
             InitializeComponent();
-            _text = text;
+            //_text = text;
             StringCollection AkadoDNS = Properties.Settings.Default.AkadoDNS;            
             strArray = new string[AkadoDNS.Count];
             AkadoDNS.CopyTo(strArray, 0);

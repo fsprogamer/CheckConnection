@@ -53,6 +53,9 @@
   <PropertyGroup>
     <ApplicationIcon>20gear2.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>CheckConnection.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
@@ -132,7 +135,6 @@
     <Compile Include="RepairForm.Designer.cs">
       <DependentUpon>RepairForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="AnalyzeForm.resx">
       <DependentUpon>AnalyzeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,6 +161,9 @@
       <DependentUpon>RepairForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="CheckConnection.exe.log4net" />
+    <None Include="CheckConnection.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

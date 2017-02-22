@@ -710,6 +710,7 @@ namespace CheckConnection
                 toolStripButtonChangeConnection.Enabled = false;
                 toolStripButtonRestore.Enabled = false;
                 toolStripButtonRenewDHCP.Enabled = false;
+                toolStripButtonRepair.Enabled = false;
             }
         }
 
@@ -726,20 +727,29 @@ namespace CheckConnection
             base.Dispose(disposing);
         }
 
-     
+
         private void toolStripRepairButton_Click(object sender, EventArgs e)
         {
-            ///Activity wf = new WorkFlowApp. .Flowchart.CheckConnection();
-            //IDictionary<string, object> outputs = WorkflowInvoker.Invoke(wf);
 
-            //string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            if (!IsAdminAccount)
+            {
+                log.Info(NotAdmin);
+                MessageBox.Show(NotAdmin, "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            else
+            {
 
-            string[] log = { "111", "222" };
+                ///Activity wf = new WorkFlowApp. .Flowchart.CheckConnection();
+                //IDictionary<string, object> outputs = WorkflowInvoker.Invoke(wf);
 
-            RepairForm repair = new RepairForm(log);
-            repair.ShowDialog();
+                //string name = GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
 
-            //WorkflowLib.WorkFlowApp.Run(log);
+                string[] log = null;//{ "111", "222" };
+                RepairForm repair = new RepairForm(log);
+                repair.ShowDialog();
+            }
         }
 
         #region
