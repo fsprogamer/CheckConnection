@@ -17,6 +17,7 @@ namespace WorkflowLib
         {
             System.Collections.ArrayList myAL = new System.Collections.ArrayList() { "dddd", "wwww" };
             FillForm();
+            MakeChoiceForm_SizeChanged(sender, e);
         }
 
         private new void FillForm()
