@@ -57,9 +57,17 @@ namespace CheckConnection.Methods
                     if (mo["IPAddress"] != null)
                     {
                         string[] addresses = (string[])mo["IPAddress"];
-                        item.Ip_Address_v4 = addresses[0];
                         if (addresses.Length > 1)
-                            item.Ip_Address_v6 = addresses[1];
+                            foreach (string addr in addresses) {
+                              if(addr.IndexOf(":")<0)
+                                    item.Ip_Address_v4 = addr;
+                                else
+                                    item.Ip_Address_v6 = addr;
+                            }
+                        else
+                            item.Ip_Address_v4 = addresses[0];
+
+                        log.InfoFormat("IPAddress={0},{1}", item.Ip_Address_v4, item.Ip_Address_v6);
                     }
 
                     if (mo["MACAddress"] != null)
