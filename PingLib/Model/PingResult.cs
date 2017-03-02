@@ -14,10 +14,10 @@ namespace PingLib.Model
         [NotNull]
         public string Name { get; set; }
         [NotNull]
-        public string Ip_Address { get; set; }
+        public string Ip_Address { get; set; }        
         [NotNull]
         public string StatusCode { get; set; }
-        [NotNull]
+        public int SocketErrorCode { get; set; }
         public string ErrMessage { get; set; }
         [NotNull]
         public string ResponseTime { get; set; }

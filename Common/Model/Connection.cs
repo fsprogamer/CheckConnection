@@ -35,10 +35,42 @@ namespace CheckConnection.Model
         public string IPSubnetMask { get; set; }
         [Ignore]        
         [Display(Name = "Шлюзы...")]
-        public string IPGateway { get; set; }
+        public string IPGateway {
+            get
+            {
+                string lIPGateway = null;
+
+                if ((Gateway_list != null)&&(Gateway_list.Count > 0))
+                {
+                    foreach (Gateway gtw in Gateway_list)
+                    {
+                        lIPGateway += gtw.IPGateway + "; ";
+                    }
+                    if (lIPGateway.Length > 2)
+                        lIPGateway = lIPGateway.Substring(0, lIPGateway.Length - 2);
+                }
+                return lIPGateway;
+            }
+        }
         [Ignore]
         [Display(Name = "DNS-серверы...")]
-        public string DNSServer { get; set; }
+        public string DNSServer {
+            get
+            {
+                string lDNSServer = null;
+
+                if ((DNS_list !=null)&&(DNS_list.Count > 0))
+                {
+                    foreach (DNS dns in DNS_list)
+                    {
+                        lDNSServer += dns.DNSServer + "; ";
+                    }
+                    if (lDNSServer.Length > 2)
+                        lDNSServer = lDNSServer.Substring(0, lDNSServer.Length - 2);
+                }
+                return lDNSServer;
+            }
+        }
         [Ignore]
         public List<DNS> DNS_list { get; set; }
         [Ignore]
@@ -47,7 +79,7 @@ namespace CheckConnection.Model
         public bool NetEnabled { get; set; }                
         [NotNull]
         public uint Index { get; set; } //связь networkadapter и networkadapterconfiguration
-        public string GUID { get; set; }
+        public string GUID { get; set; }   
     }
 
 }

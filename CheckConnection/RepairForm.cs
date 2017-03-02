@@ -165,6 +165,7 @@ namespace CheckConnection
 
                 if (!string.IsNullOrEmpty(msg))
                 {
+                    log.Info(msg);
                     if(msg.IndexOf("\r\n")>0)
                     {
                         msg = msg.Substring(0,msg.Length-2);

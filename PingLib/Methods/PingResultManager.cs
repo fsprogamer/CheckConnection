@@ -26,20 +26,20 @@ namespace PingLib.Methods
                 IPingResultRepo pm = new PingResultRepo();
                 PingReply reply = pm.GetPing(strHostName);
 
-                png.StatusCode = GetStatusCode((int)reply.Status); //(reply.Status.ToString() == "Success" ? "Успешно" : reply.Status.ToString());
-                log.InfoFormat("Status : {0}", png.StatusCode );
+                png.StatusCode = /*GetStatusCode((int)reply.Status); */(reply.Status.ToString() == "Success" ? "Успешно" : reply.Status.ToString());
+                log.InfoFormat("Status: {0}, {1}", (int)reply.Status, png.StatusCode );
 
                 if (reply.Status == IPStatus.Success) { 
                     png.Ip_Address = reply.Address.ToString();
-                    log.InfoFormat("Address : {0}", png.Ip_Address);
+                    log.InfoFormat("Address: {0}", png.Ip_Address);
 
                     png.ResponseTime = reply.RoundtripTime.ToString();
-                    log.InfoFormat("ResponseTime : {0}", png.ResponseTime);
+                    log.InfoFormat("ResponseTime: {0}", png.ResponseTime);
                 }
                 else
                 {
                     png.ResponseTime = "*";
-                    log.InfoFormat("ResponseTime : {0}", png.ResponseTime);
+                    log.InfoFormat("ResponseTime: {0}", png.ResponseTime);
                 }
             }
             catch (SocketException ex)
@@ -47,14 +47,15 @@ namespace PingLib.Methods
                 png.ResponseTime = "*";
                 png.ErrMessage = ex.Message;
                 png.StatusCode = ex.Message;
-                log.InfoFormat("SocketException ErrMessage : {0}", png.ErrMessage);
+                png.SocketErrorCode = ex.ErrorCode;
+                log.InfoFormat("SocketException ErrMessage: {0}", png.ErrMessage);
             }
             catch (Exception ex)
             {
                 png.ResponseTime = "*";
                 png.ErrMessage = (ex.InnerException!=null)? ex.InnerException.Message : ex.Message;
-                png.StatusCode = (ex.InnerException!=null)? ex.InnerException.Message : ex.Message;
-                log.InfoFormat("Exception ErrMessage : {0}", png.ErrMessage);
+                png.StatusCode = (ex.InnerException!=null)? ex.InnerException.Message : ex.Message;                            
+                log.InfoFormat("Exception ErrMessage: {0}", png.ErrMessage);
             }
             return png;
         }

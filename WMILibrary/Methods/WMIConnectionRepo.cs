@@ -17,7 +17,7 @@ namespace CheckConnection.Methods
             get { return _mo_repo; }
             set { _mo_repo = value; }
         }
-        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer FROM Win32_NetworkAdapterConfiguration")
+        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer, SettingID FROM Win32_NetworkAdapterConfiguration")
         {
             //where not Description like '%virtual%' and not Description like '%hamachi%' and not Description like '%1394%' 
             int Conn_id = 0;
@@ -100,9 +100,9 @@ namespace CheckConnection.Methods
                             };
                             item.Gateway_list.Add(gtw);
 
-                            item.IPGateway += defaultipgateway_str + "; ";
+                            //item.IPGateway += defaultipgateway_str + "; ";
                         }
-                        item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
+                        //item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
                     }
 
                     if (mo["DNSServerSearchOrder"] != null)
@@ -122,15 +122,21 @@ namespace CheckConnection.Methods
                             };
                             item.DNS_list.Add(_dns);
 
-                            item.DNSServer += dns_str + "; ";
+                            //item.DNSServer += dns_str + "; ";
 
                             Order_Id++;
                         }
-                        item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
+                        //item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
                     }
 
                     if (mo["DHCPServer"] != null)
                         item.DHCPServer = mo["DHCPServer"].ToString();
+
+                    if (mo["SettingID"] != null)
+                    {
+                        item.GUID = mo["SettingID"].ToString();
+                        log.InfoFormat("SettingID={0}", mo["SettingID"].ToString());
+                    }
 
                     Context.Add(item);
                     Conn_id++;

@@ -136,6 +136,11 @@ namespace WorkflowLib
         {
             return GetConnectionMOByIndex(index).setDinamicIP();
         }
+        public int setDNSServerSearchOrder(uint index, string[] name)
+        {
+            return GetConnectionMOByIndex(index).setDNSServerSearchOrder(name);
+        }
+
         public List<Connection> GetItems()
         {
             /*исключаем new string[] { "virtual", "hamachi", "1394" }*/

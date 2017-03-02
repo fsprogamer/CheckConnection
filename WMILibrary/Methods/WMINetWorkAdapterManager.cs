@@ -48,7 +48,7 @@ namespace CheckConnection.Methods
             conn.NetConnectionID = adapter.NetConnectionID;
             conn.NetConnectionStatus = adapter.NetConnectionStatus;
             conn.NetEnabled = adapter.NetEnabled;
-            conn.GUID = adapter.GUID;
+            //conn.GUID = adapter.GUID;
         }
 
         public Connection GetItem(Func<Connection, bool> predicate)
@@ -94,7 +94,9 @@ namespace CheckConnection.Methods
                         conn.NetConnectionID = adapter.NetConnectionID;
                         conn.NetConnectionStatus = adapter.NetConnectionStatus;
                         conn.NetEnabled = adapter.NetEnabled;
-                        conn.GUID = adapter.GUID;
+                        //Читаем SettingID из NetworkAdapterConfiguration
+                        //conn.GUID = adapter.GUID;
+
                         connlist.Add(conn);
                     }
                 }
@@ -116,7 +118,8 @@ namespace CheckConnection.Methods
                         conn.NetConnectionID = adapter.NetConnectionID;
                         conn.NetConnectionStatus = adapter.NetConnectionStatus;
                         conn.NetEnabled = adapter.NetEnabled;
-                        conn.GUID = adapter.GUID;
+                        //Читаем SettingID из NetworkAdapterConfiguration
+                        //conn.GUID = adapter.GUID;
                         connlist.Add(conn);
                     }
                 }

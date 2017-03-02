@@ -581,24 +581,25 @@ namespace CheckConnection
                         IList<DNS> dnslist = dnsmgr.GetDNSsByConnectionId(conn.Id);
                         IList<Gateway> gtwlist = gatewaymgr.GetGatewaysByConnectionId(conn.Id);
 
-                        if (dnslist.Count > 0)
-                        {
-                            foreach (DNS dns in dnslist)
-                            {
-                                conn.DNSServer += dns.DNSServer + "; ";
-                            }
-                            if (conn.DNSServer.Length > 2)
-                                conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
-                        }
-                        if (gtwlist.Count > 0)
-                        {
-                            foreach (Gateway gtw in gtwlist)
-                            {
-                                conn.IPGateway += gtw.IPGateway + "; ";
-                            }
-                            if (conn.IPGateway.Length > 2)
-                                conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
-                        }
+                        //if (dnslist.Count > 0)
+                        //{
+                        //    foreach (DNS dns in dnslist)
+                        //    {
+                        //        conn.DNSServer += dns.DNSServer + "; ";
+                        //    }
+                        //    if (conn.DNSServer.Length > 2)
+                        //        conn.DNSServer = conn.DNSServer.Substring(0, conn.DNSServer.Length - 2);
+                        //}
+
+                        //if (gtwlist.Count > 0)
+                        //{
+                        //    foreach (Gateway gtw in gtwlist)
+                        //    {
+                        //        conn.IPGateway += gtw.IPGateway + "; ";
+                        //    }
+                        //    if (conn.IPGateway.Length > 2)
+                        //        conn.IPGateway = conn.IPGateway.Substring(0, conn.IPGateway.Length - 2);
+                        //}
                     }
                     HistorydataGridView.DataSource = connlist;
 
