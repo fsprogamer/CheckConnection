@@ -145,7 +145,7 @@ namespace WorkflowLib
         {
             /*исключаем new string[] { "virtual", "hamachi", "1394" }*/
             //List<Connection> tmp = cmgr.GetItems(p => p.NetConnectionID != null).OrderBy(s => s.Ip_Address_v4).ToList();
-            return Filter(cmgr.GetItems(p => p.NetConnectionID != null).OrderBy(s => s.Ip_Address_v4).ToList(),
+            return Filter(cmgr.GetItems(p => p.NetConnectionID != null).OrderByDescending(s => s.Ip_Address_v4).ToList(),
                           exceptionConnNameLst
                          );
         }
