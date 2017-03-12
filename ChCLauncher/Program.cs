@@ -8,7 +8,7 @@ namespace ChCLauncher
     {
         static void Main(string[] args)
         {
-            string fileName = @"..\..\..\CheckConnection\bin\Debug\CheckConnection.exe";
+            string fileName = @".\CheckConnection.exe";
             const int ERROR_CANCELLED = 1223; //The operation was canceled by the user.
             ProcessStartInfo info;
             info = new ProcessStartInfo(fileName);
