@@ -27,12 +27,9 @@ namespace CheckConnection.Methods
                 try
                 {
                     NetworkAdapter item = new NetworkAdapter();
-
-                    if (mo["name"] != null)                    
-                       item.Name = mo["name"].ToString();                                            
-
-                    if (mo["NetConnectionID"] != null)
-                        item.NetConnectionID = mo["NetConnectionID"].ToString();
+                                  
+                    item.Name = mo["name"]?.ToString();                                            
+                    item.NetConnectionID = mo["NetConnectionID"]?.ToString();
 
                     if (mo["NetConnectionStatus"] != null)
                         item.NetConnectionStatus = (ushort)mo["NetConnectionStatus"];
@@ -47,7 +44,7 @@ namespace CheckConnection.Methods
                     //if (mo["netenabled"] != null)
                     //    item.NetEnabled = (bool)mo["netenabled"];
 
-                    log.InfoFormat("{0}, NetEnabled={1}", item.Name, item.NetEnabled.ToString());
+                    log.InfoFormat("{0}", item.Name);
                     log.InfoFormat("NetConnectionID={0}, NetConnectionStatus={1}", item.NetConnectionID, item.NetConnectionStatus.ToString());
                     log.InfoFormat("Index={0}", item.Index.ToString());
 

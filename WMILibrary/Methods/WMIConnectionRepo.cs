@@ -70,11 +70,8 @@ namespace CheckConnection.Methods
                         log.InfoFormat("IPAddress={0},{1}", item.Ip_Address_v4, item.Ip_Address_v6);
                     }
 
-                    if (mo["MACAddress"] != null)
-                        item.MAC = mo["MACAddress"].ToString();
-
-                    if (mo["DNSDomain"] != null)
-                        item.DNSDomain = mo["DNSDomain"].ToString();
+                    item.MAC = mo["MACAddress"]?.ToString();
+                    item.DNSDomain = mo["DNSDomain"]?.ToString();
 
                     if (mo["IPSubnet"] != null)
                     {
@@ -129,8 +126,7 @@ namespace CheckConnection.Methods
                         //item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
                     }
 
-                    if (mo["DHCPServer"] != null)
-                        item.DHCPServer = mo["DHCPServer"].ToString();
+                    item.DHCPServer = mo["DHCPServer"]?.ToString();
 
                     if (mo["SettingID"] != null)
                     {

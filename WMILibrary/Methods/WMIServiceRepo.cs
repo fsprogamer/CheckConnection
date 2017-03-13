@@ -29,15 +29,10 @@ namespace CheckConnection.Methods
 
                     if (mo["ProcessId"] != null)
                         item.Id = Int32.Parse(mo["ProcessId"].ToString());
-
-                    if (mo["Name"] != null)
-                        item.Name = mo["Name"].ToString();
-
-                    if (mo["Status"] != null)
-                        item.Status = mo["Status"].ToString();
-
-                    if (mo["State"] != null)
-                        item.State = mo["State"].ToString();
+  
+                    item.Name = mo["Name"]?.ToString();
+                    item.Status = mo["Status"]?.ToString();
+                    item.State = mo["State"]?.ToString();
                    
                     log.InfoFormat("ProcessId={0}, Name={1}, Status={2}, State={3}", item.Id, item.Name, item.Status, item.State );
                     
