@@ -40,9 +40,9 @@ namespace CheckConnection
 
         private IConnectionManager connmgr;
         private IDNSManager dnsmgr;
-        private IGatewayManager gatewaymgr;
-        //private IWMIConnectionManager cpmgr;
+        private IGatewayManager gatewaymgr;        
         private IWMINetworkAdapterManager namgr;
+        //private IUserManager usermgr;
 
         public DisplayConnections( )
         {
@@ -135,6 +135,7 @@ namespace CheckConnection
             //asyncDNS.AsyncWaitHandle.WaitOne();
             #endregion
 
+            //usermgr = Common.NinjectProgram.Kernel.Get<IUserManager>(parameter);
             connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
             log.Info("DisplayConnections, after Ninject IConnectionManager");
             dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
@@ -145,6 +146,22 @@ namespace CheckConnection
 
             asyncWMI.AsyncWaitHandle.WaitOne();
 
+            if(connmgr.GetDiffInDays()>30)
+            {
+                string mess = "Превышено максимальное число запусков.Приложение будет закрыто.";
+                log.Info(mess);
+                MessageBox.Show(mess, "", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                if (System.Windows.Forms.Application.MessageLoop)
+                {
+                    // WinForms app
+                    System.Windows.Forms.Application.Exit();
+                }
+                else
+                {
+                    // Console app
+                    System.Environment.Exit(1);
+                }
+            }
         }
 
         void WMICallBack(IAsyncResult async)

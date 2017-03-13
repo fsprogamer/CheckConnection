@@ -14,5 +14,6 @@ namespace CheckConnection.Methods
         int SaveConnection(Connection conn);
         int DeleteConnection(int id);
         int GetLastInsertRowId();
+        int GetDiffInDays();
     }
 }

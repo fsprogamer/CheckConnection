@@ -10,5 +10,6 @@ namespace CheckConnection.Methods
         int GetItemsAmount();
         int GetItemsAmountByName(string Name);
         int GetLastInsertRowId();
+        int GetDiffInDays();
     }
 }

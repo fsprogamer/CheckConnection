@@ -108,5 +108,22 @@ namespace CheckConnection.Methods
                 }
             }
         }
+
+        public int GetDiffInDays()
+        {
+            lock (Locker)
+            {
+                try
+                {
+                    return Context.ExecuteScalar<int>(@"select (max(Date) / 10000000 - min(Date) / 10000000) / (24 * 3600) from Connection");
+                }
+                catch (Exception e)
+                {
+                    log.Error("Ошибка: '{0}'", e);
+                    return 0;
+                }
+            }
+        }
+
     }   
 }

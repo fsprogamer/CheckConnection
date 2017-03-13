@@ -13,6 +13,7 @@ namespace CheckConnection.Methods
             Bind<IConnectionManager>().To<ConnectionManager>();
             Bind<IDNSManager>().To<DNSManager>();
             Bind<IGatewayManager>().To<GatewayManager>();
+            //Bind<IUserManager>().To<UserManager>();
 
             Bind<ILog>().ToMethod(context =>
              LogManager.GetLogger(context.Request.ParentContext == null ?

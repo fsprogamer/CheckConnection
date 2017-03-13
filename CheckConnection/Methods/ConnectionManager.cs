@@ -56,6 +56,9 @@ namespace CheckConnection.Methods
         {
             return _repository.GetLastInsertRowId();
         }
-    }
-    
+        public int GetDiffInDays()
+        {
+            return _repository.GetDiffInDays();
+        }
+    }    
 }
