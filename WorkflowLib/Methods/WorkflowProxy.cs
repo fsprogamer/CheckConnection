@@ -157,8 +157,8 @@ namespace WorkflowLib
             foreach (Connection conn in conn_list)
             {
                 foreach (string ex in ex_list)
-                {
-                    if (conn.NetConnectionID.IndexOf(ex, StringComparison.OrdinalIgnoreCase) >= 0)
+                {                    
+                    if (conn.NetConnectionID?.IndexOf(ex, StringComparison.OrdinalIgnoreCase) >= 0)
                         find = true;
                 }
 

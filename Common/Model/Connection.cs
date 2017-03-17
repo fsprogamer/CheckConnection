@@ -40,7 +40,7 @@ namespace CheckConnection.Model
             {
                 string lIPGateway = null;
 
-                if ((Gateway_list != null)&&(Gateway_list.Count > 0))
+                if (Gateway_list?.Count > 0)
                 {
                     foreach (Gateway gtw in Gateway_list)
                     {
@@ -59,7 +59,7 @@ namespace CheckConnection.Model
             {
                 string lDNSServer = null;
 
-                if ((DNS_list !=null)&&(DNS_list.Count > 0))
+                if (DNS_list?.Count > 0)
                 {
                     foreach (DNS dns in DNS_list)
                     {
@@ -79,7 +79,8 @@ namespace CheckConnection.Model
         public bool NetEnabled { get; set; }                
         [NotNull]
         public uint Index { get; set; } //связь networkadapter и networkadapterconfiguration
-        public string GUID { get; set; }   
+        public string GUID { get; set; }  
+        //public uint IPConnectionMetric { get; set; }
     }
 
 }

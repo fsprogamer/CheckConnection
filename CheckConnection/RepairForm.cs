@@ -13,7 +13,7 @@ namespace CheckConnection
 {
     public partial class RepairForm : BaseForm
     {
-        string[] _text;
+        //string[] _text;
         WorkflowApplication wfApp;
         string[] strArray;
         private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

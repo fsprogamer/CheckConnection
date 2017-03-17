@@ -17,7 +17,7 @@ namespace CheckConnection.Methods
             get { return _mo_repo; }
             set { _mo_repo = value; }
         }
-        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer, SettingID FROM Win32_NetworkAdapterConfiguration")
+        public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer, SettingID, IPConnectionMetric FROM Win32_NetworkAdapterConfiguration")
         {
             //where not Description like '%virtual%' and not Description like '%hamachi%' and not Description like '%1394%' 
             int Conn_id = 0;
@@ -96,10 +96,7 @@ namespace CheckConnection.Methods
                                 Connection_Id = Conn_id
                             };
                             item.Gateway_list.Add(gtw);
-
-                            //item.IPGateway += defaultipgateway_str + "; ";
                         }
-                        //item.IPGateway = item.IPGateway.Substring(0, item.IPGateway.Length - 2);
                     }
 
                     if (mo["DNSServerSearchOrder"] != null)
@@ -118,12 +115,8 @@ namespace CheckConnection.Methods
                                 Order_Id = Order_Id
                             };
                             item.DNS_list.Add(_dns);
-
-                            //item.DNSServer += dns_str + "; ";
-
                             Order_Id++;
                         }
-                        //item.DNSServer = item.DNSServer.Substring(0, item.DNSServer.Length - 2);
                     }
 
                     item.DHCPServer = mo["DHCPServer"]?.ToString();
@@ -133,6 +126,12 @@ namespace CheckConnection.Methods
                         item.GUID = mo["SettingID"].ToString();
                         log.InfoFormat("SettingID={0}", mo["SettingID"].ToString());
                     }
+
+                    //if (mo["IPConnectionMetric"] != null)
+                    //{
+                    //    item.IPConnectionMetric = (uint)mo["IPConnectionMetric"];
+                    //    log.InfoFormat("IPConnectionMetric={0}", mo["IPConnectionMetric"].ToString());
+                    //}
 
                     Context.Add(item);
                     Conn_id++;

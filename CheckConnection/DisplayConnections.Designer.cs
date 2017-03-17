@@ -77,12 +77,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ConnectionsdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 62);
+            this.ConnectionsdataGridView.Location = new System.Drawing.Point(0, 72);
             this.ConnectionsdataGridView.MultiSelect = false;
             this.ConnectionsdataGridView.Name = "ConnectionsdataGridView";
             this.ConnectionsdataGridView.ReadOnly = true;
             this.ConnectionsdataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ConnectionsdataGridView.Size = new System.Drawing.Size(1107, 153);
+            this.ConnectionsdataGridView.Size = new System.Drawing.Size(1291, 176);
             this.ConnectionsdataGridView.TabIndex = 0;
             this.ConnectionsdataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ConnectionsdataGridView_RowEnter);
             this.ConnectionsdataGridView.SelectionChanged += new System.EventHandler(this.ConnectionsdataGridView_SelectionChanged);
@@ -96,12 +96,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.HistorydataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.HistorydataGridView.Location = new System.Drawing.Point(0, 28);
+            this.HistorydataGridView.Location = new System.Drawing.Point(0, 32);
             this.HistorydataGridView.MultiSelect = false;
             this.HistorydataGridView.Name = "HistorydataGridView";
             this.HistorydataGridView.ReadOnly = true;
             this.HistorydataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.HistorydataGridView.Size = new System.Drawing.Size(1107, 205);
+            this.HistorydataGridView.Size = new System.Drawing.Size(1291, 237);
             this.HistorydataGridView.TabIndex = 1;
             // 
             // splitContainer1
@@ -123,8 +123,9 @@
             this.splitContainer1.Panel2.Controls.Add(this.HistorybindingNavigator);
             this.splitContainer1.Panel2.Controls.Add(this.ConnectionHistorylabel);
             this.splitContainer1.Panel2.Controls.Add(this.HistorydataGridView);
-            this.splitContainer1.Size = new System.Drawing.Size(1107, 458);
-            this.splitContainer1.SplitterDistance = 218;
+            this.splitContainer1.Size = new System.Drawing.Size(1291, 528);
+            this.splitContainer1.SplitterDistance = 251;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 2;
             // 
             // toolStrip1
@@ -142,7 +143,7 @@
             this.toolStripButtonRepair});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1107, 38);
+            this.toolStrip1.Size = new System.Drawing.Size(1291, 38);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -277,7 +278,7 @@
             this.HistorybindingNavigator.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.HistorybindingNavigator.Name = "HistorybindingNavigator";
             this.HistorybindingNavigator.PositionItem = this.bindingNavigatorPositionItem;
-            this.HistorybindingNavigator.Size = new System.Drawing.Size(1107, 25);
+            this.HistorybindingNavigator.Size = new System.Drawing.Size(1291, 25);
             this.HistorybindingNavigator.TabIndex = 3;
             this.HistorybindingNavigator.Text = "HistorybindingNavigator1";
             // 
@@ -318,7 +319,7 @@
             this.bindingNavigatorPositionItem.AccessibleName = "Position";
             this.bindingNavigatorPositionItem.AutoSize = false;
             this.bindingNavigatorPositionItem.Name = "bindingNavigatorPositionItem";
-            this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(50, 23);
+            this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(58, 23);
             this.bindingNavigatorPositionItem.Text = "0";
             this.bindingNavigatorPositionItem.ToolTipText = "Current position";
             // 
@@ -353,9 +354,9 @@
             // ConnectionHistorylabel
             // 
             this.ConnectionHistorylabel.AutoSize = true;
-            this.ConnectionHistorylabel.Location = new System.Drawing.Point(4, 4);
+            this.ConnectionHistorylabel.Location = new System.Drawing.Point(5, 5);
             this.ConnectionHistorylabel.Name = "ConnectionHistorylabel";
-            this.ConnectionHistorylabel.Size = new System.Drawing.Size(120, 13);
+            this.ConnectionHistorylabel.Size = new System.Drawing.Size(134, 15);
             this.ConnectionHistorylabel.TabIndex = 2;
             this.ConnectionHistorylabel.Text = "История подключений";
             // 
@@ -365,15 +366,16 @@
             // 
             // DisplayConnections
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1107, 485);
+            this.ClientSize = new System.Drawing.Size(1284, 560);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(40, 40);
             this.Name = "DisplayConnections";
             this.Text = "Сетевые подключения";
             this.Load += new System.EventHandler(this.DisplayConnections_Load);
+            this.Shown += new System.EventHandler(this.DisplayConnections_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);

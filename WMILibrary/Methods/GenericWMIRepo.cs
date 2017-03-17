@@ -37,13 +37,7 @@ namespace CheckConnection.Methods
         {
             return Context;
         }
-        public int SaveItem(T item)
-        {
-            throw new NotImplementedException();
-        }
-        public int SaveItems(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
-        }
+        //abstract public int SaveItem(T item);
+        //abstract public int SaveItems(IEnumerable<T> items);
     }
 }

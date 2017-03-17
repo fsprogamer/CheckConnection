@@ -850,5 +850,18 @@ namespace CheckConnection
         //if(!objMOConnection.IpEnabled)
         //    objMONetAdapter.EnableAdapter();
         #endregion
+
+        private void DisplayConnections_Shown(object sender, EventArgs e)
+        {
+            string mess;
+            if (IsAdminAccount)            
+              mess = "Вам доступно редактирование параметров подключения. Изменения параметров подключения будут сохранены в реестре Windows.";
+            else
+              mess = "Для редактирования параметров подключения требуются права Администратора. Вам доступен только просмотр параметров подключения.";
+
+            log.Info(mess);
+            MessageBox.Show(mess, "", MessageBoxButtons.OK,
+                                            MessageBoxIcon.Exclamation);
+        }
     }
 }

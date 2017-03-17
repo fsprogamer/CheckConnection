@@ -9,7 +9,7 @@ namespace CheckConnection.Methods
         //int Query(string wmiquery);
         List<T> GetItems(Func<T, bool> predicate);
         List<T> GetItems();
-        int SaveItem(T item);
-        int SaveItems(IEnumerable<T> items);
+        //int SaveItem(T item);
+        //int SaveItems(IEnumerable<T> items);
     }
 }
