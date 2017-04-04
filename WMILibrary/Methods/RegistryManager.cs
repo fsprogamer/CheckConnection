@@ -1,6 +1,5 @@
 ﻿using Common;
 using System;
-using System.IO;
 using Microsoft.Win32;
 
 namespace CheckConnection.Methods

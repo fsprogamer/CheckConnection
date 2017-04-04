@@ -9,9 +9,9 @@ using PingLib.Methods;
 
 namespace CheckConnection.Methods
 {
-    class AnalyzeManager:ClassWithLog
+    class AnalyzeManager:ClassWithLogger<AnalyzeManager>
     {
-        public string _ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
+        private readonly string _ProviderDefaultAddress = Properties.Settings.Default.ProviderDefaultAddress;
         private int _ValidatedDNS = -1;
         private int _subnet = -1;
         private Connection _conn;
@@ -24,6 +24,8 @@ namespace CheckConnection.Methods
             _pingmgr = new PingResultManager();
             _conn = conn;
         }
+
+        public string ProviderDefaultAddress => _ProviderDefaultAddress;
 
         public void CompareWithStandartParam()
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using System.Management;
 
 using CheckConnection.Model;
 using Common;
@@ -10,7 +9,7 @@ using Common;
 namespace CheckConnection.Methods
 {
 
-    public class WMINetworkAdapterManager : ClassWithLog, IWMINetworkAdapterManager
+    public class WMINetworkAdapterManager : ClassWithLogger<WMINetworkAdapterManager>, IWMINetworkAdapterManager
     {
         private readonly IWMINetworkAdapterRepo _repository;
         private readonly IWMIConnectionRepo _child_repository;
@@ -39,10 +38,6 @@ namespace CheckConnection.Methods
             set { mo_con_repo = value; }
         }
 
-        //public NetworkAdapter GetItem(Func<NetworkAdapter, bool> predicate)
-        //{
-        //    return _repository.GetItem(predicate);
-        //}
         private void CopyFields(ref Connection conn, ref NetworkAdapter adapter)
         {
             conn.NetConnectionID = adapter.NetConnectionID;
@@ -71,62 +66,43 @@ namespace CheckConnection.Methods
             return conn;
         }
 
-        //public ManagementObject GetMOItem(Func<ManagementObject, bool> predicate)
-        //{
-        //    return mo_repo.GetItem(predicate);
-        //}
-
-        //public ManagementObject GetConMOItem(Func<ManagementObject, bool> predicate)
-        //{
-        //    return mo_con_repo.GetItem(predicate);
-        //}
-
-        public List<Connection> GetItems()
-        {
-            List<Connection> connlist = new List<Connection>();
-            foreach (NetworkAdapter adapter in _repository.GetItems())
-            {
-                foreach (Connection conn in _child_repository.GetItems())
-                {
-                    if (conn.Index == adapter.Index)
-                    //if (conn.Name == adapter.Name)
-                    {
-                        conn.NetConnectionID = adapter.NetConnectionID;
-                        conn.NetConnectionStatus = adapter.NetConnectionStatus;
-                        conn.NetEnabled = adapter.NetEnabled;
-                        //Читаем SettingID из NetworkAdapterConfiguration
-                        //conn.GUID = adapter.GUID;
-
-                        connlist.Add(conn);
-                    }
-                }
-            }
-
-            return connlist.OrderByDescending(p => p.NetConnectionID != null).ToList();
-        }
-
         public List<Connection> GetItems(Func<NetworkAdapter, bool> predicate)
         {
-            List<Connection> connlist = new List<Connection>();
-            foreach (NetworkAdapter adapter in _repository.GetItems(predicate))
+            List<Connection> lst = new List<Connection>(_child_repository.mo_repo.Context.Count);
+
+            try
             {
-                foreach (Connection conn in _child_repository.GetItems())
-                {
-                    if (conn.Index == adapter.Index)
-                    //if (conn.Name == adapter.Name)
-                    {
-                        conn.NetConnectionID = adapter.NetConnectionID;
-                        conn.NetConnectionStatus = adapter.NetConnectionStatus;
-                        conn.NetEnabled = adapter.NetEnabled;
-                        //Читаем SettingID из NetworkAdapterConfiguration
-                        //conn.GUID = adapter.GUID;
-                        connlist.Add(conn);
-                    }
-                }
+                lst = (from conn in _child_repository.GetItems()
+                   join adapter in _repository.GetItems(predicate) on conn.Index equals adapter.Index
+                   orderby !string.IsNullOrEmpty(adapter.NetConnectionID) descending
+                   select new Connection()
+                   {
+                       Id = conn.Id,
+                       Date = conn.Date,
+                       NetConnectionID = adapter.NetConnectionID,
+                       Name = conn.Name,
+                       MAC = conn.MAC,
+                       Ip_Address_v4 = conn.Ip_Address_v4,
+                       Ip_Address_v6 = conn.Ip_Address_v6,
+                       DHCP_Enabled = conn.DHCP_Enabled,
+                       DHCPServer = conn.DHCPServer,
+                       DNSDomain = conn.DNSDomain,
+                       IPSubnetMask = conn.IPSubnetMask,
+                       DNS_list = conn.DNS_list,
+                       Gateway_list = conn.Gateway_list,
+                       NetConnectionStatus = adapter.NetConnectionStatus,
+                       NetEnabled = adapter.NetEnabled,
+                       Index = conn.Index,
+                       GUID = conn.GUID
+                   }).ToList();
+            }
+            catch (Exception ex)
+            {
+                log.Error("error GetItems", ex);
             }
 
-            return connlist.OrderByDescending(p => p.NetConnectionID != null).ToList();
-        }
+            return lst;
+        }        
 
         public Connection GetItem(DataGridView dgv)
         {
@@ -142,25 +118,13 @@ namespace CheckConnection.Methods
 
                 Connection conn = new Connection();
 
-                conn.Name = Name;
-
-                if (dgv.Rows[selectedRow].Cells["Ip_Address_v4"].Value != null)
-                    conn.Ip_Address_v4 = dgv.Rows[selectedRow].Cells["Ip_Address_v4"].Value.ToString();
-
-                if (dgv.Rows[selectedRow].Cells["IpSubnetMask"].Value != null)
-                    conn.IPSubnetMask = dgv.Rows[selectedRow].Cells["IpSubnetMask"].Value.ToString();
-
-                if (dgv.Rows[selectedRow].Cells["DNSDomain"].Value != null)
-                    conn.DNSDomain = dgv.Rows[selectedRow].Cells["DNSDomain"].Value.ToString();
-
-                if (dgv.Rows[selectedRow].Cells["DHCP_Enabled"].Value != null)
-                    conn.DHCP_Enabled = dgv.Rows[selectedRow].Cells["DHCP_Enabled"].Value.ToString();
-
-                if (dgv.Rows[selectedRow].Cells["DNSServer"].Value != null)
-                    conn.DNS_list = setDNSServerSearchOrder(dgv.Rows[selectedRow].Cells["DNSServer"].Value.ToString());
-
-                if (dgv.Rows[selectedRow].Cells["IPGateway"].Value != null)
-                    conn.Gateway_list = setGateway(dgv.Rows[selectedRow].Cells["IPGateway"].Value.ToString());
+                conn.Name = Name;                
+                conn.Ip_Address_v4 = dgv.Rows[selectedRow].Cells["Ip_Address_v4"].Value?.ToString();
+                conn.IPSubnetMask = dgv.Rows[selectedRow].Cells["IpSubnetMask"].Value?.ToString();
+                conn.DNSDomain = dgv.Rows[selectedRow].Cells["DNSDomain"].Value?.ToString();
+                conn.DHCP_Enabled = dgv.Rows[selectedRow].Cells["DHCP_Enabled"].Value?.ToString();
+                conn.DNS_list = setDNSServerSearchOrder(dgv.Rows[selectedRow].Cells["DNSServer"].Value?.ToString());
+                conn.Gateway_list = setGateway(dgv.Rows[selectedRow].Cells["IPGateway"].Value?.ToString());
 
                 return conn;
             }

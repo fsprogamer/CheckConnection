@@ -46,27 +46,27 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(12, 35);
+            label2.Location = new System.Drawing.Point(14, 40);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(62, 13);
+            label2.Size = new System.Drawing.Size(63, 15);
             label2.TabIndex = 16;
             label2.Text = "&Результат:";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(12, 12);
+            label1.Location = new System.Drawing.Point(14, 14);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(111, 13);
+            label1.Size = new System.Drawing.Size(119, 15);
             label1.TabIndex = 12;
             label1.Text = "&Адрес или имя узла:";
             // 
             // close
             // 
             this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.close.Location = new System.Drawing.Point(316, 277);
+            this.close.Location = new System.Drawing.Point(369, 320);
             this.close.Name = "close";
-            this.close.Size = new System.Drawing.Size(75, 23);
+            this.close.Size = new System.Drawing.Size(87, 27);
             this.close.TabIndex = 17;
             this.close.Text = "&Закрыть";
             this.close.UseVisualStyleBackColor = true;
@@ -84,9 +84,9 @@
             this.hostNameHeader,
             this.roundTripTimeHeader});
             this.pingList.GridLines = true;
-            this.pingList.Location = new System.Drawing.Point(12, 54);
+            this.pingList.Location = new System.Drawing.Point(14, 62);
             this.pingList.Name = "pingList";
-            this.pingList.Size = new System.Drawing.Size(379, 217);
+            this.pingList.Size = new System.Drawing.Size(441, 250);
             this.pingList.TabIndex = 15;
             this.pingList.UseCompatibleStateImageBehavior = false;
             this.pingList.View = System.Windows.Forms.View.Details;
@@ -118,9 +118,9 @@
             // startPing
             // 
             this.startPing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.startPing.Location = new System.Drawing.Point(316, 8);
+            this.startPing.Location = new System.Drawing.Point(369, 9);
             this.startPing.Name = "startPing";
-            this.startPing.Size = new System.Drawing.Size(75, 23);
+            this.startPing.Size = new System.Drawing.Size(87, 27);
             this.startPing.TabIndex = 14;
             this.startPing.Text = "&Начать пинг";
             this.startPing.UseVisualStyleBackColor = true;
@@ -130,9 +130,9 @@
             // 
             this.destination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.destination.Location = new System.Drawing.Point(129, 9);
+            this.destination.Location = new System.Drawing.Point(150, 10);
             this.destination.Name = "destination";
-            this.destination.Size = new System.Drawing.Size(170, 20);
+            this.destination.Size = new System.Drawing.Size(198, 23);
             this.destination.TabIndex = 13;
             // 
             // tracert
@@ -144,9 +144,9 @@
             // 
             // MainPingForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 309);
+            this.ClientSize = new System.Drawing.Size(470, 357);
             this.Controls.Add(this.close);
             this.Controls.Add(label2);
             this.Controls.Add(this.pingList);

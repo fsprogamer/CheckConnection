@@ -1,7 +1,7 @@
 ﻿
 namespace Common
 {
-    public abstract class DBConnection: ClassWithLog
+    public abstract class DBConnection: ClassWithLogger<DBConnection>
     {
         private string _conn_string;
 

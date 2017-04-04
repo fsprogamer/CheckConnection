@@ -7,17 +7,16 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    public abstract class GenericWMIRepo<T> : ClassWithLog, IGenericWMIRepo<T> where T : class, new()
+    public abstract class GenericWMIRepo<T> : ClassWithLogger<T>, IGenericWMIRepo<T> where T : class, new()
                                                                                                                                                           
     {
-        private List<T> _entities;
         protected string _query = String.Empty;
         protected string _scope = String.Empty;
 
-        public List<T> Context
+        public IList<T> Context
         {
-            get { return _entities; }
-            set { _entities = value; }
+            get; 
+            set; 
         }
         public GenericWMIRepo(string scope, string query)
         {
@@ -29,11 +28,11 @@ namespace CheckConnection.Methods
         {
             return Context.Where<T>(predicate).First();
         }
-        public List<T> GetItems(Func<T, bool> predicate)
+        public IEnumerable<T> GetItems(Func<T, bool> predicate)
         {
-            return Context.Where<T>(predicate).ToList();
+            return Context.Where<T>(predicate)/*.ToList()*/;
         }
-        public List<T> GetItems()
+        public IEnumerable<T> GetItems()
         {
             return Context;
         }

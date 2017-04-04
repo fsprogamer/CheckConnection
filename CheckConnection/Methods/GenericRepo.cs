@@ -7,7 +7,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {     
-    public abstract class GenericRepo<C,T> : ClassWithLog, IGenericRepo<T> where T : class, IEntity, new()
+    public abstract class GenericRepo<C,T> : ClassWithLogger<T>, IGenericRepo<T> where T : class, IEntity, new()
                                                                            where C : SQLiteConnection
     {
         private C _entities;
@@ -42,7 +42,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    return (from i in Context.Table<T>() select i).ToList();
+                    return (from i in Context.Table<T>() select i)/*.ToList()*/;
                 }
                 catch (Exception e)
                 {

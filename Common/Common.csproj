@@ -44,6 +44,7 @@
     <Compile Include="FormWithLog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LogCreator.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\DNS.cs" />

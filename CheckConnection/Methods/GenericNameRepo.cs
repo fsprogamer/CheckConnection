@@ -20,7 +20,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    return (from i in Context.Table<T>() select i).Where(i => i.Name == Name).ToList();
+                    return (from i in Context.Table<T>() select i).Where(i => i.Name == Name)/*.ToList()*/;
                 }
                 catch (Exception e)
                 {

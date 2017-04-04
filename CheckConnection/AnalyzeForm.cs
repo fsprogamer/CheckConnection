@@ -131,7 +131,7 @@ namespace CheckConnection
 
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(ts, analyze._ProviderDefaultAddress);
+                this.BeginInvoke(ts, analyze.ProviderDefaultAddress);
             }            
         }
 

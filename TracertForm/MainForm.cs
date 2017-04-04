@@ -10,12 +10,16 @@ namespace TracertForm
 {
 	public partial class MainForm : BaseForm
 	{
-		public MainForm()
+		public MainForm(string pingAddress) : this()
 		{
-			InitializeComponent();
-		}
+            destination.Text = pingAddress;
+        }
+        public MainForm()
+        {
+            InitializeComponent();
+        }
 
-		private void close_Click(object sender, EventArgs e)
+        private void close_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}

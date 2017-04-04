@@ -22,7 +22,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    return Context.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", ConnectionId).ToList();
+                    return Context.Query<DNS>("SELECT * FROM DNS where connection_id = ? order by Order_Id asc", ConnectionId)/*.ToList()*/;
                 }
                 catch (Exception e)
                 {

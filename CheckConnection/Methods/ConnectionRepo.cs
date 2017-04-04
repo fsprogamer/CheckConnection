@@ -29,7 +29,7 @@ namespace CheckConnection.Methods
 		                ) AS row_Num
                         FROM Connection AS t1                        
                         ORDER BY Date desc) t3
-                        where row_Num between ? and ?", Offset + 1, Offset + Pagesize).ToList();
+                        where row_Num between ? and ?", Offset + 1, Offset + Pagesize)/*.ToList()*/;
                 }
                 catch (Exception e)
                 {
@@ -54,7 +54,7 @@ namespace CheckConnection.Methods
                         FROM Connection AS t1
                         where Name = ?
                         ORDER BY Date desc) t3
-                        where row_Num between ? and ?", Name, Name, Offset + 1, Offset + Pagesize).ToList();
+                        where row_Num between ? and ?", Name, Name, Offset + 1, Offset + Pagesize)/*.ToList()*/;
                 }
                 catch (Exception e)
                 {

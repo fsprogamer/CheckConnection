@@ -30,6 +30,16 @@ namespace CheckConnection
         {
             IWMIConnectionManager cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();            
             conn = cpmgr.GetItem(p=>p.Name == pconnname);
+            log.InfoFormat("pconnname={0}, conn.DHCP_Enabled={1}", pconnname,conn.DHCP_Enabled);
+
+            InitializeComponent();
+        }
+
+        public ChangeConnectionForm(uint index)
+        {
+            IWMIConnectionManager cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();
+            conn = cpmgr.GetItem(p => p.Index == index);
+            log.InfoFormat("index={0}, conn.DHCP_Enabled={1}", index, conn.DHCP_Enabled);
 
             InitializeComponent();
         }
@@ -41,8 +51,7 @@ namespace CheckConnection
         }
 
         private void ChangeConnectionForm_Load(object sender, EventArgs e)
-        {            
-
+        {
             ipAddressControl.Text = conn.Ip_Address_v4;
             NetMaskControl.Text = conn.IPSubnetMask;
             DHCPServerControl.Text = conn.DHCPServer;

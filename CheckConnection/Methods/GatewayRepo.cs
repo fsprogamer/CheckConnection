@@ -22,7 +22,7 @@ namespace CheckConnection.Methods
             {
                 try
                 {
-                    return Context.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc", ConnectionId).ToList();
+                    return Context.Query<Gateway>("SELECT * FROM Gateway where connection_id = ? order by Id asc", ConnectionId)/*.ToList()*/;
                 }
                 catch (Exception e)
                 {

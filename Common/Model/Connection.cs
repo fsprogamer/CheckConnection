@@ -2,12 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using SQLite;
+using System.ComponentModel;
 
 namespace CheckConnection.Model
 {
     public class Connection : INameEntity,IEntity
     {
-
+        public static string listDelimetr = "; ";
         [PrimaryKey, AutoIncrement, Unique]
         public int Id { get; set; }
         [NotNull, Indexed]
@@ -44,7 +45,7 @@ namespace CheckConnection.Model
                 {
                     foreach (Gateway gtw in Gateway_list)
                     {
-                        lIPGateway += gtw.IPGateway + "; ";
+                        lIPGateway += gtw.IPGateway + listDelimetr;
                     }
                     if (lIPGateway.Length > 2)
                         lIPGateway = lIPGateway.Substring(0, lIPGateway.Length - 2);
@@ -63,7 +64,7 @@ namespace CheckConnection.Model
                 {
                     foreach (DNS dns in DNS_list)
                     {
-                        lDNSServer += dns.DNSServer + "; ";
+                        lDNSServer += dns.DNSServer + listDelimetr;
                     }
                     if (lDNSServer.Length > 2)
                         lDNSServer = lDNSServer.Substring(0, lDNSServer.Length - 2);
@@ -78,6 +79,7 @@ namespace CheckConnection.Model
         public ushort NetConnectionStatus { get; set; }
         public bool NetEnabled { get; set; }                
         [NotNull]
+        [Display(Name = "Index")]
         public uint Index { get; set; } //связь networkadapter и networkadapterconfiguration
         public string GUID { get; set; }  
         //public uint IPConnectionMetric { get; set; }

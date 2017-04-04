@@ -7,7 +7,7 @@ using Common;
 
 namespace PingLib.Methods
 {
-    public class PingResultManager: ClassWithLog
+    public class PingResultManager: ClassWithLogger<PingResultManager>
     {
         public PingResultManager()
         {

@@ -5,7 +5,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    public class MObjectManager: ClassWithLog, IMObjectManager
+    public class MObjectManager: ClassWithLogger<MObjectManager>, IMObjectManager
     {
         private ManagementObject _objMO;        
         public MObjectManager(ManagementObject pobjMO)
@@ -196,7 +196,7 @@ namespace CheckConnection.Methods
                 if ((osInfo.Version.Major <= 5) && (osInfo.Version.Minor <= 1))
                 {
                     CNICManager cnic = new CNICManager();
-                    cnic.EnableConnection(_objMO.Properties["NetConnectionId"].ToString());
+                    cnic.DisableConnection(_objMO.Properties["NetConnectionId"].ToString());
                 }
                 else
                     _objMO.InvokeMethod("Disable", null);

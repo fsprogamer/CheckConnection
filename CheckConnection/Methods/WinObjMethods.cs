@@ -61,7 +61,8 @@ namespace CheckConnection.Methods
                 };
                 dgv.Columns.Add(colName);
             }
-            dgv.Columns[dgv.ColumnCount - 1].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill;
+            dgv.Columns["Index"].Visible = false;//Index
+            dgv.Columns[dgv.ColumnCount - 2].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill;//DNS
         }
 
         public static void AddColumnForWizard(ref DataGridView dgv)
@@ -87,6 +88,15 @@ namespace CheckConnection.Methods
             return dgv;
         }
 
+        public static string GetSelectedConnectionParam(DataGridView dgv, string paramname)
+        {
+            int selectedrow = WinObjMethods.GetSelectedRow(dgv);
+            //log.InfoFormat("WinObjMethods.GetSelectedRow {0},{1}", paramname, selectedrow.ToString());
+            string Name = string.Empty;
+            if ((dgv.RowCount > 0) && (dgv.Rows[selectedrow].Cells[paramname].Value != null))
+                Name = dgv.Rows[selectedrow].Cells[paramname].Value.ToString();
+            return Name;
+        }
 
         //public static bool HasWritePermission(string dir)
         //{
