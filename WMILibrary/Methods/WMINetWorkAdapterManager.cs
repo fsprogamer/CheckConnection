@@ -66,43 +66,66 @@ namespace CheckConnection.Methods
             return conn;
         }
 
+        //public List<Connection> GetItems(Func<NetworkAdapter, bool> predicate)
+        //{
+        //    List<Connection> lst = new List<Connection>();
+
+        //    try
+        //    {
+        //        lst = (from conn in _child_repository.GetItems()
+        //           join adapter in _repository.GetItems(predicate) on conn.Index equals adapter.Index
+        //           orderby !string.IsNullOrEmpty(adapter.NetConnectionID) descending
+        //           select new Connection()
+        //           {
+        //               Id = conn.Id,
+        //               Date = conn.Date,
+        //               NetConnectionID = adapter.NetConnectionID,
+        //               Name = conn.Name,
+        //               MAC = conn.MAC,
+        //               Ip_Address_v4 = conn.Ip_Address_v4,
+        //               Ip_Address_v6 = conn.Ip_Address_v6,
+        //               DHCP_Enabled = conn.DHCP_Enabled,
+        //               DHCPServer = conn.DHCPServer,
+        //               DNSDomain = conn.DNSDomain,
+        //               IPSubnetMask = conn.IPSubnetMask,
+        //               DNS_list = conn.DNS_list,
+        //               Gateway_list = conn.Gateway_list,
+        //               NetConnectionStatus = adapter.NetConnectionStatus,
+        //               NetEnabled = adapter.NetEnabled,
+        //               Index = conn.Index,
+        //               GUID = conn.GUID
+        //           }).ToList();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error("error GetItems", ex);
+        //    }
+
+        //    return lst;
+        //}
+
         public List<Connection> GetItems(Func<NetworkAdapter, bool> predicate)
         {
-            List<Connection> lst = new List<Connection>(_child_repository.mo_repo.Context.Count);
+            List<Connection> connlist = new List<Connection>();
+            foreach (NetworkAdapter adapter in _repository.GetItems(predicate))
+            {
+                foreach (Connection conn in _child_repository.GetItems())
+                {
+                    if (conn.Index == adapter.Index)
+                    {
+                        conn.NetConnectionID = adapter.NetConnectionID;
+                        conn.NetConnectionStatus = adapter.NetConnectionStatus;
+                        conn.NetEnabled = adapter.NetEnabled;
+                        //Читаем SettingID из NetworkAdapterConfiguration
+                        //conn.GUID = adapter.GUID;
 
-            try
-            {
-                lst = (from conn in _child_repository.GetItems()
-                   join adapter in _repository.GetItems(predicate) on conn.Index equals adapter.Index
-                   orderby !string.IsNullOrEmpty(adapter.NetConnectionID) descending
-                   select new Connection()
-                   {
-                       Id = conn.Id,
-                       Date = conn.Date,
-                       NetConnectionID = adapter.NetConnectionID,
-                       Name = conn.Name,
-                       MAC = conn.MAC,
-                       Ip_Address_v4 = conn.Ip_Address_v4,
-                       Ip_Address_v6 = conn.Ip_Address_v6,
-                       DHCP_Enabled = conn.DHCP_Enabled,
-                       DHCPServer = conn.DHCPServer,
-                       DNSDomain = conn.DNSDomain,
-                       IPSubnetMask = conn.IPSubnetMask,
-                       DNS_list = conn.DNS_list,
-                       Gateway_list = conn.Gateway_list,
-                       NetConnectionStatus = adapter.NetConnectionStatus,
-                       NetEnabled = adapter.NetEnabled,
-                       Index = conn.Index,
-                       GUID = conn.GUID
-                   }).ToList();
-            }
-            catch (Exception ex)
-            {
-                log.Error("error GetItems", ex);
+                        connlist.Add(conn);
+                    }
+                }
             }
 
-            return lst;
-        }        
+            return connlist.OrderByDescending(p => p.NetConnectionID != null).ToList();
+        }
 
         public Connection GetItem(DataGridView dgv)
         {

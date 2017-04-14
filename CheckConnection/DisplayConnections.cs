@@ -123,34 +123,35 @@ namespace CheckConnection
             log.Info("DisplayConnections, after IWMINetworkAdapterManager");
 
             #region not used
-            //dReadConnectionInfo dconnection = new dReadConnectionInfo(ReadConnectionInfo);
-            ////Invoke our method in another thread
-            //IAsyncResult asyncConnection = dconnection.BeginInvoke(parameter, new AsyncCallback(ConnectionCallBack), null);
-            //log.Info("DisplayConnections, after Ninject IConnectionManager");
+            dReadConnectionInfo dconnection = new dReadConnectionInfo(ReadConnectionInfo);
+            //Invoke our method in another thread
+            IAsyncResult asyncConnection = dconnection.BeginInvoke(parameter, new AsyncCallback(ConnectionCallBack), null);
+            log.Info("DisplayConnections, after Ninject IConnectionManager");
 
-            //dReadDNSInfo ddns = new dReadDNSInfo(ReadDNSInfo);
-            ////Invoke our method in another thread
-            //IAsyncResult asyncDNS = ddns.BeginInvoke(parameter, new AsyncCallback(DNSCallBack), null);
-            //log.Info("DisplayConnections, after Ninject IDNSManager");
+            dReadDNSInfo ddns = new dReadDNSInfo(ReadDNSInfo);
+            //Invoke our method in another thread
+            IAsyncResult asyncDNS = ddns.BeginInvoke(parameter, new AsyncCallback(DNSCallBack), null);
+            log.Info("DisplayConnections, after Ninject IDNSManager");
 
-            //dReadGatewayInfo dgateway = new dReadGatewayInfo(ReadGatewayInfo);
-            ////Invoke our method in another thread
-            //IAsyncResult asyncGateway = dgateway.BeginInvoke(parameter, new AsyncCallback(GatewayCallBack), null);
-            //log.Info("DisplayConnections, after Ninject IGatewayManager");
+            dReadGatewayInfo dgateway = new dReadGatewayInfo(ReadGatewayInfo);
+            //Invoke our method in another thread
+            IAsyncResult asyncGateway = dgateway.BeginInvoke(parameter, new AsyncCallback(GatewayCallBack), null);
+            log.Info("DisplayConnections, after Ninject IGatewayManager");
 
-            //asyncConnection.AsyncWaitHandle.WaitOne();
-            //asyncGateway.AsyncWaitHandle.WaitOne();
-            //asyncDNS.AsyncWaitHandle.WaitOne();
+            asyncConnection.AsyncWaitHandle.WaitOne();
+            asyncGateway.AsyncWaitHandle.WaitOne();
+            asyncDNS.AsyncWaitHandle.WaitOne();
             #endregion
 
             //usermgr = Common.NinjectProgram.Kernel.Get<IUserManager>(parameter);
-            connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
-            log.Info("DisplayConnections, after Ninject IConnectionManager");
-            dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
-            log.Info("DisplayConnections, before Ninject IDNSManager");
-            gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
-            log.Info("DisplayConnections, after Ninject IGatewayManager");
-            log.Info("DisplayConnections, before IWMINetworkAdapterManager");
+
+            //connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
+            //log.Info("DisplayConnections, after Ninject IConnectionManager");
+            //dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
+            //log.Info("DisplayConnections, before Ninject IDNSManager");
+            //gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
+            //log.Info("DisplayConnections, after Ninject IGatewayManager");
+            //log.Info("DisplayConnections, before IWMINetworkAdapterManager");
 
             asyncWMI.AsyncWaitHandle.WaitOne();
 
