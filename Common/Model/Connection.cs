@@ -5,7 +5,7 @@ using SQLite;
 using System.ComponentModel;
 
 namespace CheckConnection.Model
-{
+{    
     public class Connection : INameEntity,IEntity
     {
         public static string listDelimetr = "; ";

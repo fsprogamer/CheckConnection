@@ -242,13 +242,14 @@ namespace CheckConnection
             WinObjMethods.AddColumn(ref HistorydataGridView);
             
             int rowcnt = 0;
-            string name = WinObjMethods.GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            //string name = WinObjMethods.GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
+            //string name = (ConnectionGridbindingSource.Current as Connection).Name;
 
-            if (!String.IsNullOrEmpty(name))
-            {
-                //Get count
-                rowcnt = connmgr.GetConnectionsAmount();// ByName(name);
-            }
+            //if (!String.IsNullOrEmpty(name))
+            //{
+            //Get count
+            rowcnt = connmgr.GetConnectionsAmount();// ByName(name);
+            //}
             if (rowcnt > 0)
             {
                 HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
@@ -267,10 +268,11 @@ namespace CheckConnection
 
             if (connlist.Count > 0)
             {
-                var bindsList = new BindingList<Connection>(connlist);
+                //var bindsList = new BindingList<Connection>(connlist);
                 //Bind BindingList directly to the DataGrid
-                var source = new BindingSource(bindsList, null);
-                ConnectionsdataGridView.DataSource = source;
+                //var source = new BindingSource(bindsList, null);
+                ConnectionGridbindingSource.DataSource = connlist;
+                ConnectionsdataGridView.DataSource = ConnectionGridbindingSource;
             }
         }              
 
@@ -482,13 +484,11 @@ namespace CheckConnection
             }
             else
             {
-                int selectedrow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
-
-                if (ConnectionsdataGridView.Rows[selectedrow].Cells["Index"].Value != null)
-                {
-                    uint Index = (uint)ConnectionsdataGridView.Rows[selectedrow].Cells["Index"].Value;
+                //int selectedrow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
+                uint Index = (ConnectionGridbindingSource.Current as Connection).Index;
+                if (Index > 0)
+                {                    
                     var ChangeConnectionForm = new ChangeConnectionForm(Index);
-
                     ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
                     ChangeConnectionForm.ShowDialog();
                 }
@@ -559,14 +559,17 @@ namespace CheckConnection
             else
             {
 
-                int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
-                string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
+                //int selectedRow = WinObjMethods.GetSelectedRow(ConnectionsdataGridView);
+                //string Name = ConnectionsdataGridView.Rows[selectedRow].Cells["Name"].Value.ToString();
 
-                Connection conn = namgr.GetItem(HistorydataGridView);
+                Connection conn = HistoryGridbindingSource.Current as Connection;
+
+                //Connection conn = namgr.GetItem(HistorydataGridView);
+
                 if (conn != null)
                 {
                     //Прописываем название подключения, для которого изменяются параметы
-                    conn.Name = Name;
+                    //conn.Name = Name;
                     var ChangeConnectionForm = new ChangeConnectionForm(/*wmi,*/ conn);
 
                     ChangeConnectionForm.StartPosition = FormStartPosition.CenterScreen;
@@ -604,10 +607,14 @@ namespace CheckConnection
 
                     foreach (Connection conn in connlist)
                     {
-                        IList<DNS> dnslist = dnsmgr.GetDNSsByConnectionId(conn.Id);
-                        IList<Gateway> gtwlist = gatewaymgr.GetGatewaysByConnectionId(conn.Id);
+                        conn.DNS_list = dnsmgr.GetDNSsByConnectionId(conn.Id).ToList();
+                        conn.Gateway_list = gatewaymgr.GetGatewaysByConnectionId(conn.Id).ToList();
                     }
-                    HistorydataGridView.DataSource = connlist;
+
+                    //var bindsList = new BindingList<Connection>(connlist);
+                    //Bind BindingList directly to the DataGrid
+                    HistoryGridbindingSource.DataSource = connlist;
+                    HistorydataGridView.DataSource = HistoryGridbindingSource;
 
                     WinObjMethods.ResizeGrid(ref ConnectionsdataGridView);
                     CorrectWindowSize();
@@ -664,10 +671,11 @@ namespace CheckConnection
             else
             {
                 log.Info("Before toolStripButtonRenewDHCP_Click");
-                string name = WinObjMethods.GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-                if (!String.IsNullOrEmpty(name))
+                
+                uint Index = (ConnectionGridbindingSource.Current as Connection).Index;
+                if (Index > 0)
                 {
-                    IMObjectManager objMO = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => p.Properties["Description"].Value.ToString() == name));
+                    IMObjectManager objMO = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => Convert.ToUInt32(p.Properties["Index"].Value) == Index));
                     objMO.RenewDHCPLease();
                 }
                 log.Info("Before toolStripButtonRenewDHCP_Click");
@@ -723,6 +731,12 @@ namespace CheckConnection
 
         protected override void Dispose(bool disposing)
         {
+            ConnectionsdataGridView.DataSource = null;
+            HistorydataGridView.DataSource = null;
+
+            ConnectionGridbindingSource.DataSource = null;
+            HistoryGridbindingSource.DataSource = null;
+
             if (disposing && (components != null))
             {
                 components.Dispose();

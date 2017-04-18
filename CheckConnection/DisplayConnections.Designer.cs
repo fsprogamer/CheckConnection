@@ -56,6 +56,8 @@
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ConnectionHistorylabel = new System.Windows.Forms.Label();
             this.HistorybindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.HistoryGridbindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ConnectionGridbindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ConnectionsdataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HistorydataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -66,6 +68,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.HistorybindingNavigator)).BeginInit();
             this.HistorybindingNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HistorybindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HistoryGridbindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ConnectionGridbindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // ConnectionsdataGridView
@@ -101,7 +105,7 @@
             this.HistorydataGridView.Name = "HistorydataGridView";
             this.HistorydataGridView.ReadOnly = true;
             this.HistorydataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.HistorydataGridView.Size = new System.Drawing.Size(1291, 237);
+            this.HistorydataGridView.Size = new System.Drawing.Size(1291, 235);
             this.HistorydataGridView.TabIndex = 1;
             // 
             // splitContainer1
@@ -390,6 +394,8 @@
             this.HistorybindingNavigator.ResumeLayout(false);
             this.HistorybindingNavigator.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HistorybindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HistoryGridbindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ConnectionGridbindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -422,5 +428,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonRenewDHCP;
         private System.Windows.Forms.ToolStripButton toolStripButtonAnalyze;
         private System.Windows.Forms.ToolStripButton toolStripButtonRepair;
+        private System.Windows.Forms.BindingSource HistoryGridbindingSource;
+        private System.Windows.Forms.BindingSource ConnectionGridbindingSource;
     }
 }
