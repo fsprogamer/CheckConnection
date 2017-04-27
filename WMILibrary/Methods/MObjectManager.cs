@@ -2,6 +2,7 @@
 using System.Management;
 
 using Common;
+using System.Threading.Tasks;
 
 namespace CheckConnection.Methods
 {
@@ -136,7 +137,7 @@ namespace CheckConnection.Methods
 
         public int RenewDHCPLease()
         {
-            int ret = 0;
+            int ret;
             try
             {
                 _objMO.InvokeMethod("ReleaseDHCPLease", null);

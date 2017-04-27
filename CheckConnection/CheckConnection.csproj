@@ -137,6 +137,12 @@
     <Compile Include="Methods\UserManager.cs" />
     <Compile Include="Methods\UserRepo.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="ModeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModeForm.Designer.cs">
+      <DependentUpon>ModeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\PageOffsetList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DisplayConnections.resx">
       <DependentUpon>DisplayConnections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModeForm.resx">
+      <DependentUpon>ModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

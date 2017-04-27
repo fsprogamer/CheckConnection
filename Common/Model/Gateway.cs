@@ -2,10 +2,8 @@
 
 namespace CheckConnection.Model
 {
-    public class Gateway : IEntity
+    public class Gateway : Entity
     {
-        [PrimaryKey, AutoIncrement, Unique]
-        public int Id { get; set; }
         [NotNull,Indexed]
         public int Connection_Id { get; set; }
         [NotNull]

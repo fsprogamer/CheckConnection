@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SQLite;
-
+﻿using SQLite;
 
 namespace CheckConnection.Model
 {
-    public class DNS : IEntity
+    public class DNS : Entity
     {
-        [PrimaryKey, AutoIncrement, Unique]
-        public int Id { get; set; }
+        //[PrimaryKey, AutoIncrement, Unique]
+        //public int Id { get; set; }
         [NotNull, Indexed]
         public int Connection_Id { get; set; }
         [NotNull]

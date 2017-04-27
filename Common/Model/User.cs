@@ -2,9 +2,8 @@
 
 namespace CheckConnection.Model
     {
-        public class User : IEntity
-        {
-            public int Id { get; set; }            
+        public class User : Entity
+        {        
             public DateTime DateFrom { get; set; }
             public DateTime DateTo { get; set; }
         }

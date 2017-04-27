@@ -33,7 +33,7 @@
             this.ConnectionsdataGridView = new System.Windows.Forms.DataGridView();
             this.HistorydataGridView = new System.Windows.Forms.DataGridView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.PingtoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TracerttoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.ComparetoolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -64,7 +64,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HistorybindingNavigator)).BeginInit();
             this.HistorybindingNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HistorybindingSource)).BeginInit();
@@ -105,7 +105,7 @@
             this.HistorydataGridView.Name = "HistorydataGridView";
             this.HistorydataGridView.ReadOnly = true;
             this.HistorydataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.HistorydataGridView.Size = new System.Drawing.Size(1291, 235);
+            this.HistorydataGridView.Size = new System.Drawing.Size(1291, 234);
             this.HistorydataGridView.TabIndex = 1;
             // 
             // splitContainer1
@@ -119,7 +119,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.toolStrip1);
+            this.splitContainer1.Panel1.Controls.Add(this.toolStrip);
             this.splitContainer1.Panel1.Controls.Add(this.ConnectionsdataGridView);
             // 
             // splitContainer1.Panel2
@@ -132,9 +132,9 @@
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 2;
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.PingtoolStripButton,
             this.TracerttoolStripButton,
             this.ComparetoolStripButton,
@@ -145,11 +145,11 @@
             this.toolStripButtonRefresh,
             this.toolStripButtonAnalyze,
             this.toolStripButtonRepair});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1291, 38);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(1291, 38);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // PingtoolStripButton
             // 
@@ -388,8 +388,8 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.HistorybindingNavigator)).EndInit();
             this.HistorybindingNavigator.ResumeLayout(false);
             this.HistorybindingNavigator.PerformLayout();
@@ -406,7 +406,7 @@
         private System.Windows.Forms.DataGridView HistorydataGridView;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label ConnectionHistorylabel;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton PingtoolStripButton;
         private System.Windows.Forms.ToolStripButton TracerttoolStripButton;
         private System.Windows.Forms.ToolStripButton ComparetoolStripButton;

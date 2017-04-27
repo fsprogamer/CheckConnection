@@ -48,10 +48,12 @@
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\DNS.cs" />
+    <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\Gateway.cs" />
     <Compile Include="Model\IEntity.cs" />
     <Compile Include="Model\INameEntity.cs" />
     <Compile Include="Model\MediumType.cs" />
+    <Compile Include="Model\NameEntity.cs" />
     <Compile Include="Model\NetworkAdapter.cs" />
     <Compile Include="Model\Service.cs" />
     <Compile Include="Model\User.cs" />

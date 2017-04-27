@@ -1,9 +1,8 @@
 ﻿namespace CheckConnection.Model
 {
-    public class MediumType:INameEntity
+    public class MediumType:NameEntity
     {
-        public string Active { get; set; }
-        public string Name { get; set; }
+        public string Active { get; set; }        
         public uint NdisPhysicalMediumType { get; set; }
     }
 }

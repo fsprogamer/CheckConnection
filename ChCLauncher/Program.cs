@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 
 namespace ChCLauncher
 {
@@ -10,8 +11,9 @@ namespace ChCLauncher
         {
             string fileName = @".\CheckConnection.exe";
             const int ERROR_CANCELLED = 1223; //The operation was canceled by the user.
-            ProcessStartInfo info;
-            info = new ProcessStartInfo(fileName);
+            ProcessStartInfo info = new ProcessStartInfo(fileName);
+
+            CopySqliteDll();
 
             info.UseShellExecute = true;
             info.Verb = "runas";
@@ -35,10 +37,35 @@ namespace ChCLauncher
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
                 }
             }
             
+        }
+
+        private static void CopySqliteDll()
+        {
+            string FromFile;
+            string ToFile = @".\sqlite3.dll";
+
+            if (System.Environment.Is64BitOperatingSystem == true)
+                FromFile = @".\x64\sqlite3.dll";
+            else
+                FromFile = @".\x86\sqlite3.dll";
+
+            try
+            {
+                if (File.Exists(ToFile))
+                    File.Delete(ToFile);
+                File.Copy(FromFile, ToFile);
+                Console.WriteLine($"sqlite3.dll replace {FromFile} to {ToFile}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadLine();
+            }
         }
     }
 }

@@ -20,22 +20,14 @@ using PingLib.Model;
 
 namespace CheckConnection
 {
-
     public partial class DisplayConnections : BaseForm
     {
         //delegate void SetComboBoxCellType(int iRowIndex);
-        delegate IWMINetworkAdapterManager dReadWMIInfo();
-        delegate IConnectionManager dReadConnectionInfo(IParameter parameter);
-        delegate IDNSManager dReadDNSInfo(IParameter parameter);
-        delegate IGatewayManager dReadGatewayInfo(IParameter parameter);
 
         private bool FormLoadComplete = false;
         private bool IsAdminAccount = false;
         const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);        
-
-        //private readonly ILog log;
-        //ILogCreator logCreator = new LogCreator();       
+        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);    
 
         private int HistorypageSize = Properties.Settings.Default.HistoryPageSize;//10;
 
@@ -46,15 +38,11 @@ namespace CheckConnection
         private IGatewayManager gatewaymgr;        
         private IWMINetworkAdapterManager namgr;        
         private readonly uint ExpiryPeriod = 30;
+        public int Mode { get; set; }
 
-        //public ILogCreator<DisplayConnections>()
-        //{
-        //}
         public DisplayConnections( )
         {
             InitializeComponent();
-
-            //log = logCreator.GetTypeLogger<DisplayConnections> ();
 
             log.Info("DisplayConnections, before");
             HistorybindingNavigator.BindingSource = HistorybindingSource;
@@ -116,24 +104,23 @@ namespace CheckConnection
 
             log.Info("DisplayConnections, before Ninject");
 
-            log.Info("DisplayConnections, before IWMINetworkAdapterManager");            
-            dReadWMIInfo dwmi = ReadWMIInfo;
+            log.Info("DisplayConnections, before IWMINetworkAdapterManager");
+            Func<IWMINetworkAdapterManager> dwmi = ReadWMIInfo;
             //Invoke our method in another thread
             IAsyncResult asyncWMI = dwmi.BeginInvoke(new AsyncCallback(WMICallBack), null);
             log.Info("DisplayConnections, after IWMINetworkAdapterManager");
-
-            #region not used
-            dReadConnectionInfo dconnection = new dReadConnectionInfo(ReadConnectionInfo);
+            
+            Func<IParameter, IConnectionManager> dconnection = new Func<IParameter, IConnectionManager>(ReadConnectionInfo);
             //Invoke our method in another thread
             IAsyncResult asyncConnection = dconnection.BeginInvoke(parameter, new AsyncCallback(ConnectionCallBack), null);
             log.Info("DisplayConnections, after Ninject IConnectionManager");
 
-            dReadDNSInfo ddns = new dReadDNSInfo(ReadDNSInfo);
+            Func<IParameter, IDNSManager> ddns = new Func<IParameter, IDNSManager>(ReadDNSInfo);
             //Invoke our method in another thread
             IAsyncResult asyncDNS = ddns.BeginInvoke(parameter, new AsyncCallback(DNSCallBack), null);
             log.Info("DisplayConnections, after Ninject IDNSManager");
 
-            dReadGatewayInfo dgateway = new dReadGatewayInfo(ReadGatewayInfo);
+            Func<IParameter, IGatewayManager> dgateway = new Func<IParameter,IGatewayManager>(ReadGatewayInfo);
             //Invoke our method in another thread
             IAsyncResult asyncGateway = dgateway.BeginInvoke(parameter, new AsyncCallback(GatewayCallBack), null);
             log.Info("DisplayConnections, after Ninject IGatewayManager");
@@ -141,10 +128,8 @@ namespace CheckConnection
             asyncConnection.AsyncWaitHandle.WaitOne();
             asyncGateway.AsyncWaitHandle.WaitOne();
             asyncDNS.AsyncWaitHandle.WaitOne();
-            #endregion
 
             //usermgr = Common.NinjectProgram.Kernel.Get<IUserManager>(parameter);
-
             //connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
             //log.Info("DisplayConnections, after Ninject IConnectionManager");
             //dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
@@ -176,7 +161,7 @@ namespace CheckConnection
         void WMICallBack(IAsyncResult async)
         {
             AsyncResult ar  = (AsyncResult)async;
-            dReadWMIInfo dwmi = (dReadWMIInfo)ar.AsyncDelegate;
+            Func<IWMINetworkAdapterManager> dwmi = (Func<IWMINetworkAdapterManager>)ar.AsyncDelegate;
             namgr = dwmi.EndInvoke(async);
             log.Info("DisplayConnections, complete IWMINetworkAdapterManager");
         }
@@ -191,7 +176,7 @@ namespace CheckConnection
         void ConnectionCallBack(IAsyncResult async)
         {
             AsyncResult ar = (AsyncResult)async;
-            dReadConnectionInfo dconnection = (dReadConnectionInfo)ar.AsyncDelegate;
+            Func<IParameter, IConnectionManager> dconnection = (Func<IParameter, IConnectionManager>)ar.AsyncDelegate;
             connmgr = dconnection.EndInvoke(async);
             log.Info("DisplayConnections, complete IConnectionManager");
         }
@@ -205,7 +190,7 @@ namespace CheckConnection
         void DNSCallBack(IAsyncResult async)
         {
             AsyncResult ar = (AsyncResult)async;
-            dReadDNSInfo ddns = (dReadDNSInfo)ar.AsyncDelegate;
+            Func<IParameter, IDNSManager> ddns = (Func<IParameter, IDNSManager>)ar.AsyncDelegate;
             dnsmgr = ddns.EndInvoke(async);
             log.Info("DisplayConnections, complete IDNSManager");
         }
@@ -219,7 +204,7 @@ namespace CheckConnection
         void GatewayCallBack(IAsyncResult async)
         {
             AsyncResult ar = (AsyncResult)async;
-            dReadGatewayInfo dgateway = (dReadGatewayInfo)ar.AsyncDelegate;
+            Func<IParameter, IGatewayManager> dgateway = (Func<IParameter, IGatewayManager>)ar.AsyncDelegate;
             gatewaymgr = dgateway.EndInvoke(async);
             log.Info("DisplayConnections, complete IGatewayManager");
         }
@@ -240,16 +225,16 @@ namespace CheckConnection
             BindConnectionGrid();
 
             WinObjMethods.AddColumn(ref HistorydataGridView);
-            
-            int rowcnt = 0;
-            //string name = WinObjMethods.GetSelectedConnectionParam(ConnectionsdataGridView, "Name");
-            //string name = (ConnectionGridbindingSource.Current as Connection).Name;
 
-            //if (!String.IsNullOrEmpty(name))
-            //{
-            //Get count
-            rowcnt = connmgr.GetConnectionsAmount();// ByName(name);
-            //}
+            if (Mode == 0)
+            {
+                foreach (var item in toolStrip.Items)
+                    (item as ToolStripButton).Visible = false;
+
+                toolStripButtonRepair.Visible = true;
+            }
+
+            int rowcnt = connmgr.GetConnectionsAmount();            
             if (rowcnt > 0)
             {
                 HistorybindingSource.DataSource = new PageOffsetList(rowcnt);
@@ -260,7 +245,6 @@ namespace CheckConnection
             FormLoadComplete = true;
             log.Info("DisplayConnections_Load, after");
         }
-
 
         private void BindConnectionGrid()
         {            
@@ -659,6 +643,7 @@ namespace CheckConnection
             }
         }
 
+
         private void toolStripButtonRenewDHCP_Click(object sender, EventArgs e)
         {
             if (!IsAdminAccount)
@@ -676,7 +661,11 @@ namespace CheckConnection
                 if (Index > 0)
                 {
                     IMObjectManager objMO = new MObjectManager(new WMIConnectionManager().mo_repo.GetItem(p => Convert.ToUInt32(p.Properties["Index"].Value) == Index));
-                    objMO.RenewDHCPLease();
+                    // objMO.RenewDHCPLease();
+                    Func<int> drenewdhcp = objMO.RenewDHCPLease;
+                    //Invoke our method in another thread
+                    IAsyncResult async_result = drenewdhcp.BeginInvoke(null, null);
+                    int res = drenewdhcp.EndInvoke(async_result);
                 }
                 log.Info("Before toolStripButtonRenewDHCP_Click");
             }
@@ -730,7 +719,8 @@ namespace CheckConnection
         }
 
         protected override void Dispose(bool disposing)
-        {
+        {            
+            
             ConnectionsdataGridView.DataSource = null;
             HistorydataGridView.DataSource = null;
 
@@ -743,11 +733,11 @@ namespace CheckConnection
             }
             if (disposing && (sqlconn != null))
             {
+                sqlconn?.Close();
                 sqlconn.Dispose();
             }
             base.Dispose(disposing);
         }
-
 
         private void toolStripRepairButton_Click(object sender, EventArgs e)
         {

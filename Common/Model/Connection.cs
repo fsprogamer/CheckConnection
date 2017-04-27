@@ -6,11 +6,11 @@ using System.ComponentModel;
 
 namespace CheckConnection.Model
 {    
-    public class Connection : INameEntity,IEntity
+    public class Connection : Entity, INameEntity
     {
         public static string listDelimetr = "; ";
-        [PrimaryKey, AutoIncrement, Unique]
-        public int Id { get; set; }
+        //[PrimaryKey, AutoIncrement, Unique]
+        //public int Id { get; set; }
         [NotNull, Indexed]
         [Display(Name = "Дата и время")]
         public DateTime Date { get; set; }
