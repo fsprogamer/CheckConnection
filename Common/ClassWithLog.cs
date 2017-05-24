@@ -1,6 +1,4 @@
-﻿using System;
-using log4net;
-using Ninject;
+﻿using log4net;
 
 namespace Common
 {
@@ -9,7 +7,7 @@ namespace Common
         protected readonly ILog log;
         protected ClassWithLog ()
         {
-            log = Common.NinjectProgram.Kernel.Get<ILog>();            
+            log = IocKernel.Get<ILog>();            
         }
     }
 
@@ -18,7 +16,7 @@ namespace Common
         protected readonly ILog log;
         protected ClassWithLogger()
         {
-          ILogCreator logCreator = new LogCreator();          
+          ILogCreator logCreator = IocKernel.Get<ILogCreator>();         
           log = logCreator.GetTypeLogger<T>();
         }
     }

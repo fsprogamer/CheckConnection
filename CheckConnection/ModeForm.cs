@@ -9,8 +9,7 @@ using Common;
 namespace CheckConnection
 {
     public partial class ModeForm: BaseForm
-    {
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    {        
         public ModeForm()
         {
             InitializeComponent();

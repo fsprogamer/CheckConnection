@@ -7,9 +7,11 @@ namespace ChCLauncher
 {
     class Program
     {
+        const string pressEnter = "Для продолжения нажмите Enter.";
         static void Main(string[] args)
         {
             string fileName = @".\CheckConnection.exe";
+            
             const int ERROR_CANCELLED = 1223; //The operation was canceled by the user.
             ProcessStartInfo info = new ProcessStartInfo(fileName);
 
@@ -38,6 +40,7 @@ namespace ChCLauncher
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    Console.WriteLine(pressEnter);
                     Console.ReadLine();
                 }
             }
@@ -64,6 +67,7 @@ namespace ChCLauncher
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.WriteLine(pressEnter);
                 Console.ReadLine();
             }
         }

@@ -11,12 +11,10 @@ using log4net;
 
 namespace CheckConnection
 {
-    public partial class AnalyzeForm : BaseForm
+    public partial class AnalyzeForm : FormWithLogger<AnalyzeForm>
     {
         private Connection _conn;        
-        private AnalyzeManager analyze;
-
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private AnalyzeManager analyze;       
         
         //public delegate int BinaryOp(int data, int time);
 

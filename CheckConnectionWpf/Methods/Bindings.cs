@@ -1,10 +1,10 @@
 ﻿using Ninject.Modules;
 using log4net;
 using Common;
+using CheckConnection.Methods;
 
-namespace CheckConnection.Methods
+namespace CheckConnectionWpf.Methods
 {
-
     public class Bindings : NinjectModule
     {
         public override void Load()
@@ -20,8 +20,7 @@ namespace CheckConnection.Methods
              LogManager.GetLogger(context.Request.ParentContext == null ?
                                   typeof(object) :
                                   context.Request.ParentContext.Plan.Type));
-
-            Bind<ILogCreator>().To<LogCreator>();            
+            Bind<ILogCreator>().To<LogCreator>();
         }
     }
 }

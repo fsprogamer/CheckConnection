@@ -4,7 +4,7 @@ using Microsoft.Win32;
 
 namespace CheckConnection.Methods
 {
-    public class RegistryManager<T> : ClassWithLog
+    public class RegistryManager<T> : ClassWithLogger<RegistryManager<T>>
     {
         string _path;
         public RegistryManager(string path)

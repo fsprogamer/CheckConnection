@@ -1,33 +1,25 @@
-﻿using System.ComponentModel;
-using System.Windows.Forms;
+﻿using CheckConnection.Methods;
+using CheckConnection.Model;
+using Common;
+using Ninject.Parameters;
+using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.IO;
-using SQLite;
 using System.Linq;
-using System;
-
-using Common;
-using CheckConnection.Methods;
-using CheckConnection.Model;
-
-using Ninject;
-using Ninject.Parameters;
-using log4net;
 using System.Runtime.Remoting.Messaging;
-using PingLib.Model;
+using System.Windows.Forms;
 
 namespace CheckConnection
 {
-    public partial class DisplayConnections : BaseForm
+    public partial class DisplayConnections : FormWithLogger<DisplayConnections>
     {
         //delegate void SetComboBoxCellType(int iRowIndex);
 
         private bool FormLoadComplete = false;
         private bool IsAdminAccount = false;
-        const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);    
+        const string NotAdmin = @"Изменения в настройки сетевых подключений могут вносить только пользователи из группы 'Администраторы'.";        
 
         private int HistorypageSize = Properties.Settings.Default.HistoryPageSize;//10;
 
@@ -53,39 +45,8 @@ namespace CheckConnection
 
             SetToolStripTitles();
 
-            string conn_string;
-            if (Properties.Settings.Default.DBConnectionString == "Connections.db")
-            {
-                StringBuilder sb = new StringBuilder(System.IO.Path.GetTempPath());
-                sb.Append( System.IO.Path.GetFileNameWithoutExtension(System.Diagnostics.Process.GetCurrentProcess().ProcessName) );
-                conn_string = sb.ToString();
-
-                // Determine whether the directory exists.
-                if (!Directory.Exists(conn_string))
-                {
-                    try
-                    {
-                        DirectoryInfo di = Directory.CreateDirectory(conn_string);
-                    }
-                    catch (Exception e)
-                    {
-                        string CantMakeDir = e.Message + Environment.NewLine + conn_string;
-                        log.Info(CantMakeDir);
-                        MessageBox.Show(CantMakeDir, "Ошибка",
-                                        MessageBoxButtons.OK,
-                                        MessageBoxIcon.Error);
-                    }
-                }
-                sb.Append("\\");
-                sb.Append(Properties.Settings.Default.DBConnectionString);
-
-                conn_string = sb.ToString();
-            }
-            else
-            {
-                conn_string = Properties.Settings.Default.DBConnectionString;
-            }
-
+            string conn_string = WinObjMethods.GetDBConnectionString(log);
+            
             try
             {
                 sqlconn = new SQLiteConnection(conn_string, true);
@@ -168,7 +129,7 @@ namespace CheckConnection
         //A method to be invoke by the delegate
         IWMINetworkAdapterManager ReadWMIInfo()
         {
-            IWMINetworkAdapterManager namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
+            IWMINetworkAdapterManager namgr = Common.IocKernel.Get<IWMINetworkAdapterManager>();
             return namgr;
         }
 
@@ -183,7 +144,7 @@ namespace CheckConnection
         //A method to be invoke by the delegate
         IConnectionManager ReadConnectionInfo(IParameter parameter)
         {
-            IConnectionManager connmgr = Common.NinjectProgram.Kernel.Get<IConnectionManager>(parameter);
+            IConnectionManager connmgr = Common.IocKernel.Get<IConnectionManager>(parameter);
             return connmgr;
         }
 
@@ -197,7 +158,7 @@ namespace CheckConnection
         //A method to be invoke by the delegate
         IDNSManager ReadDNSInfo(IParameter parameter)
         {
-            IDNSManager dnsmgr = Common.NinjectProgram.Kernel.Get<IDNSManager>(parameter);
+            IDNSManager dnsmgr = Common.IocKernel.Get<IDNSManager>(parameter);
             return dnsmgr;
         }
 
@@ -211,7 +172,7 @@ namespace CheckConnection
         //A method to be invoke by the delegate
         IGatewayManager ReadGatewayInfo(IParameter parameter)
         {
-            IGatewayManager gatewaymgr = Common.NinjectProgram.Kernel.Get<IGatewayManager>(parameter);
+            IGatewayManager gatewaymgr = Common.IocKernel.Get<IGatewayManager>(parameter);
             return gatewaymgr;
         }
         #endregion
@@ -489,7 +450,7 @@ namespace CheckConnection
         private void toolStripButtonRefresh_Click(object sender, System.EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            namgr = Common.NinjectProgram.Kernel.Get<IWMINetworkAdapterManager>();
+            namgr = Common.IocKernel.Get<IWMINetworkAdapterManager>();
             BindConnectionGrid();
             this.Cursor = Cursors.Default;
         }

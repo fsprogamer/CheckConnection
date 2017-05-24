@@ -9,7 +9,17 @@ namespace Common
 
         protected FormWithLog()
         {
-            log = Common.NinjectProgram.Kernel.Get<ILog>();
+            log = Common.IocKernel.Get<ILog>();
+        }
+    }
+
+    public class FormWithLogger<T> : BaseForm where T : class
+    {
+        protected readonly ILog log;
+        protected FormWithLogger()
+        {
+            ILogCreator logCreator = IocKernel.Get<ILogCreator>();       
+            log = logCreator.GetTypeLogger<T>();
         }
     }
 }

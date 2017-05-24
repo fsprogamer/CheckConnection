@@ -3,7 +3,7 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    interface IGatewayManager
+    public interface IGatewayManager
     {
         IList<Gateway> GetGatewaysByConnectionId(int ConnectionId);
         int SaveGateways(IEnumerable<Gateway> gateways);

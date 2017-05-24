@@ -3,7 +3,7 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    interface IConnectionManager
+    public interface IConnectionManager
     {
         Connection GetConnection(int id);
         IList<Connection> GetConnections();

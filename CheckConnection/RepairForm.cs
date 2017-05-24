@@ -7,16 +7,14 @@ using System.Text;
 using System.Collections.Specialized;
 
 using Common;
-using log4net;
 
 namespace CheckConnection
 {
-    public partial class RepairForm : BaseForm
+    public partial class RepairForm : FormWithLogger<RepairForm>
     {
         //string[] _text;
         WorkflowApplication wfApp;
-        string[] strArray;
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        string[] strArray;        
 
         public RepairForm(string[] text)
         {

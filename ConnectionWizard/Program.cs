@@ -1,15 +1,11 @@
-﻿using System;
-using System.Windows.Forms;
-
-using ConnectionWizard.Methods;
-using CheckConnection.Methods;
-using PingLib.Methods;
+﻿using CheckConnection.Methods;
 using Common;
-using Ninject;
+using System;
+using System.Windows.Forms;
 
 namespace ConnectionWizard
 {
-    class Program : NinjectProgram
+    class Program //: NinjectProgram
     {
         /// <summary>
         /// The main entry point for the application.
@@ -21,7 +17,8 @@ namespace ConnectionWizard
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Ninject Initialization
-            Kernel = new StandardKernel(new Bindings());
+            //Kernel = new StandardKernel(new Bindings());
+            IocKernel.Initialize(new Bindings());
 
             Application.Run(new MainWizard(/*db, wmi, png*/));
         }
