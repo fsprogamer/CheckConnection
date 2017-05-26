@@ -48,13 +48,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -67,11 +62,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Data\CompareConnectionsRepository.cs" />
     <Compile Include="Data\DisplayConnectionsRepository.cs" />
     <Compile Include="Methods\Bindings.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="Models\CompareConnectionsEventArgs.cs" />
+    <Compile Include="Models\ConnectionEventArgs.cs" />
     <Compile Include="Models\ModeModel.cs" />
+    <Compile Include="Presenters\CompareConnectionsPresenter.cs" />
     <Compile Include="Presenters\DisplayConnectionsPresenter.cs" />
+    <Compile Include="Views\CompareConnectionsForm.xaml.cs">
+      <DependentUpon>CompareConnectionsForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ICompareConnectionsView.cs" />
     <Compile Include="Views\IDisplayConnectionsView.cs" />
     <Compile Include="Views\ModeForm.xaml.cs">
       <DependentUpon>ModeForm.xaml</DependentUpon>
@@ -79,6 +82,10 @@
     <Compile Include="Presenters\ModePresenter.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\IModeView.cs" />
+    <Page Include="Views\CompareConnectionsForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DisplayConnectionsForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

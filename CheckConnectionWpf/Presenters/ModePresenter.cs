@@ -36,7 +36,7 @@ namespace CheckConnectionWpf.Presenters
             try
             {
                 var displayConnectionsForm = new DisplayConnectionsForm();
-                var displayConnectionsRepository = new DisplayConnectionsRepository();
+                var displayConnectionsRepository = new DisplayConnectionsRepository() { appMode = e.ModeModel.Id };
                 var displayConnectionsPresenter = new DisplayConnectionsPresenter(displayConnectionsForm, displayConnectionsRepository);
                 // show other form            
                 displayConnectionsForm.ShowDialog();

@@ -34,7 +34,7 @@
                         <TextBlock TextAlignment="Center">Сравнить</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="ViewComparetoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                <Button x:Name="ViewComparetoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="buttonTableCompare_Click">
                     <StackPanel Orientation="Vertical">
                         <Image Source="/Icon/104indexcards.png" Width="24" Height="24" />
                         <TextBlock TextAlignment="Center">Табличное<LineBreak/>сравнение</TextBlock>

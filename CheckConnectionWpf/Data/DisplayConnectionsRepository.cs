@@ -1,6 +1,7 @@
 ﻿using CheckConnection.Methods;
 using CheckConnection.Model;
 using CheckConnectionWpf.Methods;
+using CheckConnectionWpf.Models;
 using Common;
 using Ninject.Parameters;
 using SQLite;
@@ -8,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using System.Text;
 
 namespace CheckConnectionWpf.Data
 {
@@ -19,8 +19,8 @@ namespace CheckConnectionWpf.Data
         private IDNSManager dnsmgr;
         private IGatewayManager gatewaymgr;
         private IWMINetworkAdapterManager namgr;
+        public Mode appMode { get; set; }
 
-        private string _UserAccount;
         public string UserAccount
         {
             get

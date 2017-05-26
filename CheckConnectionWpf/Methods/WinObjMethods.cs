@@ -3,6 +3,11 @@ using System.Text;
 using System.IO;
 using System;
 using log4net;
+using System.Windows.Controls;
+using CheckConnection.Model;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.Windows.Data;
 
 namespace CheckConnectionWpf.Methods
 {
@@ -44,6 +49,30 @@ namespace CheckConnectionWpf.Methods
             }
             return conn_string;
         }
- 
+
+        public static void AddColumn(ref DataGrid dgv)
+        {
+            dgv.AutoGenerateColumns = false;
+
+            var properties = typeof(Connection).GetProperties()
+                                           .Where(p => p.IsDefined(typeof(DisplayAttribute), false))
+                                           .Select(p => new
+                                           {
+                                               PropertyName = p.Name,
+                                               p.GetCustomAttributes(typeof(DisplayAttribute),
+                                              false).Cast<DisplayAttribute>().Single().Name
+                                           });
+            foreach (var propinfo in properties)
+            {
+                DataGridTextColumn colName = new DataGridTextColumn()
+                {
+                    Header = propinfo.Name,
+                    Binding = new Binding(propinfo.PropertyName),
+                };
+                if (propinfo.Name == "Index") colName.Visibility = Visibility.Hidden;
+                dgv.Columns.Add(colName);
+            }                        
+        }
+
     }
 }

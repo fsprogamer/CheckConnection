@@ -1,6 +1,8 @@
-﻿using CheckConnectionWpf.Data;
+﻿using System;
+using CheckConnectionWpf.Data;
 using CheckConnectionWpf.Views;
 using Common;
+using CheckConnectionWpf.Models;
 
 namespace CheckConnectionWpf.Presenters
 {
@@ -24,6 +26,28 @@ namespace CheckConnectionWpf.Presenters
                    
             _view.LoadActiveConnections(_model.ActiveConnections());
             _view.LoadHistoryConnections(_model.HistoryConnections());
+
+            _view.ActiveConnectionSelectedIndex = 0;
+            _view.HistoryConnectionSelectedIndex = 0;
+
+            _view.TableCompareButtonClicked += OnTableCompareButtonClicked;
+        }
+        
+        private void OnTableCompareButtonClicked(object sender, CompareConnectionsEventArgs e)
+        {
+            try
+            {
+                var compareConnectionsForm = new CompareConnectionsForm();
+                var compareConnectionsRepository = new CompareConnectionsRepository() { ActiveConnection = e.firstConnection,
+                                                                                        HistoryConnection = e.secondConnection};
+                var compareConnectionsPresenter = new CompareConnectionsPresenter(compareConnectionsForm, compareConnectionsRepository);
+                // show other form            
+                compareConnectionsForm.ShowDialog();
+            }
+            catch (Exception exeption)
+            {
+                _view.ShowMessage(exeption.Message, "Ошибка", Icons.Error);
+            }
         }
     }
 }
