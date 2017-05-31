@@ -5,19 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CheckConnectionWpf.Views"
         mc:Ignorable="d"
-        Title="Сравнение подключений" Height="300" Width="300">
+        Title="Сравнение подключений" Height="300" Width="300" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="Текущее соединение"/>
-            <Label Grid.Row="0" Grid.Column="1"/>
-            <ListBox x:Name="listBoxActiveConnection" Grid.Row="1" Grid.Column="0"/>
-            <ListBox x:Name="listBoxHistoryConnection" Grid.Row="1" Grid.Column="1"/>
+        <ListView x:Name="listBoxCompareConnection" Grid.Row="0" Grid.Column="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Параметр" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Текущее значение" DisplayMemberBinding="{Binding Active}" />
+                    <GridViewColumn Header="Сохраненное значение" DisplayMemberBinding="{Binding History}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

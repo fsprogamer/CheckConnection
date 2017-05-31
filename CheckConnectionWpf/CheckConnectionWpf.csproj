@@ -62,9 +62,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Data\CompareConnection.cs" />
     <Compile Include="Data\CompareConnectionsRepository.cs" />
     <Compile Include="Data\DisplayConnectionsRepository.cs" />
+    <Compile Include="Data\PropertyValue.cs" />
     <Compile Include="Methods\Bindings.cs" />
+    <Compile Include="Methods\ReflectionProperties.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
     <Compile Include="Models\CompareConnectionsEventArgs.cs" />
     <Compile Include="Models\ConnectionEventArgs.cs" />

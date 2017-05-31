@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CheckConnectionWpf"
         mc:Ignorable="d"
         Title="Сетевые подключения" Height="598" Width="Auto" Icon="/Icon/20gear2.ico" 
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>

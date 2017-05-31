@@ -4,6 +4,8 @@ using System.Windows;
 using CheckConnection.Model;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using CheckConnectionWpf.Methods;
+using CheckConnectionWpf.Data;
 
 namespace CheckConnectionWpf.Views
 {
@@ -16,67 +18,9 @@ namespace CheckConnectionWpf.Views
         {
             InitializeComponent();
         }
-
-        public void LoadActiveConnection(Connection connection)
+        public void LoadConnections(List<CompareConnection> connections)
         {
-            var properties = typeof(Connection).GetProperties()
-                                          .Where(p => p.IsDefined(typeof(DisplayAttribute), false))
-                                          .Select(p => new
-                                          {
-                                              PropertyName = p.Name,
-                                              p.GetCustomAttributes(typeof(DisplayAttribute),
-                                             false).Cast<DisplayAttribute>().Single().Name
-                                          });
-
-            List<string> propertyValueList = new List<string>();
-            string value = string.Empty;
-            foreach (var propinfo in properties)
-            {
-                value = string.Empty;
-                try
-                {
-                    value = GetPropValue(connection, propinfo.PropertyName).ToString();
-                }
-                catch(Exception ex)
-                {
-                }
-                propertyValueList.Add(value);                
-            }
-            listBoxActiveConnection.ItemsSource = propertyValueList;
-        }
-
-        public static object GetPropValue(object src, string propName)
-        {
-            return src.GetType().GetProperty(propName).GetValue(src, null);
-        }
-
-        public void LoadHistoryConnection(Connection connection)
-        {
-            var properties = typeof(Connection).GetProperties()
-                                          .Where(p => p.IsDefined(typeof(DisplayAttribute), false))
-                                          .Select(p => new
-                                          {
-                                              PropertyName = p.Name,
-                                              p.GetCustomAttributes(typeof(DisplayAttribute),
-                                             false).Cast<DisplayAttribute>().Single().Name
-                                          });
-
-            List<string> propertyValueList = new List<string>();
-
-            string value = string.Empty;
-            foreach (var propinfo in properties)
-            {
-                value = string.Empty;
-                try
-                {
-                    value = GetPropValue(connection, propinfo.PropertyName).ToString();
-                }
-                catch (Exception ex)
-                {
-                }
-                propertyValueList.Add(value);
-            }
-            listBoxHistoryConnection.ItemsSource = propertyValueList;
+            listBoxCompareConnection.ItemsSource = connections;
         }
     }
 }

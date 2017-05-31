@@ -7,7 +7,7 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
             <!--StartupUri="ModeForm.xaml"-->
     <Application.Resources>
-        <Style x:Key="CommonStyle" TargetType="FrameworkElement">
+        <!--<Style x:Key="CommonStyle" TargetType="FrameworkElement">
             <Setter Property="Margin" Value="2" />
         </Style>
         <Style TargetType="StackPanel" BasedOn="{StaticResource CommonStyle}">
@@ -16,7 +16,7 @@
         </Style>
         <Style TargetType="Button" BasedOn="{StaticResource CommonStyle}">
             <Setter Property="Background" Value="LimeGreen" />
-        </Style>
+        </Style>-->
 
     </Application.Resources>
 </Application>
