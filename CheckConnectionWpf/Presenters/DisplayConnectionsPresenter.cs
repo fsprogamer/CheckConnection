@@ -3,6 +3,7 @@ using CheckConnectionWpf.Data;
 using CheckConnectionWpf.Views;
 using Common;
 using CheckConnectionWpf.Models;
+using System.Linq;
 
 namespace CheckConnectionWpf.Presenters
 {
@@ -31,6 +32,7 @@ namespace CheckConnectionWpf.Presenters
             _view.HistoryConnectionSelectedIndex = 0;
 
             _view.TableCompareButtonClicked += OnTableCompareButtonClicked;
+            _view.CompareButtonClicked += OnCompareButtonClicked;
         }
         
         private void OnTableCompareButtonClicked(object sender, CompareConnectionsEventArgs e)
@@ -43,6 +45,26 @@ namespace CheckConnectionWpf.Presenters
                 var compareConnectionsPresenter = new CompareConnectionsPresenter(compareConnectionsForm, compareConnectionsRepository);
                 // show other form            
                 compareConnectionsForm.ShowDialog();
+            }
+            catch (Exception exeption)
+            {
+                _view.ShowMessage(exeption.Message, "Ошибка", Icons.Error);
+            }
+        }
+
+        private void OnCompareButtonClicked(object sender, CompareConnectionsEventArgs e)
+        {
+            try
+            {
+                var compareConnectionsForm = new CompareConnectionsForm();
+                var compareConnectionsRepository = new CompareConnectionsRepository()
+                {
+                    ActiveConnection = e.firstConnection,
+                    HistoryConnection = e.secondConnection
+                };
+
+                var comparedConnections = compareConnectionsRepository.ComparedConnections;
+                _view.LoadComparedConnections(comparedConnections.Where(p => p.Equal == false).ToList());
             }
             catch (Exception exeption)
             {

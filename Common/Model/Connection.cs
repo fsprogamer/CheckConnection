@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
-using SQLite;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CheckConnection.Model
-{    
-    public class Connection : Entity, INameEntity
+{
+    public class Connection : Entity, INameEntity, IEquatable<Connection>
     {
         public static string listDelimetr = "; ";
         //[PrimaryKey, AutoIncrement, Unique]
@@ -81,8 +80,28 @@ namespace CheckConnection.Model
         [NotNull]
         [Display(Name = "Index")]
         public uint Index { get; set; } //связь networkadapter и networkadapterconfiguration
-        public string GUID { get; set; }  
-        //public uint IPConnectionMetric { get; set; }
-    }
+        public string GUID { get; set; }
 
+        public bool Equals(Connection other)
+        {
+            if (other == null) return false;
+
+            if (this.Name != other.Name) return false;
+            if (this.NetConnectionID != other.NetConnectionID) return false;
+            if (this.MAC != other.MAC) return false;
+
+            if (this.Ip_Address_v4 != other.Ip_Address_v4) return false;
+            if (this.Ip_Address_v6 != other.Ip_Address_v6) return false;
+            if (this.DHCP_Enabled != other.DHCP_Enabled) return false;
+            if (this.DHCPServer != other.DHCPServer) return false;
+            if (this.DNSDomain != other.DNSDomain) return false;
+            if (this.IPSubnetMask != other.IPSubnetMask) return false;
+            
+            if (this.IPGateway != other.IPGateway) return false;
+            if (this.DNSServer != other.DNSServer) return false;
+
+            return true;
+        }
+              
+    }
 }

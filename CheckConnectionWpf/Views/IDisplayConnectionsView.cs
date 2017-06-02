@@ -1,4 +1,5 @@
 ﻿using CheckConnection.Model;
+using CheckConnectionWpf.Data;
 using CheckConnectionWpf.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace CheckConnectionWpf.Views
 
         event Action PingButtonClicked;
         event Action TracertButtonClicked;
-        event Action CompareButtonClicked;
+        event EventHandler<CompareConnectionsEventArgs> CompareButtonClicked;
         event EventHandler<CompareConnectionsEventArgs> TableCompareButtonClicked;
         event Action ChangeButtonClicked;
 
@@ -33,6 +34,7 @@ namespace CheckConnectionWpf.Views
 
         void LoadActiveConnections(IList<Connection> connections);
         void LoadHistoryConnections(IList<Connection> connections);
+        void LoadComparedConnections(IList<CompareConnection> connections);
         void ShowMessage(string text, string caption, Icons icon);
         
     }

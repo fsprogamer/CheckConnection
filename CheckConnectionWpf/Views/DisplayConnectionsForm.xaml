@@ -7,7 +7,20 @@
         mc:Ignorable="d"
         Title="Сетевые подключения" Height="598" Width="Auto" Icon="/Icon/20gear2.ico" 
         WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
-    <Grid>
+    <Window.Resources>
+        <Style x:Key="OriginalDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}"/>
+        <Style x:Key="DifferentDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Red"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
@@ -28,7 +41,7 @@
                         <TextBlock>Tracert</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="ComparetoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                <Button x:Name="ComparetoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="buttonCompare_Click">
                     <StackPanel Orientation="Vertical">
                         <Image Source="/Icon/42photos.png" Width="24" Height="24"/>
                         <TextBlock TextAlignment="Center">Сравнить</TextBlock>
@@ -78,19 +91,13 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <DataGrid Grid.Row="1" x:Name="ConnectionsdataGridView">
+        <DataGrid Grid.Row="1" x:Name="ConnectionsdataGridView" SelectionChanged="ConnectionsdataGridView_SelectionChanged">
             <DataGrid.Columns>
-                <!--<DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="90" />
-                <DataGridHyperlinkColumn Header="Компания" Binding="{Binding Path=Company}" Width="80" />
-                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50" />-->
             </DataGrid.Columns>
         </DataGrid>
         <GridSplitter Grid.Row="2" ShowsPreview="False" Width="Auto" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         <DataGrid x:Name="HistorydataGridView" Grid.Row="3">
             <DataGrid.Columns>
-                <!--<DataGridTextColumn Header="Модель" Binding="{Binding Path=Title}" Width="90" />
-                <DataGridHyperlinkColumn Header="Компания" Binding="{Binding Path=Company}" Width="80" />
-                <DataGridTextColumn Header="Цена" Binding="{Binding Path=Price}" Width="50" />-->
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

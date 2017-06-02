@@ -66,6 +66,7 @@
     <Compile Include="Data\CompareConnectionsRepository.cs" />
     <Compile Include="Data\DisplayConnectionsRepository.cs" />
     <Compile Include="Data\PropertyValue.cs" />
+    <Compile Include="ExtensionMethods\DataGridExtension.cs" />
     <Compile Include="Methods\Bindings.cs" />
     <Compile Include="Methods\ReflectionProperties.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
