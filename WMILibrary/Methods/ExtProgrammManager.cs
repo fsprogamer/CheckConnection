@@ -5,7 +5,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    public class ExtProgrammManager : ClassWithLog
+    public class ExtProgrammManager : ClassWithLogger<ExtProgrammManager>
     {
         string _arguments = String.Empty;
         string _filename = String.Empty;

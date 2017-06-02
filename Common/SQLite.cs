@@ -1473,7 +1473,7 @@ namespace SQLite
 				try {
 					if (_mappings != null) {
 						foreach (var sqlInsertCommand in _mappings.Values) {
-							sqlInsertCommand.Dispose();
+							sqlInsertCommand?.Dispose();
 						}
 					}
 					var r = SQLite3.Close (Handle);

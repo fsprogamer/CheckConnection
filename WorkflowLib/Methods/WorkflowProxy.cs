@@ -7,6 +7,7 @@ using System;
 using CheckConnection.Model;
 
 using Common;
+using System.Collections.ObjectModel;
 
 namespace WorkflowLib
 {
@@ -22,12 +23,12 @@ namespace WorkflowLib
     //    }
     //}
 
-    public class WMIConnectionManagerProxy: ClassWithLog
+    public class WMIConnectionManagerProxy: ClassWithLogger<WMIConnectionManagerProxy>
     {
         IWMIConnectionManager cmgr = new WMIConnectionManager();
         public int Count
         {
-            get { return cmgr.GetItems(p => p.NetConnectionID != null).Count; }
+            get { return cmgr.GetItems(p => !string.IsNullOrEmpty(p.NetConnectionID)).Count; }
         }
 
         public IMObjectManager GetMOByName(string name)
@@ -38,19 +39,19 @@ namespace WorkflowLib
 
         public List<Connection> GetItems()
         {            
-            return cmgr.GetItems(p => p.NetConnectionID != null);
+            return cmgr.GetItems(p => !string.IsNullOrEmpty(p.NetConnectionID));
         }
     }
 
-    public class WMINetworkAdapterManagerProxy : ClassWithLog
+    public class WMINetworkAdapterManagerProxy : ClassWithLogger<WMINetworkAdapterManagerProxy>
     {
         IWMINetworkAdapterManager cmgr = new WMINetworkAdapterManager();
-        List<string> exceptionConnNameLst;
+        ReadOnlyCollection<string> exceptionConnNameLst;
         const string exConnName = "ExceptionConnName";
 
         public WMINetworkAdapterManagerProxy() {
                       
-            exceptionConnNameLst = new List<string>(new ConfigManager().GetStringArray(exConnName));
+            exceptionConnNameLst = new ReadOnlyCollection<string>(new ConfigManager().GetStringArray(exConnName));
             foreach (string ex in exceptionConnNameLst)
             {
                 log.InfoFormat("Exception name: {0}", ex);
@@ -145,12 +146,12 @@ namespace WorkflowLib
         {
             /*исключаем new string[] { "virtual", "hamachi", "1394" }*/
             //List<Connection> tmp = cmgr.GetItems(p => p.NetConnectionID != null).OrderBy(s => s.Ip_Address_v4).ToList();
-            return Filter(cmgr.GetItems(p => p.NetConnectionID != null).OrderByDescending(s => s.Ip_Address_v4).ToList(),
+            return Filter(cmgr.GetItems(p =>!string.IsNullOrEmpty(p.NetConnectionID)).OrderByDescending(s => s.DHCP_Enabled).ToList(),
                           exceptionConnNameLst
                          );
         }
 
-        private List<Connection> Filter(List<Connection> conn_list, List<string> ex_list)
+        private List<Connection> Filter(ICollection<Connection> conn_list, ReadOnlyCollection<string> ex_list)
         {
             bool find = false;
             List<Connection> ret = new List<Connection>(conn_list.Count);
@@ -178,7 +179,7 @@ namespace WorkflowLib
         {
            /*исключаем new string[] { "virtual", "hamachi", "1394" }*/  
            get { //return cmgr.GetItems(p => p.NetConnectionID != null).Count;
-                return Filter(cmgr.GetItems(p => p.NetConnectionID != null),
+                return Filter(cmgr.GetItems(p => !string.IsNullOrEmpty(p.NetConnectionID)),
                               exceptionConnNameLst
                              ).Count;
                }            
@@ -186,7 +187,7 @@ namespace WorkflowLib
     }
 
   
-    public class WMIServiceManagerProxy : ClassWithLog
+    public class WMIServiceManagerProxy : ClassWithLogger<WMIServiceManagerProxy>
     {
         IWMIServiceManager cmgr = new WMIServiceManager();
         public IMObjectManager GetMOByName(string name)

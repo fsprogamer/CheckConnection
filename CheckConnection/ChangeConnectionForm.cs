@@ -1,21 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
-
-using System.Collections.Generic;
-
-using CheckConnection.Methods;
+﻿using CheckConnection.Methods;
 using CheckConnection.Model;
 using Common;
-
-using log4net;
-using Ninject;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace CheckConnection
 {
-    public partial class ChangeConnectionForm : BaseForm
+    public partial class ChangeConnectionForm : FormWithLogger<ChangeConnectionForm>
     {
         private Connection conn;
-        private readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public ChangeConnectionForm()
         {
@@ -28,8 +22,18 @@ namespace CheckConnection
 
         public ChangeConnectionForm(string pconnname)
         {
-            IWMIConnectionManager cpmgr = Common.NinjectProgram.Kernel.Get<IWMIConnectionManager>();            
+            IWMIConnectionManager cpmgr = Common.IocKernel.Get<IWMIConnectionManager>();            
             conn = cpmgr.GetItem(p=>p.Name == pconnname);
+            log.InfoFormat("pconnname={0}, conn.DHCP_Enabled={1}", pconnname,conn.DHCP_Enabled);
+
+            InitializeComponent();
+        }
+
+        public ChangeConnectionForm(uint index)
+        {
+            IWMIConnectionManager cpmgr = Common.IocKernel.Get<IWMIConnectionManager>();
+            conn = cpmgr.GetItem(p => p.Index == index);
+            log.InfoFormat("index={0}, conn.DHCP_Enabled={1}", index, conn.DHCP_Enabled);
 
             InitializeComponent();
         }
@@ -41,8 +45,7 @@ namespace CheckConnection
         }
 
         private void ChangeConnectionForm_Load(object sender, EventArgs e)
-        {            
-
+        {
             ipAddressControl.Text = conn.Ip_Address_v4;
             NetMaskControl.Text = conn.IPSubnetMask;
             DHCPServerControl.Text = conn.DHCPServer;

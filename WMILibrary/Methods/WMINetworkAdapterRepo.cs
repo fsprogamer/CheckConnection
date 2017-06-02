@@ -9,12 +9,10 @@ namespace CheckConnection.Methods
 {
     public class WMINetworkAdapterRepo : GenericWMIRepo<NetworkAdapter>, IWMINetworkAdapterRepo
     {
-        private WMIManagementObjectRepo _mo_repo;
-
         public WMIManagementObjectRepo mo_repo
         {
-            get { return _mo_repo; }
-            set { _mo_repo = value; }
+            get;
+            set;
         }
         public WMINetworkAdapterRepo() : base("root\\CIMV2", "SELECT * FROM Win32_NetworkAdapter") //NetConnectionID, Name, Index, NetConnectionStatus
         {

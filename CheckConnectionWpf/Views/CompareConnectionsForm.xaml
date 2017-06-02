@@ -1,0 +1,36 @@
+﻿<Window x:Class="CheckConnectionWpf.Views.CompareConnectionsForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CheckConnectionWpf.Views"
+        mc:Ignorable="d"
+        Title="Сравнение подключений" Height="300" Width="300" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Foreground" Value="Black" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Equal}" Value="false">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="listBoxCompareConnection" Grid.Row="0" Grid.Column="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Параметр" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Текущее значение" DisplayMemberBinding="{Binding Active}" />
+                    <GridViewColumn Header="Сохраненное значение" DisplayMemberBinding="{Binding History}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

@@ -1,0 +1,1 @@
+Powershell.exe -executionpolicy remotesigned -File CleanVSProject.ps1 >> res.txt

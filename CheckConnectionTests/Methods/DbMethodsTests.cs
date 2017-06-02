@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using SQLite;
-
+using CheckConnection.Methods;
 using CheckConnection.Model;
 
 namespace CheckConnection.Methods.Tests

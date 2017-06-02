@@ -11,7 +11,7 @@ namespace CheckConnection.Methods
     {
         //NetworkAdapter GetItem(Func<NetworkAdapter, bool> predicate);
         Connection GetItem(Func<Connection, bool> predicate);
-        List<Connection> GetItems();
+        //List<Connection> GetItems();
         List<Connection> GetItems(Func<NetworkAdapter, bool> predicate);
         Connection GetItem(DataGridView dgv);
         //ManagementObject GetMOItem(Func<ManagementObject, bool> predicate);

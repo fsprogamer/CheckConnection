@@ -8,9 +8,8 @@ using System;
 
 namespace Common
 {
-    public class ConfigManager:ClassWithLog
+    public class ConfigManager:ClassWithLogger<ConfigManager>
     {
-
         public string[] GetStringArray(string ElementName)
         {
             string[] strings = null;

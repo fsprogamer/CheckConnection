@@ -17,7 +17,7 @@ namespace CheckConnection
         private int formSize=0;
 
         public void NewDataTable(DataGridView dgv1, DataGridViewRow dgv2Row)
-        {
+        {          
             DataGridViewTextBoxColumn colName = new DataGridViewTextBoxColumn()
             {
                 Name = "CurrentConnection",
@@ -33,7 +33,7 @@ namespace CheckConnection
             };
             resultDataGridView.Columns.Add(colName);
             resultDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            resultDataGridView.RowCount = dgv1.ColumnCount - 1;
+            resultDataGridView.RowCount = dgv1.ColumnCount - 2;// Index не показываем
             for (int i = 0; i < resultDataGridView.RowCount; i++)
             {
                 resultDataGridView.Rows[i].HeaderCell.Value = dgv1.Columns[i + 1].HeaderCell.Value;
@@ -86,14 +86,8 @@ namespace CheckConnection
         {
             if(dgvRow.Cells[index+1].Value!=null)
             if (dgvRow.Cells[index + 1].Value.ToString().Contains(';'))
-            {
-                string[] textString = dgvRow.Cells[index + 1].Value.ToString().Split(';');
-                string resultText = "";
-                foreach (var text in textString)
-                {
-                    resultText += text.Trim() + '\n';
-                }
-                resultDataGridView.Rows[index].Cells[cellIndex].Value = resultText.TrimEnd();
+            {                
+                resultDataGridView.Rows[index].Cells[cellIndex].Value = dgvRow.Cells[index + 1].Value.ToString().Replace(Model.Connection.listDelimetr, "\n");
                 resultDataGridView.Rows[index].DefaultCellStyle.WrapMode=DataGridViewTriState.True;
                 resultDataGridView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             }

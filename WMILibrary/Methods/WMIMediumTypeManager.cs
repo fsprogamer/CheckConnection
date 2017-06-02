@@ -7,7 +7,7 @@ using Common;
 namespace CheckConnection.Methods
 {
 
-    public class WMIMediumTypeManager : ClassWithLog, IWMIMediumTypeManager
+    public class WMIMediumTypeManager : ClassWithLogger<WMIMediumTypeManager>, IWMIMediumTypeManager
     {
         private readonly IWMIMediumTypeRepo _repository;
 

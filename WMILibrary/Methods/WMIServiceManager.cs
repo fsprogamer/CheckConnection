@@ -7,7 +7,7 @@ using Common;
 
 namespace CheckConnection.Methods
 {
-    public class WMIServiceManager : ClassWithLog, IWMIServiceManager
+    public class WMIServiceManager : ClassWithLogger<WMIServiceManager>, IWMIServiceManager
     {
         private readonly IWMIServiceRepo _repository;
 

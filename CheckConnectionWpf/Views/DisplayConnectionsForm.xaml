@@ -1,0 +1,107 @@
+﻿<Window x:Class="CheckConnectionWpf.DisplayConnectionsForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CheckConnectionWpf"
+        mc:Ignorable="d"
+        Title="Сетевые подключения" Height="598" Width="Auto" Icon="/Icon/20gear2.ico" 
+        WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style x:Key="DifferentDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Foreground" Value="Red"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--<Style x:Key="DefaultDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+        </Style>-->
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ToolBarTray>
+            <ToolBar x:Name="toolBar" VerticalAlignment="Top" Width="Auto" Height="Auto" HorizontalContentAlignment="Stretch">
+                <Button x:Name="PingtoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/77ekg.png" Width="24" Height="24" />
+                        <TextBlock>Ping</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="TracerttoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/55network.png" Width="24" Height="24"/>
+                        <TextBlock>Tracert</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ComparetoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="buttonCompare_Click">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/42photos.png" Width="24" Height="24"/>
+                        <TextBlock TextAlignment="Center">Сравнить</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ViewComparetoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="buttonTableCompare_Click">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/104indexcards.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Табличное<LineBreak/>сравнение</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="toolStripButtonChangeConnection" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/187pencil.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Изменить<LineBreak/>параметры</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="toolStripButtonRestore" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/02redo.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Восстановить<LineBreak />параметры</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="toolStripButtonRenewDHCP" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/03loopback.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Обновить<LineBreak/>DHCP</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="toolStripButtonRefresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/01refresh.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Обновить</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="toolStripButtonAnalyze"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/140gradhat.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Анализ<LineBreak/>подключения</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="toolStripButtonRepair" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="/Icon/97puzzle.png" Width="24" Height="24" />
+                        <TextBlock TextAlignment="Center">Восстановить<LineBreak/>подключения</TextBlock>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <DataGrid Grid.Row="1" x:Name="ConnectionsdataGridView" SelectionChanged="ConnectionsdataGridView_SelectionChanged" GridLinesVisibility="None" SelectionMode="Single">
+            <DataGrid.Columns>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.Row="2" ShowsPreview="False" Width="Auto" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+        <DataGrid x:Name="HistorydataGridView" Grid.Row="3" GridLinesVisibility="None" SelectionMode="Single">
+            <DataGrid.Columns>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

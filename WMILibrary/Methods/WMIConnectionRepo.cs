@@ -8,14 +8,12 @@ using CheckConnection.Model;
 
 namespace CheckConnection.Methods
 {
-    public class WMIConnectionRepo : GenericWMIRepo<Connection>, IWMIConnectionRepo
+    public class WMIConnectionRepo : GenericWMIRepo<Connection>, IWMIConnectionRepo 
     {
-        private WMIManagementObjectRepo _mo_repo;
-
         public WMIManagementObjectRepo mo_repo
         {
-            get { return _mo_repo; }
-            set { _mo_repo = value; }
+            get;
+            set;
         }
         public WMIConnectionRepo() : base("root\\CIMV2", "SELECT Description, Index, IPEnabled, DHCPEnabled, IPAddress, MACAddress, DNSDomain, IPSubnet, DefaultIPGateway, DNSServerSearchOrder, DHCPServer, SettingID, IPConnectionMetric FROM Win32_NetworkAdapterConfiguration")
         {
@@ -36,7 +34,7 @@ namespace CheckConnection.Methods
                     if (mo["Index"] != null)
                     {
                         item.Index = (uint)mo["Index"];
-                        log.InfoFormat("Index={0}", mo["Index"].ToString());
+                        log.InfoFormat("Index={0}", mo["Index"].ToString());                       
                     }
 
                     if (mo["Description"] != null)

@@ -2,6 +2,10 @@
 using CheckConnection.Model;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.IO;
+using System;
+using log4net;
 
 namespace CheckConnection.Methods
 {
@@ -61,7 +65,8 @@ namespace CheckConnection.Methods
                 };
                 dgv.Columns.Add(colName);
             }
-            dgv.Columns[dgv.ColumnCount - 1].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill;
+            dgv.Columns["Index"].Visible = false;//Index
+            dgv.Columns[dgv.ColumnCount - 2].AutoSizeMode = DataGridViewAutoSize‌​ColumnMode.Fill;//DNS
         }
 
         public static void AddColumnForWizard(ref DataGridView dgv)
@@ -87,6 +92,52 @@ namespace CheckConnection.Methods
             return dgv;
         }
 
+        public static string GetSelectedConnectionParam(DataGridView dgv, string paramname)
+        {
+            int selectedrow = WinObjMethods.GetSelectedRow(dgv);
+            //log.InfoFormat("WinObjMethods.GetSelectedRow {0},{1}", paramname, selectedrow.ToString());
+            string Name = string.Empty;
+            if ((dgv.RowCount > 0) && (dgv.Rows[selectedrow].Cells[paramname].Value != null))
+                Name = dgv.Rows[selectedrow].Cells[paramname].Value.ToString();
+            return Name;
+        }
+
+        public static string GetDBConnectionString(ILog log)
+        {
+            string conn_string;
+            if (Properties.Settings.Default.DBConnectionString == "Connections.db")
+            {
+                StringBuilder sb = new StringBuilder(System.IO.Path.GetTempPath());
+                sb.Append(System.IO.Path.GetFileNameWithoutExtension(System.Diagnostics.Process.GetCurrentProcess().ProcessName));
+                conn_string = sb.ToString();
+
+                // Determine whether the directory exists.
+                if (!Directory.Exists(conn_string))
+                {
+                    try
+                    {
+                        DirectoryInfo di = Directory.CreateDirectory(conn_string);
+                    }
+                    catch (Exception e)
+                    {
+                        string CantMakeDir = e.Message + Environment.NewLine + conn_string;
+                        log.Info(CantMakeDir);
+                        MessageBox.Show(CantMakeDir, "Ошибка",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                    }
+                }
+                sb.Append("\\");
+                sb.Append(Properties.Settings.Default.DBConnectionString);
+
+                conn_string = sb.ToString();
+            }
+            else
+            {
+                conn_string = Properties.Settings.Default.DBConnectionString;
+            }
+            return conn_string;
+        }
 
         //public static bool HasWritePermission(string dir)
         //{

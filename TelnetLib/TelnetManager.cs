@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace TelnetLib
 {
-    public class TelnetManager : ClassWithLog
+    public class TelnetManager : ClassWithLogger<TelnetManager>
     {
         private TelnetConnection _tc;
         private string _s = null;

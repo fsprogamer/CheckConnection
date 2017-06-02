@@ -44,13 +44,16 @@
     <Compile Include="FormWithLog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LogCreator.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\DNS.cs" />
+    <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\Gateway.cs" />
     <Compile Include="Model\IEntity.cs" />
     <Compile Include="Model\INameEntity.cs" />
     <Compile Include="Model\MediumType.cs" />
+    <Compile Include="Model\NameEntity.cs" />
     <Compile Include="Model\NetworkAdapter.cs" />
     <Compile Include="Model\Service.cs" />
     <Compile Include="Model\User.cs" />
@@ -80,6 +83,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

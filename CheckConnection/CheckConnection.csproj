@@ -116,27 +116,13 @@
     </Compile>
     <Compile Include="Methods\AnalyzeManager.cs" />
     <Compile Include="Methods\Bindings.cs" />
-    <Compile Include="Methods\ConnectionManager.cs" />
-    <Compile Include="Methods\ConnectionRepo.cs" />
-    <Compile Include="Methods\DNSManager.cs" />
-    <Compile Include="Methods\DNSRepo.cs" />
-    <Compile Include="Methods\GatewayManager.cs" />
-    <Compile Include="Methods\GatewayRepo.cs" />
-    <Compile Include="Methods\GenericNameRepo.cs" />
-    <Compile Include="Methods\IConnectionManager.cs" />
-    <Compile Include="Methods\IConnectionRepo.cs" />
-    <Compile Include="Methods\IDNSManager.cs" />
-    <Compile Include="Methods\IDNSRepo.cs" />
-    <Compile Include="Methods\IGatewayManager.cs" />
-    <Compile Include="Methods\IGatewayRepo.cs" />
-    <Compile Include="Methods\IGenericNameRepo.cs" />
-    <Compile Include="Methods\IGenericRepo.cs" />
-    <Compile Include="Methods\GenericRepo.cs" />
-    <Compile Include="Methods\IUserManager.cs" />
-    <Compile Include="Methods\IUserRepo.cs" />
-    <Compile Include="Methods\UserManager.cs" />
-    <Compile Include="Methods\UserRepo.cs" />
     <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="ModeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ModeForm.Designer.cs">
+      <DependentUpon>ModeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\PageOffsetList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DisplayConnections.resx">
       <DependentUpon>DisplayConnections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModeForm.resx">
+      <DependentUpon>ModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -201,6 +190,10 @@
     <ProjectReference Include="..\PingLib\PingLib.csproj">
       <Project>{5ee4a6af-87e1-4847-958f-50cd4e0a7202}</Project>
       <Name>PingLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLiteLib\SQLiteLib.csproj">
+      <Project>{77acb72d-657e-429f-bfbf-f99f0c534558}</Project>
+      <Name>SQLiteLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TelnetLib\TelnetLib.csproj">
       <Project>{03e5bf4d-6bfc-40c7-b76a-9b0e42874eb4}</Project>
@@ -250,13 +243,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets'))" />
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net40\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.102.0\build\net40\System.Data.SQLite.Core.targets'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.102.0\build\net40\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net40\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

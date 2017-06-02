@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using log4net;
+using Common;
 
 namespace CheckConnection.Methods
 {
@@ -19,6 +20,8 @@ namespace CheckConnection.Methods
              LogManager.GetLogger(context.Request.ParentContext == null ?
                                   typeof(object) :
                                   context.Request.ParentContext.Plan.Type));
+
+            Bind<ILogCreator>().To<LogCreator>();            
         }
     }
 }

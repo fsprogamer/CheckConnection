@@ -1,0 +1,53 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CheckConnectionWpf.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="IPAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.10</Value>
+    </Setting>
+    <Setting Name="SubnetMask" Type="System.String" Scope="User">
+      <Value Profile="(Default)">255.255.254.0</Value>
+    </Setting>
+    <Setting Name="Gateway" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.1</Value>
+    </Setting>
+    <Setting Name="HistoryPageSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="RouterDeafultIpAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.1</Value>
+    </Setting>
+    <Setting Name="ProviderDefaultAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">akado.ru</Value>
+    </Setting>
+    <Setting Name="TestNetwork" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;10.128&lt;/string&gt;
+  &lt;string&gt;10.255&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="ExceptionConnName" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;virtual&lt;/string&gt;
+  &lt;string&gt;hamachi&lt;/string&gt;
+  &lt;string&gt;1394&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="AkadoDNS" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;217.10.36.5&lt;/string&gt;
+  &lt;string&gt;217.10.35.5&lt;/string&gt;
+  &lt;string&gt;217.10.44.35&lt;/string&gt;
+  &lt;string&gt;217.10.32.5&lt;/string&gt;
+  &lt;string&gt;217.10.32.4&lt;/string&gt;
+  &lt;string&gt;217.10.39.4&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="DBConnectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Connections.db</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

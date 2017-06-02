@@ -10,7 +10,11 @@ using Common;
 namespace PingForm
 {
     public partial class MainPingForm : BaseForm
-    {
+    {        
+        public MainPingForm(string pingAddress):this()
+        {
+            destination.Text = pingAddress;
+        }
         public MainPingForm()
         {
             InitializeComponent();

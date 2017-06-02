@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A2432B66-E95D-4B0B-BE80-F8862BC6DEA9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CheckConnectionWpf</RootNamespace>
+    <AssemblyName>CheckConnectionWpf</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Data\CompareConnection.cs" />
+    <Compile Include="Data\CompareConnectionsRepository.cs" />
+    <Compile Include="Data\DisplayConnectionsRepository.cs" />
+    <Compile Include="Data\PropertyValue.cs" />
+    <Compile Include="ExtensionMethods\DataGridExtension.cs" />
+    <Compile Include="Methods\Bindings.cs" />
+    <Compile Include="Methods\ReflectionProperties.cs" />
+    <Compile Include="Methods\WinObjMethods.cs" />
+    <Compile Include="Models\CompareConnectionsEventArgs.cs" />
+    <Compile Include="Models\ConnectionEventArgs.cs" />
+    <Compile Include="Models\ModeModel.cs" />
+    <Compile Include="Presenters\CompareConnectionsPresenter.cs" />
+    <Compile Include="Presenters\DisplayConnectionsPresenter.cs" />
+    <Compile Include="Views\CompareConnectionsForm.xaml.cs">
+      <DependentUpon>CompareConnectionsForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ICompareConnectionsView.cs" />
+    <Compile Include="Views\IDisplayConnectionsView.cs" />
+    <Compile Include="Views\ModeForm.xaml.cs">
+      <DependentUpon>ModeForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presenters\ModePresenter.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Views\IModeView.cs" />
+    <Page Include="Views\CompareConnectionsForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DisplayConnectionsForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\DisplayConnectionsForm.xaml.cs">
+      <DependentUpon>DisplayConnectionsForm.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\ModeForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="CheckConnectionWPF.exe.log4net" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\ConnectionWizard\icon\01refresh.png">
+      <Link>Icon\01refresh.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\02redo.png">
+      <Link>Icon\02redo.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\03loopback.png">
+      <Link>Icon\03loopback.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\04squiggle.png">
+      <Link>Icon\04squiggle.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\103map.ico">
+      <Link>Icon\103map.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\104indexcards.png">
+      <Link>Icon\104indexcards.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\122stats.png">
+      <Link>Icon\122stats.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\139flags.png">
+      <Link>Icon\139flags.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\140gradhat.png">
+      <Link>Icon\140gradhat.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\180stickynote.png">
+      <Link>Icon\180stickynote.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\187pencil.png">
+      <Link>Icon\187pencil.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\20gear2.ico">
+      <Link>Icon\20gear2.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\42photos.png">
+      <Link>Icon\42photos.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\55network.png">
+      <Link>Icon\55network.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\77ekg.png">
+      <Link>Icon\77ekg.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\81dashboard.png">
+      <Link>Icon\81dashboard.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\90lifebuoy.ico">
+      <Link>Icon\90lifebuoy.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\90lifebuoy.png">
+      <Link>Icon\90lifebuoy.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\95equalizer.png">
+      <Link>Icon\95equalizer.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionWizard\icon\97puzzle.png">
+      <Link>Icon\97puzzle.png</Link>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{2e728e94-a37e-4b82-97d1-e22a51319659}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ipaddresscontrollib\VS2015\IPAddressControlLib\IPAddressControlLib.csproj">
+      <Project>{a5ed2b33-5644-47c4-bc30-a4840f67ff87}</Project>
+      <Name>IPAddressControlLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PingLib\PingLib.csproj">
+      <Project>{5ee4a6af-87e1-4847-958f-50cd4e0a7202}</Project>
+      <Name>PingLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLiteLib\SQLiteLib.csproj">
+      <Project>{77acb72d-657e-429f-bfbf-f99f0c534558}</Project>
+      <Name>SQLiteLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TelnetLib\TelnetLib.csproj">
+      <Project>{03e5bf4d-6bfc-40c7-b76a-9b0e42874eb4}</Project>
+      <Name>TelnetLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tracert\tracert.csproj">
+      <Project>{18ca356f-fb1f-45eb-8d0a-4ce593692bd8}</Project>
+      <Name>tracert</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMILibrary\WMILib.csproj">
+      <Project>{08a38414-6c0d-46cc-8545-dc38fcd78fb1}</Project>
+      <Name>WMILib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkflowLib\WorkflowLib.csproj">
+      <Project>{cb10e8eb-a70f-41f0-b9b3-0bd259dfde82}</Project>
+      <Name>WorkflowLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

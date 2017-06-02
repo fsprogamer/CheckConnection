@@ -12,9 +12,9 @@ namespace CheckConnection.Methods
         {
             _repository = new WMIManagementObjectRepo(scope, query);
         }
-        public List<ManagementObject> GetItems()
+        public IEnumerable<ManagementObject> GetItems()
         {
-            return _repository.GetItems(p => true).ToList();
+            return _repository.GetItems(p => true)/*.ToList()*/;
         }
 
         public ManagementObject GetItem(Func<ManagementObject, bool> predicate)

@@ -1,13 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using SQLite;
+﻿using SQLite;
 
 namespace CheckConnection.Model
 {
-    public class Account : INameEntity, IEntity
+    public class Account : Entity, INameEntity 
     {
-        [PrimaryKey, AutoIncrement, Unique]
-        public int Id { get; set; }
         [NotNull]
         public string Caption { get; set; }
         [NotNull]
