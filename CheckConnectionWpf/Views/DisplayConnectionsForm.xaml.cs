@@ -1,17 +1,14 @@
 ﻿using CheckConnection.Model;
-using CheckConnectionWpf.Models;
-using CheckConnectionWpf.Views;
-using CheckConnectionWpf.Methods;
-using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
-using System.Globalization;
 using CheckConnectionWpf.Data;
 using CheckConnectionWpf.ExtensionMethods;
+using CheckConnectionWpf.Methods;
+using CheckConnectionWpf.Models;
+using CheckConnectionWpf.Views;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CheckConnectionWpf
 {
@@ -20,25 +17,24 @@ namespace CheckConnectionWpf
         public event Action ActiveConnectionSelected;
         public event Action AnalyzeButtonClicked;
         public event Action ChangeButtonClicked;
-        //public event Action CompareButtonClicked;
         public event Action HistoryConnectionSelected;
-        public event Action PingButtonClicked;
+        
         public event Action RefreshButtonClicked;
         public event Action RefreshDHCPButtonClicked;
         public event Action RepairButtonClicked;
-        public event Action RestoreButtonClicked;
-        //public event Action TableCompareButtonClicked;
-        public event Action TracertButtonClicked;
+        public event Action RestoreButtonClicked;   
 
         public event EventHandler<CompareConnectionsEventArgs> TableCompareButtonClicked;
         public event EventHandler<CompareConnectionsEventArgs> CompareButtonClicked;
+        public event EventHandler PingButtonClicked;
+        public event EventHandler TracertButtonClicked;
 
         public DisplayConnectionsForm()
         {
             InitializeComponent();
             BindComponent();
         }
-
+        
         private void BindComponent()
         {
             WinObjMethods.AddColumn(ref ConnectionsdataGridView);
@@ -233,33 +229,26 @@ namespace CheckConnectionWpf
 
         private void ConnectionsdataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedRow = ConnectionsdataGridView.GetSelectedRow();            
-            if(selectedRow != null)
-                selectedRow.Style = (Style)FindResource("OriginalDataGridCell");
-        }
-    }
-
-    class NameToBrushConverter : IMultiValueConverter
-    {
-
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            Connection item = values[0] as Connection;
-            if (item != null)
+            var selectedRow = ConnectionsdataGridView.GetSelectedRow();
+            if(selectedRow!=null)
+            for (int index = 0; index < ConnectionsdataGridView.Columns.Count; index++)
             {
-                if (item.Name == "test2")
-                    return Brushes.Red;
-                else
-                    return Brushes.Black;
+                var columnCell = ConnectionsdataGridView.GetCell(selectedRow, index);
+                if (columnCell?.Style != null) {
+                        columnCell.Style = null; 
+                }
             }
-
-            return Brushes.Black;
+            
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        private void buttonPing_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            PingButtonClicked(this,new EventArgs());
         }
 
+        private void buttonTracert_Click(object sender, RoutedEventArgs e)
+        {
+            TracertButtonClicked(this, new EventArgs());
+        }        
     }
 }

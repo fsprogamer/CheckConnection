@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="Сравнение подключений" Height="300" Width="300" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Foreground" Value="Black" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Equal}" Value="false">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

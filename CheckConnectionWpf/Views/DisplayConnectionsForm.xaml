@@ -8,19 +8,22 @@
         Title="Сетевые подключения" Height="598" Width="Auto" Icon="/Icon/20gear2.ico" 
         WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
     <Window.Resources>
-        <Style x:Key="OriginalDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}"/>
         <Style x:Key="DifferentDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Red"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Red"/>
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Foreground" Value="Red"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!--<Style x:Key="DefaultDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+        </Style>-->
     </Window.Resources>
-        <Grid>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
@@ -29,13 +32,13 @@
         </Grid.RowDefinitions>
         <ToolBarTray>
             <ToolBar x:Name="toolBar" VerticalAlignment="Top" Width="Auto" Height="Auto" HorizontalContentAlignment="Stretch">
-                <Button x:Name="PingtoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                <Button x:Name="PingtoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="buttonPing_Click">
                     <StackPanel Orientation="Vertical">
                         <Image Source="/Icon/77ekg.png" Width="24" Height="24" />
                         <TextBlock>Ping</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="TracerttoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                <Button x:Name="TracerttoolStripButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="buttonTracert_Click">
                     <StackPanel Orientation="Vertical">
                         <Image Source="/Icon/55network.png" Width="24" Height="24"/>
                         <TextBlock>Tracert</TextBlock>
@@ -91,12 +94,12 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <DataGrid Grid.Row="1" x:Name="ConnectionsdataGridView" SelectionChanged="ConnectionsdataGridView_SelectionChanged">
+        <DataGrid Grid.Row="1" x:Name="ConnectionsdataGridView" SelectionChanged="ConnectionsdataGridView_SelectionChanged" GridLinesVisibility="None" SelectionMode="Single">
             <DataGrid.Columns>
             </DataGrid.Columns>
         </DataGrid>
         <GridSplitter Grid.Row="2" ShowsPreview="False" Width="Auto" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-        <DataGrid x:Name="HistorydataGridView" Grid.Row="3">
+        <DataGrid x:Name="HistorydataGridView" Grid.Row="3" GridLinesVisibility="None" SelectionMode="Single">
             <DataGrid.Columns>
             </DataGrid.Columns>
         </DataGrid>

@@ -21,12 +21,11 @@ namespace CheckConnectionWpf.Data
 
             var query = from active in ReflectionProperties<Connection>.GetPropertiesValueList(first)
                         join history in ReflectionProperties<Connection>.GetPropertiesValueList(second)
-                        on active.Name equals history.Name                       
-                        where active.Name != "Index"
+                        on active.Name equals history.Name
+                        where active.Name != "Index" 
                         select new CompareConnection() { Name = active.Name, Active = active.Value, History = history.Value, Equal = active.Value==history.Value };
 
             List<CompareConnection> compareConnections = query.ToList<CompareConnection>();
-
             return compareConnections;
         }
     }

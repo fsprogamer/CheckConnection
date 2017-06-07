@@ -4,6 +4,7 @@ using CheckConnectionWpf.Views;
 using Common;
 using CheckConnectionWpf.Models;
 using System.Linq;
+using PingLib.Methods;
 
 namespace CheckConnectionWpf.Presenters
 {
@@ -33,6 +34,8 @@ namespace CheckConnectionWpf.Presenters
 
             _view.TableCompareButtonClicked += OnTableCompareButtonClicked;
             _view.CompareButtonClicked += OnCompareButtonClicked;
+            _view.PingButtonClicked += OnPingButtonClicked;
+            _view.TracertButtonClicked += OnTracertButtonClicked;
         }
         
         private void OnTableCompareButtonClicked(object sender, CompareConnectionsEventArgs e)
@@ -64,7 +67,38 @@ namespace CheckConnectionWpf.Presenters
                 };
 
                 var comparedConnections = compareConnectionsRepository.ComparedConnections;
-                _view.LoadComparedConnections(comparedConnections.Where(p => p.Equal == false).ToList());
+                _view.LoadComparedConnections(comparedConnections.Where(p => p.Equal == false && p.Name != "Дата и время").ToList());
+            }
+            catch (Exception exeption)
+            {
+                _view.ShowMessage(exeption.Message, "Ошибка", Icons.Error);
+            }
+        }
+
+        private void OnPingButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var pingForm = new PingForm();
+                var pingResultMahager = new PingResultManager();
+                var pingPresenter = new PingPresenter(pingForm, pingResultMahager);
+                // show other form            
+                pingForm.ShowDialog();
+            }
+            catch (Exception exeption)
+            {
+                _view.ShowMessage(exeption.Message, "Ошибка", Icons.Error);
+            }
+        }
+        private void OnTracertButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var tracertForm = new TracertForm();
+                var tracert = new VRK.Net.Tracert();
+                var tracertPresenter = new TracertPresenter(tracertForm, tracert);
+                // show other form            
+                tracertForm.ShowDialog();
             }
             catch (Exception exeption)
             {

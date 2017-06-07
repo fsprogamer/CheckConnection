@@ -58,6 +58,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\PingEventArgs.cs" />
+    <Compile Include="Presenters\PingPresenter.cs" />
+    <Compile Include="Presenters\TracertPresenter.cs" />
+    <Compile Include="Views\IPingView.cs" />
+    <Compile Include="Views\ITracertView.cs" />
+    <Compile Include="Views\PingForm.xaml.cs">
+      <DependentUpon>PingForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TracertForm.xaml.cs">
+      <DependentUpon>TracertForm.xaml</DependentUpon>
+    </Compile>
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +114,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ModeForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PingForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TracertForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -102,7 +102,7 @@
             this.hopHeader.DisplayIndex = 0;
             this.hopHeader.Text = "Переход";
             this.hopHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.hopHeader.Width = 56;
+            this.hopHeader.Width = 66;
             // 
             // hostNameHeader
             // 

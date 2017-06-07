@@ -11,8 +11,8 @@ namespace CheckConnectionWpf.Views
     {
         //event Action Closed;
 
-        event Action PingButtonClicked;
-        event Action TracertButtonClicked;
+        event EventHandler PingButtonClicked;
+        event EventHandler TracertButtonClicked;
         event EventHandler<CompareConnectionsEventArgs> CompareButtonClicked;
         event EventHandler<CompareConnectionsEventArgs> TableCompareButtonClicked;
         event Action ChangeButtonClicked;

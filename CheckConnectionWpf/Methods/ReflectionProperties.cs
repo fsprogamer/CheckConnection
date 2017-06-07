@@ -30,8 +30,8 @@ namespace CheckConnectionWpf.Methods
                 PropertyValue propertyValue = new PropertyValue();
                 try
                 {
-                    propertyValue.Value = GetPropValue(refclass, propinfo.PropertyName).ToString();
-                    propertyValue.Name = propinfo.Name.ToString();                    
+                    propertyValue.Value = GetPropValue(refclass, propinfo.PropertyName)?.ToString();
+                    propertyValue.Name = propinfo.Name?.ToString();                    
                 }
                 catch (Exception ex)
                 {
