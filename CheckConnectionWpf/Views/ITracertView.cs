@@ -7,8 +7,7 @@ namespace CheckConnectionWpf.Views
 {
     interface ITracertView:IPingView
     {
-        event EventHandler<PingEventArgs> TracertStarted;
-        bool TracertButtonEnable { get; set; }
+        event EventHandler<PingEventArgs> TracertStarted;        
         void ClearList();
         ObservableCollection<PingResult> ItemsSourceForPingList { get; set; }
     }

@@ -10,5 +10,6 @@ namespace CheckConnectionWpf.Views
         event EventHandler<PingEventArgs> PingStarted;
         void AddItemAtPingList(PingResult pingResult);
         void ShowMessage(string text, string caption, Icons icon);
+        bool TracertButtonEnable { get; set; }
     }
 }

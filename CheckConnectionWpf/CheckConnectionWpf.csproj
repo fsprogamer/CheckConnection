@@ -58,6 +58,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\TracertRepository.cs" />
     <Compile Include="Models\PingEventArgs.cs" />
     <Compile Include="Presenters\PingPresenter.cs" />
     <Compile Include="Presenters\TracertPresenter.cs" />

@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace CheckConnectionWpf.Presenters
 {
@@ -44,18 +46,28 @@ namespace CheckConnectionWpf.Presenters
             _model.Trace();
         }
 
-        delegate void ThreadSwitch();
         private void OnGetHostEntry(IAsyncResult ar)
         {
+
             try
             {
-                PingResult host = ar.AsyncState as PingResult;                
+                PingResult host = ar.AsyncState as PingResult;
                 host.Name = Dns.EndGetHostEntry(ar).HostName;
             }
             catch (SocketException ex)
             {
                 log.Error(ex);
             }
+
+            //try
+            //{
+            //    Application.Current.Dispatcher.BeginInvoke( DispatcherPriority.Background,
+            //    new Action(() => { PingResult host = ar.AsyncState as PingResult; host.Name = Dns.EndGetHostEntry(ar).HostName; }));
+            //}
+            //catch (SocketException ex)
+            //{
+            //    log.Error(ex);
+            //}
         }
 
         private void tracert_RouteNodeFound(object sender, VRK.Net.RouteNodeFoundEventArgs e)
@@ -64,8 +76,7 @@ namespace CheckConnectionWpf.Presenters
             pingresult.Ip_Address = e.Node.Address.ToString();
             pingresult.Name = String.Empty;
             pingresult.ResponseTime = (e.Node.Status == IPStatus.Success) ? e.Node.RoundTripTime.ToString() : "*";
-            tracertResults.Add(pingresult);
-            //var host = tracertResults[tracertResults.Count - 1];
+            tracertResults.Add(pingresult);            
 
             if (e.Node.Status == IPStatus.Success)
             {                

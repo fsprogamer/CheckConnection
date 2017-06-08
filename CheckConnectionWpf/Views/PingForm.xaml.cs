@@ -22,6 +22,19 @@ namespace CheckConnectionWpf.Views
         public string GroupBoxHeader { set { groupBox.Header = value; } }
         public string FormTitle { set { this.Title = value; } }
 
+        public bool TracertButtonEnable
+        {
+            get
+            {
+                return startTrace.IsEnabled;
+            }
+
+            set
+            {
+                startTrace.IsEnabled = value;
+            }
+        }
+
         public event EventHandler<PingEventArgs> PingStarted;
 
         public virtual void BindControl()

@@ -7,23 +7,28 @@ using Common;
 
 namespace PingLib.Methods
 {
+    
     public class PingResultManager: ClassWithLogger<PingResultManager>
     {
+        IPingResultRepo pm;
+        Model.PingResult png;
+
+        public event EventHandler<PingResultEventArgs> PingResultCompleted;
         public PingResultManager()
         {
+            pm = new PingResultRepo();
+            pm.PingCompleted += new PingCompletedEventHandler(PingCompletedCallback);            
         }
 
         public PingResult GetPingResult(string strHostName)
         {
-            Model.PingResult png = new Model.PingResult(strHostName);
-
             if (String.IsNullOrEmpty(strHostName))
             {
                 strHostName = "localhost";
             }
+            png = new Model.PingResult(strHostName);
             try
-            {
-                IPingResultRepo pm = new PingResultRepo();
+            {                
                 PingReply reply = pm.GetPing(strHostName);
 
                 png.StatusCode = /*GetStatusCode((int)reply.Status); */(reply.Status.ToString() == "Success" ? "Успешно" : reply.Status.ToString());
@@ -58,6 +63,57 @@ namespace PingLib.Methods
                 log.InfoFormat("Exception ErrMessage: {0}", png.ErrMessage);
             }
             return png;
+        }
+
+        public void GetPingResultAsync(string strHostName)
+        {
+            if (String.IsNullOrEmpty(strHostName))
+            {
+                strHostName = "localhost";
+            }
+            png = new Model.PingResult(strHostName);
+
+            try
+            {
+                pm.GetPingAsync(strHostName);
+            }
+            catch (SocketException ex)
+            {
+                png.ResponseTime = "*";
+                png.ErrMessage = ex.Message;
+                png.StatusCode = ex.Message;
+                png.SocketErrorCode = ex.ErrorCode;
+                log.InfoFormat("SocketException ErrMessage: {0}", png.ErrMessage);
+            }
+            catch (Exception ex)
+            {
+                png.ResponseTime = "*";
+                png.ErrMessage = (ex.InnerException != null) ? ex.InnerException.Message : ex.Message;
+                png.StatusCode = (ex.InnerException != null) ? ex.InnerException.Message : ex.Message;
+                log.InfoFormat("Exception ErrMessage: {0}", png.ErrMessage);
+            }            
+        }
+
+        void PingCompletedCallback(object sender, PingCompletedEventArgs e)
+        {            
+            png.StatusCode = (e.Reply.Status.ToString() == "Success" ? "Успешно" : e.Reply.Status.ToString());
+            log.InfoFormat("Status: {0}, {1}", (int)e.Reply.Status, png.StatusCode);
+
+            if (e.Reply.Status == IPStatus.Success)
+            {
+                png.Ip_Address = e.Reply.Address.ToString();
+                log.InfoFormat("Address: {0}", png.Ip_Address);
+
+                png.ResponseTime = e.Reply.RoundtripTime.ToString();
+                log.InfoFormat("ResponseTime: {0}", png.ResponseTime);
+            }
+            else
+            {
+                png.ResponseTime = "*";
+                log.InfoFormat("ResponseTime: {0}", png.ResponseTime);
+            }
+
+            PingResultCompleted(this, new PingResultEventArgs(png));
         }
 
         private string GetStatusCode(int intCode)

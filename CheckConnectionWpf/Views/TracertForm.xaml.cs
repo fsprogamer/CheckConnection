@@ -36,18 +36,7 @@ namespace CheckConnectionWpf.Views
             pingList.ItemsSource = null;
             pingList.Items.Clear();
         }
-        public bool TracertButtonEnable
-        {
-            get
-            {
-                return startTrace.IsEnabled;
-            }
-
-            set
-            {
-                startTrace.IsEnabled = value;
-            }
-        }
+        
         public ObservableCollection<PingResult> ItemsSourceForPingList
         {
             get

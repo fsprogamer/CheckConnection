@@ -9,9 +9,7 @@ namespace CheckConnectionWpf.Presenters
     class PingPresenter : ClassWithLog
     {
         private readonly IPingView _view;
-        private readonly PingResultManager _model;
-
-        //public event EventHandler<PingEventArgs> PingDone;
+        private readonly PingResultManager _model;        
 
         public PingPresenter(IPingView view, PingResultManager model)
         {
@@ -19,13 +17,19 @@ namespace CheckConnectionWpf.Presenters
             this._model = model;
 
             _view.PingStarted += OnPingButtonClicked;
+            _model.PingResultCompleted += OnPingResultCompleted;
         }
 
         private void OnPingButtonClicked(object sender, PingEventArgs e)
-        {                                   
-            PingResult pingResult = _model.GetPingResult(e.Destination);
-            _view.AddItemAtPingList(pingResult);
+        {
+            _view.TracertButtonEnable = false;
+            _model.GetPingResultAsync(e.Destination);            
+        }
 
+        private void OnPingResultCompleted(object sender, PingResultEventArgs e)
+        {
+            _view.AddItemAtPingList(e.PingResult);
+            _view.TracertButtonEnable = true;
         }
     }
 }

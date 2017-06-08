@@ -49,6 +49,7 @@
     <Compile Include="Methods\PingResultRepo.cs" />
     <Compile Include="Methods\PingResultManager.cs" />
     <Compile Include="Model\PingResult.cs" />
+    <Compile Include="Model\PingResultEventArgs.cs" />
     <Compile Include="Model\Tracert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
