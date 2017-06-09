@@ -1,11 +1,6 @@
-﻿using System;
+﻿using CheckConnectionWpf.Data;
 using System.Collections.Generic;
 using System.Windows;
-using CheckConnection.Model;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using CheckConnectionWpf.Methods;
-using CheckConnectionWpf.Data;
 
 namespace CheckConnectionWpf.Views
 {

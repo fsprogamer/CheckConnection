@@ -56,7 +56,7 @@
                         <TextBlock TextAlignment="Center">Табличное<LineBreak/>сравнение</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button x:Name="toolStripButtonChangeConnection" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto">
+                <Button x:Name="toolStripButtonChangeConnection" HorizontalAlignment="Left" VerticalAlignment="Top" Width="Auto" Click="toolStripButtonChangeConnection_Click">
                     <StackPanel Orientation="Vertical">
                         <Image Source="/Icon/187pencil.png" Width="24" Height="24" />
                         <TextBlock TextAlignment="Center">Изменить<LineBreak/>параметры</TextBlock>

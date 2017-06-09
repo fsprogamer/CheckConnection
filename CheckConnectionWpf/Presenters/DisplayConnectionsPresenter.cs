@@ -36,6 +36,9 @@ namespace CheckConnectionWpf.Presenters
             _view.CompareButtonClicked += OnCompareButtonClicked;
             _view.PingButtonClicked += OnPingButtonClicked;
             _view.TracertButtonClicked += OnTracertButtonClicked;
+
+            _view.CompareButtonClicked += OnCompareButtonClicked;
+            _view.ChangeConnectionButtonClicked += OnChangeConnectionButtonClicked;
         }
         
         private void OnTableCompareButtonClicked(object sender, CompareConnectionsEventArgs e)
@@ -99,6 +102,27 @@ namespace CheckConnectionWpf.Presenters
                 var tracertPresenter = new TracertPresenter(tracertForm, tracert);
                 // show other form            
                 tracertForm.ShowDialog();
+            }
+            catch (Exception exeption)
+            {
+                _view.ShowMessage(exeption.Message, "Ошибка", Icons.Error);
+            }
+        }
+
+        private void OnChangeConnectionButtonClicked(object sender, ConnectionEventArgs e)
+        {
+            try
+            {
+                var changeConnectionForm = new ChangeConnectionForm();
+                var changeConnectionRepository = new ChangeConnectionRepository();
+                //{
+                //    ActiveConnection = e.firstConnection,
+                //    HistoryConnection = e.secondConnection
+                //};
+
+                var changeConnectionPresenter = new ChangeConnectionPresenter(changeConnectionForm, changeConnectionRepository);
+                // show other form            
+                changeConnectionForm.ShowDialog();
             }
             catch (Exception exeption)
             {

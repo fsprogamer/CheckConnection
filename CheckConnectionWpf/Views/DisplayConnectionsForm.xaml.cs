@@ -16,7 +16,7 @@ namespace CheckConnectionWpf
     {
         public event Action ActiveConnectionSelected;
         public event Action AnalyzeButtonClicked;
-        public event Action ChangeButtonClicked;
+        //public event Action ChangeButtonClicked;
         public event Action HistoryConnectionSelected;
         
         public event Action RefreshButtonClicked;
@@ -28,6 +28,7 @@ namespace CheckConnectionWpf
         public event EventHandler<CompareConnectionsEventArgs> CompareButtonClicked;
         public event EventHandler PingButtonClicked;
         public event EventHandler TracertButtonClicked;
+        public event EventHandler<ConnectionEventArgs> ChangeConnectionButtonClicked;
 
         public DisplayConnectionsForm()
         {
@@ -249,6 +250,11 @@ namespace CheckConnectionWpf
         private void buttonTracert_Click(object sender, RoutedEventArgs e)
         {
             TracertButtonClicked(this, new EventArgs());
-        }        
+        }
+
+        private void toolStripButtonChangeConnection_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeConnectionButtonClicked(this, new ConnectionEventArgs(SelectedActiveConnection));
+        }
     }
 }

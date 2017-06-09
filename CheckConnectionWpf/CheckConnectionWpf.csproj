@@ -50,18 +50,28 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ChangeConnectionRepository.cs" />
     <Compile Include="Data\TracertRepository.cs" />
     <Compile Include="Models\PingEventArgs.cs" />
+    <Compile Include="Presenters\ChangeConnectionPresenter.cs" />
     <Compile Include="Presenters\PingPresenter.cs" />
     <Compile Include="Presenters\TracertPresenter.cs" />
+    <Compile Include="Views\ChangeConnectionForm.xaml.cs">
+      <DependentUpon>ChangeConnectionForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IChangeConnectionView.cs" />
     <Compile Include="Views\IPingView.cs" />
     <Compile Include="Views\ITracertView.cs" />
     <Compile Include="Views\PingForm.xaml.cs">
@@ -98,6 +108,10 @@
     <Compile Include="Presenters\ModePresenter.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\IModeView.cs" />
+    <Page Include="Views\ChangeConnectionForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CompareConnectionsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

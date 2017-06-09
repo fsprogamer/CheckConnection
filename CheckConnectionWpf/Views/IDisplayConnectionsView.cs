@@ -15,7 +15,7 @@ namespace CheckConnectionWpf.Views
         event EventHandler TracertButtonClicked;
         event EventHandler<CompareConnectionsEventArgs> CompareButtonClicked;
         event EventHandler<CompareConnectionsEventArgs> TableCompareButtonClicked;
-        event Action ChangeButtonClicked;
+        event EventHandler<ConnectionEventArgs> ChangeConnectionButtonClicked;
 
         event Action RestoreButtonClicked;
         event Action RefreshDHCPButtonClicked;
