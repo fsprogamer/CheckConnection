@@ -114,12 +114,7 @@ namespace CheckConnectionWpf.Presenters
             try
             {
                 var changeConnectionForm = new ChangeConnectionForm();
-                var changeConnectionRepository = new ChangeConnectionRepository();
-                //{
-                //    ActiveConnection = e.firstConnection,
-                //    HistoryConnection = e.secondConnection
-                //};
-
+                var changeConnectionRepository = new ChangeConnectionRepository(e.Connection);
                 var changeConnectionPresenter = new ChangeConnectionPresenter(changeConnectionForm, changeConnectionRepository);
                 // show other form            
                 changeConnectionForm.ShowDialog();
