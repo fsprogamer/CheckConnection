@@ -2,6 +2,8 @@
 using System.Windows;
 using CheckConnection.Model;
 using System.Windows.Data;
+using System.Diagnostics;
+using CheckConnectionWpf.Data;
 
 namespace CheckConnectionWpf.Views
 {
@@ -21,15 +23,30 @@ namespace CheckConnectionWpf.Views
         }
        
         private void buttonSave_Click(object sender, RoutedEventArgs e)
-        {
-           
-            Connection conn = DataContext as Connection;
+        {           
+            ChangeConnectionRepository connrepo = DataContext as ChangeConnectionRepository;
         }
 
-        public void LoadConnection(Connection connection)
+        public void LoadConnection(ChangeConnectionRepository repoconnection)
         {
-            this.DataContext = connection;
+            DataContext = repoconnection;
         }        
+    }
+
+
+    public class DebugDummyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            Debugger.Break();
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            Debugger.Break();
+            return value;
+        }
     }
 
     //public class YesNoToBooleanConverter : IValueConverter

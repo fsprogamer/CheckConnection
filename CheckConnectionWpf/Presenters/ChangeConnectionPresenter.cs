@@ -14,7 +14,7 @@ namespace CheckConnectionWpf.Presenters
             this._model = modeModel;
             
             //_view.connection = _model.connection;
-            _view.LoadConnection(_model.connection);
+            _view.LoadConnection(_model);
         }
     }
 }

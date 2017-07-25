@@ -237,9 +237,9 @@
       <Project>{2e728e94-a37e-4b82-97d1-e22a51319659}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ipaddresscontrollib\VS2015\IPAddressControlLib\IPAddressControlLib.csproj">
-      <Project>{a5ed2b33-5644-47c4-bc30-a4840f67ff87}</Project>
-      <Name>IPAddressControlLib</Name>
+    <ProjectReference Include="..\IPMaskedTextBox\IPMaskedTextBox.csproj">
+      <Project>{e1b94377-d545-4b9d-a2d1-a2ae1aff87da}</Project>
+      <Name>IPMaskedTextBox</Name>
     </ProjectReference>
     <ProjectReference Include="..\PingLib\PingLib.csproj">
       <Project>{5ee4a6af-87e1-4847-958f-50cd4e0a7202}</Project>

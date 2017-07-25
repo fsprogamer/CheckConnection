@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CheckConnectionWpf.Views"
+        xmlns:IPmaskedtextbox="clr-namespace:IPmaskedtextbox;assembly=IPMaskedTextBox" 
         mc:Ignorable="d"
         Title="Изменение параметров подключения" Height="325" Width="588">
+    <Window.Resources>
+        <local:DebugDummyConverter x:Key="DebugDummyConverter" />
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -35,31 +39,32 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
                         <Label x:Name="labelIPAddress" Content="IP-адрес"/>
-                        <TextBox x:Name="ipAddressControl"  HorizontalAlignment="Left" Height="23" Text="{Binding Ip_Address_v4, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="ipAddressControl"  HorizontalAlignment="Left" Height="23" Value="{Binding Ip_Address_v4, Mode=TwoWay, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
+                    
                     <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
                         <Label x:Name="labelNetMask" Content="Маска подсети"/>
-                        <TextBox x:Name="NetMaskControl" HorizontalAlignment="Left" Height="23" Text="{Binding IPSubnetMask, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox  x:Name="NetMaskControl" HorizontalAlignment="Left" Height="23" Value="{Binding IPSubnetMask, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="0">
                         <Label x:Name="labelDHCPServer" Content="DHCP сервер"/>
-                        <TextBox x:Name="DHCPServerControl" HorizontalAlignment="Left" Height="23" Text="{Binding DHCPServer, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DHCPServerControl" HorizontalAlignment="Left" Height="23" Value="{Binding DHCPServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
                         <Label x:Name="labelGateway" Content="Шлюз"/>
-                        <TextBox x:Name="GatewayControl1" HorizontalAlignment="Left" Height="23" Text="{Binding Gateway_list[0].IPGateway, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="GatewayControl1" HorizontalAlignment="Left" Height="23" Value="{Binding firstGateway, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                         <Separator Opacity="0" Height="10"/>
-                        <TextBox x:Name="GatewayControl2" HorizontalAlignment="Left" Height="23" Text="{Binding Gateway_list[1].IPGateway, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="GatewayControl2" HorizontalAlignment="Left" Height="23" Value="{Binding secondGateway, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
                         <Label x:Name="labelDNS" Content="DNS"/>
-                        <TextBox x:Name="DNSControl1" HorizontalAlignment="Left" Height="23" Text="{Binding DNS_list[0].DNSServer, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DNSControl1" HorizontalAlignment="Left" Height="23" Value="{Binding firstDNSServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                         <Separator Opacity="0" Height="10"/>
-                        <TextBox x:Name="DNSControl2" HorizontalAlignment="Left" Height="23" Text="{Binding DNS_list[1].DNSServer, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DNSControl2" HorizontalAlignment="Left" Height="23" Value="{Binding secondDNSServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
                         <Label x:Name="labelDNSDomain" Content="DNSDomain"/>
-                        <TextBox x:Name="textBoxDNSDomain" HorizontalAlignment="Left" Height="23" Text="{Binding DNSDomain, Mode=TwoWay}" VerticalAlignment="Top" Width="120"/>
+                        <TextBox x:Name="textBoxDNSDomain" HorizontalAlignment="Left" Height="23" Text="{Binding DNSDomain, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>
