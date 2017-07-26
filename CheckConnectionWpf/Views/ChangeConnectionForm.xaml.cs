@@ -25,6 +25,7 @@ namespace CheckConnectionWpf.Views
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {           
             ChangeConnectionRepository connrepo = DataContext as ChangeConnectionRepository;
+            string[] result = connrepo.connection.IpAddress;
         }
 
         public void LoadConnection(ChangeConnectionRepository repoconnection)

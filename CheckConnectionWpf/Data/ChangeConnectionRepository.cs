@@ -4,17 +4,30 @@ using System;
 
 namespace CheckConnectionWpf.Data
 {
+    public class LocalConnection 
+    {
+        private string[] _ipAddress;
+        public string[] IpAddress
+        {
+            get { return _ipAddress; }
+            set
+            {
+                _ipAddress = value;              
+            }
+        }
+    }
     public class ChangeConnectionRepository : INotifyPropertyChanged
     {
-
+        private LocalConnection _connection;
         public ChangeConnectionRepository(Connection connection)
         {
-            _connection = connection;
-            _connection.DNSDomain = "akado.ru";
+            _connection = new LocalConnection();                 
+            _connection.IpAddress = connection.Ip_Address_v4.Split('.');
+            //_connection.IpAddress = new string[] { "10", "10", "10", "10" };
         }
 
-        private Connection _connection;
-        public Connection connection
+        
+        public LocalConnection connection
         {
             get { return _connection; }
             set
@@ -27,95 +40,95 @@ namespace CheckConnectionWpf.Data
             }
         }
 
-        public bool DHCP_Enabled
-        {
-            get { return Convert.ToBoolean(_connection.DHCP_Enabled); }
-            set
-            {
-                _connection.DHCP_Enabled = value.ToString();
-                OnPropertyChanged("DHCP_Enabled");
-            }
-        }
+        //public bool DHCP_Enabled
+        //{
+        //    get { return Convert.ToBoolean(_connection.DHCP_Enabled); }
+        //    set
+        //    {
+        //        _connection.DHCP_Enabled = value.ToString();
+        //        OnPropertyChanged("DHCP_Enabled");
+        //    }
+        //}
 
-        public string[] Ip_Address_v4
-        {
-            get { return _connection.Ip_Address_v4?.Split('.'); }
-            set
-            {
-                _connection.Ip_Address_v4 = string.Join(".", value);
-                OnPropertyChanged("Ip_Address_v4");
-            }
-        }
+        //public string[] Ip_Address_v4
+        //{
+        //    get { return _connection.Ip_Address_v4?.Split('.'); }
+        //    set
+        //    {
+        //        _connection.Ip_Address_v4 = string.Join(".", value);
+        //        OnPropertyChanged("Ip_Address_v4");
+        //    }
+        //}
 
-        public string[] IPSubnetMask
-        {
-            get { return _connection.IPSubnetMask?.Split('.'); }
-            set
-            {
-                _connection.IPSubnetMask = string.Join(".", value);
-                OnPropertyChanged("IPSubnetMask");
-            }
-        }
+        //public string[] IPSubnetMask
+        //{
+        //    get { return _connection.IPSubnetMask?.Split('.'); }
+        //    set
+        //    {
+        //        _connection.IPSubnetMask = string.Join(".", value);
+        //        OnPropertyChanged("IPSubnetMask");
+        //    }
+        //}
 
-        public string[] DHCPServer
-        {
-            get { return _connection.DHCPServer?.Split('.'); }
-            set
-            {
-                _connection.DHCPServer = string.Join(".", value);
-                OnPropertyChanged("DHCPServer");
-            }
-        }
+        //public string[] DHCPServer
+        //{
+        //    get { return _connection.DHCPServer?.Split('.'); }
+        //    set
+        //    {
+        //        _connection.DHCPServer = string.Join(".", value);
+        //        OnPropertyChanged("DHCPServer");
+        //    }
+        //}
 
-        public string DNSDomain
-        {
-            get { return _connection.DNSDomain; }
-            set
-            {
-                _connection.DNSDomain = value;
-                OnPropertyChanged("DNSDomain");
-            }
-        }
+        //public string DNSDomain
+        //{
+        //    get { return _connection.DNSDomain; }
+        //    set
+        //    {
+        //        _connection.DNSDomain = value;
+        //        OnPropertyChanged("DNSDomain");
+        //    }
+        //}
 
-        public string[] firstGateway
-        {
-            get { return (_connection.Gateway_list?.Count > 0) ? _connection.Gateway_list[0].IPGateway?.Split('.'):null; }
-            set
-            {
-                _connection.Gateway_list[0].IPGateway = string.Join(".", value);
-                OnPropertyChanged("firstGateway");
-            }
-        }
+        //public string[] firstGateway
+        //{
+        //    get { return (_connection.Gateway_list?.Count > 0) ? _connection.Gateway_list[0].IPGateway?.Split('.'):null; }
+        //    set
+        //    {
+        //        _connection.Gateway_list[0].IPGateway = string.Join(".", value);
+        //        OnPropertyChanged("firstGateway");
+        //    }
+        //}
 
-        public string[] secondGateway
-        {
-            get { return (_connection.Gateway_list?.Count > 1) ? _connection.Gateway_list[1].IPGateway?.Split('.'):null; }
-            set
-            {
-                _connection.Gateway_list[1].IPGateway = string.Join(".", value);
-                OnPropertyChanged("secondGateway");
-            }
-        }
+        //public string[] secondGateway
+        //{
+        //    get { return (_connection.Gateway_list?.Count > 1) ? _connection.Gateway_list[1].IPGateway?.Split('.'):null; }
+        //    set
+        //    {
+        //        _connection.Gateway_list[1].IPGateway = string.Join(".", value);
+        //        OnPropertyChanged("secondGateway");
+        //    }
+        //}
 
-        public string[] firstDNSServer
-        {
-            get { return (_connection.DNS_list?.Count > 0) ? _connection.DNS_list[0].DNSServer?.Split('.'):null; }
-            set
-            {
-                _connection.DNS_list[0].DNSServer = string.Join(".", value);
-                OnPropertyChanged("firstDNSServer");
-            }
-        }
+        //public string[] firstDNSServer
+        //{
+        //    get { return (_connection.DNS_list?.Count > 0) ? _connection.DNS_list[0].DNSServer?.Split('.'):null; }
+        //    set
+        //    {
+        //        _connection.DNS_list[0].DNSServer = string.Join(".", value);
+        //        OnPropertyChanged("firstDNSServer");
+        //    }
+        //}
 
-        public string[] secondDNSServer
-        {
-            get { return (_connection.DNS_list?.Count > 1) ? _connection.DNS_list[1].DNSServer?.Split('.'):null; }
-            set
-            {
-                _connection.DNS_list[1].DNSServer = string.Join(".", value);
-                OnPropertyChanged("secondDNSServer");
-            }
-        }
+        //public string[] secondDNSServer
+        //{
+        //    get { return (_connection.DNS_list?.Count > 1) ? _connection.DNS_list[1].DNSServer?.Split('.'):null; }
+        //    set
+        //    {
+        //        _connection.DNS_list[1].DNSServer = string.Join(".", value);
+        //        OnPropertyChanged("secondDNSServer");
+        //    }
+        //}
         //Gateway_list[0].IPGateway
         //Gateway_list[1].IPGateway
 

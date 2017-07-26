@@ -39,10 +39,10 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
                         <Label x:Name="labelIPAddress" Content="IP-адрес"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="ipAddressControl"  HorizontalAlignment="Left" Height="23" Value="{Binding Ip_Address_v4, Mode=TwoWay, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="ipAddressControl"  HorizontalAlignment="Left" Height="23" Value="{Binding connection.IpAddress, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     
-                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
+                    <!--<StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
                         <Label x:Name="labelNetMask" Content="Маска подсети"/>
                         <IPmaskedtextbox:IPMaskedTextBox  x:Name="NetMaskControl" HorizontalAlignment="Left" Height="23" Value="{Binding IPSubnetMask, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
@@ -65,7 +65,7 @@
                     <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
                         <Label x:Name="labelDNSDomain" Content="DNSDomain"/>
                         <TextBox x:Name="textBoxDNSDomain" HorizontalAlignment="Left" Height="23" Text="{Binding DNSDomain, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
-                    </StackPanel>
+                    </StackPanel>-->
                 </Grid>
             </StackPanel>
            
