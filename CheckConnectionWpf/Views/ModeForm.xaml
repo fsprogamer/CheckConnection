@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
         <GroupBox x:Name="groupBoxRegim" Header="Режим работы" Grid.ColumnSpan="2">
             <StackPanel Orientation="Vertical">
-                <RadioButton x:Name="radioButtonRepair" GroupName="Regim" Content="Восстановить интернет подключением" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" IsChecked="True"/>
+                <RadioButton x:Name="radioButtonRepair" GroupName="Regim" Content="Восстановить интернет подключение" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" IsChecked="True"/>
                 <RadioButton x:Name="radioButtonDiagnose" GroupName="Regim" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0">
                     <RadioButton.Content>
                         <TextBlock Text="Расширенная диагностика интернет подключения" TextWrapping="Wrap"/>

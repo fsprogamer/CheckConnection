@@ -25,7 +25,9 @@ namespace CheckConnectionWpf.Views
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {           
             ChangeConnectionRepository connrepo = DataContext as ChangeConnectionRepository;
-            string[] result = connrepo.connection.IpAddress;
+            string[] result = connrepo.connection.Ip_Address_v4;
+            result = connrepo.connection.IPSubnetMask;
+            result = connrepo.connection.DHCPServer;
         }
 
         public void LoadConnection(ChangeConnectionRepository repoconnection)
@@ -33,7 +35,6 @@ namespace CheckConnectionWpf.Views
             DataContext = repoconnection;
         }        
     }
-
 
     public class DebugDummyConverter : IValueConverter
     {

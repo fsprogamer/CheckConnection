@@ -1,32 +1,85 @@
-﻿using System.ComponentModel;
-using CheckConnection.Model;
+﻿using CheckConnection.Model;
 using System;
+using System.ComponentModel;
 
 namespace CheckConnectionWpf.Data
 {
-    public class LocalConnection 
-    {
-        private string[] _ipAddress;
-        public string[] IpAddress
+    public class LocalConnection
+    {        
+        public bool DHCP_Enabled
         {
-            get { return _ipAddress; }
-            set
-            {
-                _ipAddress = value;              
-            }
+            get;
+            set;
+        }
+        public string[] Ip_Address_v4
+        {
+            get;
+            set;
+        }
+        public string[] IPSubnetMask
+        {
+            get;
+            set;
+        }
+        public string[] DHCPServer
+        {
+            get;
+            set;
+        }
+        public string DNSDomain
+        {
+            get;
+            set;
+        }
+        public string[][] DNS_list
+        {
+            get;
+            set;
+        }
+        public string[][] Gateway_list
+        {
+            get;
+            set;
         }
     }
+
+    //public string[] IpAddress
+    //{
+    //    get { return _connection.Ip_Address_v4?.Split('.'); }
+    //    set
+    //    {
+    //        _connection.Ip_Address_v4 = string.Join(".", value);
+    //    }
+    //}
+    
     public class ChangeConnectionRepository : INotifyPropertyChanged
     {
         private LocalConnection _connection;
         public ChangeConnectionRepository(Connection connection)
         {
-            _connection = new LocalConnection();                 
-            _connection.IpAddress = connection.Ip_Address_v4.Split('.');
-            //_connection.IpAddress = new string[] { "10", "10", "10", "10" };
+            _connection = new LocalConnection();
+            _connection.DHCP_Enabled = Convert.ToBoolean(connection.DHCP_Enabled);
+            _connection.Ip_Address_v4 = connection.Ip_Address_v4?.Split('.');
+            _connection.IPSubnetMask = connection.IPSubnetMask?.Split('.');
+            _connection.DHCPServer = connection.DHCPServer?.Split('.');
+            _connection.DNSDomain = connection.DNSDomain;
+            if (connection.DNS_list?.Count > 0)
+            {
+                _connection.DNS_list = new string[connection.DNS_list.Count][];
+                _connection.DNS_list[0] = connection.DNS_list[0].DNSServer?.Split('.');
+                if (connection.DNS_list.Count > 1)
+                    _connection.DNS_list[1] = connection.DNS_list[1].DNSServer?.Split('.');
+            }
+            if (connection.Gateway_list?.Count > 0)
+            {
+                _connection.Gateway_list = new string[connection.Gateway_list.Count][];
+                _connection.Gateway_list[0] = connection.Gateway_list[0].IPGateway?.Split('.');
+                if (connection.Gateway_list.Count > 1)
+                    _connection.Gateway_list[1] = connection.Gateway_list[1].IPGateway?.Split('.');
+            }
+
         }
 
-        
         public LocalConnection connection
         {
             get { return _connection; }

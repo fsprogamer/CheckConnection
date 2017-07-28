@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
         <GroupBox x:Name="groupBox" Header="Тип IP-адреса" Grid.RowSpan="1">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <RadioButton GroupName="ip_types" Content="DHCP" IsChecked="{Binding DHCP_Enabled, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <RadioButton GroupName="ip_types" Content="DHCP" IsChecked="{Binding connection.DHCP_Enabled, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <RadioButton GroupName="ip_types" Content="Static IP" HorizontalAlignment="Left" VerticalAlignment="Center" />
             </StackPanel>
         </GroupBox>
@@ -39,33 +39,33 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
                         <Label x:Name="labelIPAddress" Content="IP-адрес"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="ipAddressControl"  HorizontalAlignment="Left" Height="23" Value="{Binding connection.IpAddress, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="ipAddressControl"  HorizontalAlignment="Left" Height="23" Value="{Binding connection.Ip_Address_v4, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     
-                    <!--<StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
                         <Label x:Name="labelNetMask" Content="Маска подсети"/>
-                        <IPmaskedtextbox:IPMaskedTextBox  x:Name="NetMaskControl" HorizontalAlignment="Left" Height="23" Value="{Binding IPSubnetMask, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox  x:Name="NetMaskControl" HorizontalAlignment="Left" Height="23" Value="{Binding connection.IPSubnetMask, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="0">
                         <Label x:Name="labelDHCPServer" Content="DHCP сервер"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DHCPServerControl" HorizontalAlignment="Left" Height="23" Value="{Binding DHCPServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DHCPServerControl" HorizontalAlignment="Left" Height="23" Value="{Binding connection.DHCPServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
                         <Label x:Name="labelGateway" Content="Шлюз"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="GatewayControl1" HorizontalAlignment="Left" Height="23" Value="{Binding firstGateway, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="GatewayControl1" HorizontalAlignment="Left" Height="23" Value="{Binding connection.Gateway_list[0], Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                         <Separator Opacity="0" Height="10"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="GatewayControl2" HorizontalAlignment="Left" Height="23" Value="{Binding secondGateway, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="GatewayControl2" HorizontalAlignment="Left" Height="23" Value="{Binding connection.Gateway_list[1], Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
                         <Label x:Name="labelDNS" Content="DNS"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DNSControl1" HorizontalAlignment="Left" Height="23" Value="{Binding firstDNSServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DNSControl1" HorizontalAlignment="Left" Height="23" Value="{Binding connection.DNS_list[0], Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                         <Separator Opacity="0" Height="10"/>
-                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DNSControl2" HorizontalAlignment="Left" Height="23" Value="{Binding secondDNSServer, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                        <IPmaskedtextbox:IPMaskedTextBox x:Name="DNSControl2" HorizontalAlignment="Left" Height="23" Value="{Binding connection.DNS_list[1], Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
                         <Label x:Name="labelDNSDomain" Content="DNSDomain"/>
-                        <TextBox x:Name="textBoxDNSDomain" HorizontalAlignment="Left" Height="23" Text="{Binding DNSDomain, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
-                    </StackPanel>-->
+                        <TextBox x:Name="textBoxDNSDomain" HorizontalAlignment="Left" Height="23" Text="{Binding connection.DNSDomain, Converter={StaticResource DebugDummyConverter}}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
                 </Grid>
             </StackPanel>
            
